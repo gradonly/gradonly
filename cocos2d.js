@@ -37,6 +37,7 @@
         appFiles:[
             'src/resource.js',
             'src/MainMenuScene.js',
+            'src/MenuItemImageMapLeft.js',
             'src/PlayScene.js',
         ]
     };

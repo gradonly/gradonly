@@ -1,6 +1,6 @@
 var MenuItemImageMapLeft = cc.MenuItemImage.extend({
     type:0,
-
+    create:null,
 	ctor:function () {
         this.setTouchEnabled(true);
     },
@@ -8,12 +8,12 @@ var MenuItemImageMapLeft = cc.MenuItemImage.extend({
     	this.type = type;
     },
     getType:function(type) {
-
+    	return type;
     },
 });
 
-cc.MenuItemImageMapLeft.create = function (normalImage, selectedImage, three, four, five) {
-	var ret = new cc.MenuItemImageMapLeft();
+MenuItemImageMapLeft.create = function (normalImage, selectedImage, three, four, five) {
+	var ret = new MenuItemImageMapLeft();
 
     if (arguments.length == 0) {
         if (ret.initWithNormalImage(null, null, null, null, null) == false) {
@@ -33,4 +33,3 @@ cc.MenuItemImageMapLeft.create = function (normalImage, selectedImage, three, fo
 
     return ret;
 };
-
