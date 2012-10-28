@@ -204,6 +204,9 @@ var PlayUILayer = cc.Layer.extend({
             var file = path + "tile" + i + ".png";
 
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+            var item2 = new cc.MenuItemImageMapLeft();
+            var item3 = new gg.MenuItemImageMapLeft();
+            var item4 = new MenuItemImageMapLeft();
             item.buttonType = i+1;
             item.setPosition(0, i*-50);
             menu.addChild(item);
