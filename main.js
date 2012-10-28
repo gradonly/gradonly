@@ -33,10 +33,12 @@ var cocos2dApp = cc.Application.extend({
         cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
         cc.setup(this.config['tag']);
         cc.AudioEngine.getInstance().init("mp3,ogg");
+        
+        // 리소스 로딩중 표시
         cc.Loader.shareLoader().onloading = function () {
             cc.LoaderScene.shareLoaderScene().draw();
         };
-
+        // 로딩 완료후 호출
         cc.Loader.shareLoader().onload = function () {
             cc.AppController.shareAppController().didFinishLaunchingWithOptions();
         };
