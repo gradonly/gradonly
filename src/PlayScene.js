@@ -207,6 +207,7 @@ var PlayUILayer = cc.Layer.extend({
             var file = path + "tile" + i + ".png";
 
             var item = cc.MenuItemImage.create(file, file, null, null, null);
+            item.setPosition(0, i*-100);
             menu.addChild(item);
         }
     },
