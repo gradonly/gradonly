@@ -39,10 +39,13 @@ var PlayMapLayer = cc.Layer.extend({
 
         map = cc.TMXTiledMap.create("res/PlayScene/ground01.tmx");
         this.addChild(map, -1, TAG_TILE_MAP);
+        // var groups = map.getObjectGroups()
+        // console.log(groups)
 
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
 
+        
         return true;
     },
     draw:function() {
