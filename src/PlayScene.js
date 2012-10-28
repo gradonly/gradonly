@@ -43,7 +43,6 @@ var PlayMapLayer = cc.Layer.extend({
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
 
-
         return true;
     },
     draw:function() {
@@ -132,12 +131,18 @@ var PlayMapLayer = cc.Layer.extend({
 
 var PlayUILayer = cc.Layer.extend({
     ctor:function () {
+        this.setTouchEnabled(true);
     },
     onEnter:function () {
+        this._super();
+
         this.TopMenu();
         this.LeftMenu();
 
         return true;
+    },
+    registerWithTouchDispatcher:function () {
+        cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
     },
     TopMenu:function () {
         var size = cc.Director.getInstance().getWinSize();
@@ -197,7 +202,7 @@ var PlayUILayer = cc.Layer.extend({
         menu.addChild(PopItem);
     },
     LeftMenu:function () {
-        var menu = cc.Menu.create(null);
+        var menu = cc.Menu.create();
         menu.setPosition(cc.p(100, 500));
         this.addChild(menu);
 
@@ -206,12 +211,15 @@ var PlayUILayer = cc.Layer.extend({
         for (var i = 0; i < item_number; ++i) {
             var file = path + "tile" + i + ".png";
 
-            var item = new MenuItemImageMenuLeft();
-            item.initWithNormalImage(file, file, null, this, null);
-
-            item.setPosition(0, i*-100);
+            var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+            // var item = cc.MenuItemImageMapLeft.create(file, file, null, this, this.SelectMenuLeftItem);
+            item.abc = i;
+            item.setPosition(0, i*-50);
             menu.addChild(item);
         }
+    },
+    SelectMenuLeftItem:function (sender) {
+        console.log(sender.abc);
     },
 });
 
