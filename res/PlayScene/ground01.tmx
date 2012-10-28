@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="20" height="20" tilewidth="60" tileheight="31">
  <tileset firstgid="1" name="base" tilewidth="60" tileheight="31">
-  <image source="base.png" width="60" height="31"/>
+  <image source="../TileMaps/base.png" width="60" height="31"/>
  </tileset>
  <tileset firstgid="2" name="3002_4iPhone" tilewidth="49" tileheight="56">
   <image source="3002_4iPhone.png" width="49" height="56"/>
@@ -11,17 +11,17 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NkYGBgHMVUw8xINDMSnxpm4uJTah6lepmxYFr5mVizselnxmIOKW5lxmIeNeOa0jBEdx+145zacUxOWiMnfijxPzZz6OX/oYAB3/lwqEAGAAA=
+   H4sIAAAAAAAAC2NkYGBgHMWjeBSP4lE8iknEALhlz4pABgAA
   </data>
  </layer>
  <layer name="Tile Layer 2" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAWjYBSMFMCEAw9X80YBbQEATK2fkEAGAAA=
+   H4sIAAAAAAAAC2NgGAWjYBQMJsBEQ/OYcOCBNA/dbGqaNwpoCwCUg55UQAYAAA==
   </data>
  </layer>
  <layer name="Tile Layer 3" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAX0AsxE4OFk3igYBaNgeAMAB20aNUAGAAA=
+   H4sIAAAAAAAAC2NgGAX0AsxE4OFk3igYBaNgeAMAB20aNUAGAAA=
   </data>
  </layer>
  <objectgroup name="CollisionLayer" width="20" height="20"/>
