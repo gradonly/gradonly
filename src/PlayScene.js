@@ -38,11 +38,15 @@ var PlayMapLayer = cc.Layer.extend({
         var size = cc.Director.getInstance().getWinSize();
 
         map = cc.TMXTiledMap.create("res/PlayScene/ground01.tmx");
-        this.addChild(map, 0, TAG_TILE_MAP);
+        this.addChild(map, -1, TAG_TILE_MAP);
 
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
+
         return true;
+    },
+    draw:function() {
+        this.ShowGridTileMap();
     },
     registerWithTouchDispatcher:function () {
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
@@ -74,10 +78,10 @@ var PlayMapLayer = cc.Layer.extend({
         var nodeLocation = map.convertToNodeSpace(touchLocation);
         tile.setPosition(nodeLocation);
 
-        var mapSize = map.getMapSize();
         var tileSize = map.getTileSize();
         var tw = tileSize.width;
         var th = tileSize.height;
+        var mapSize = map.getMapSize();
         var mw = mapSize.width;
         var mh = mapSize.height;
         
@@ -92,19 +96,32 @@ var PlayMapLayer = cc.Layer.extend({
         // layer.
     },
     ShowGridTileMap:function () {
-        for (var i = 0; i < 20; ++i) {
-            for (var j = 0; j < 20; ++j) {
-                
-            }
-        }
-
         cc.renderContext.lineWidth = 3;
         cc.renderContext.strokeStyle = "#ffffff";
+    
+        var layer = map.layerNamed("Tile Layer 1");
+        var tileSize = map.getTileSize();
+        var tw = tileSize.width;
+        var th = tileSize.height;
+        var offset = cc.p(0, th*0.45);
+        var count = 20;
 
-        cc.drawingUtil.drawLine(cc.p(x, y), cc.p((x + width), y));
-        cc.drawingUtil.drawLine(cc.p((x + width), y), cc.p((x + width), (y + height)));
-        cc.drawingUtil.drawLine(cc.p((x + width), (y + height)), cc.p(x, (y + height)));
-        cc.drawingUtil.drawLine(cc.p(x, (y + height)), cc.p(x, y));
+        for (var i = 0; i <= count; ++i) {          
+            var start = layer.positionAt(cc.p(i, -1));
+            var end = layer.positionAt(cc.p(i, count-1));
+
+            start = cc.pAdd(start, offset);
+            end = cc.pAdd(end, offset);
+            cc.drawingUtil.drawLine(start, end);
+        }
+        for (var i = 0; i <= count; ++i) {
+            var start = layer.positionAt(cc.p(0, i-1));
+            var end = layer.positionAt(cc.p(count, i-1));
+
+            start = cc.pAdd(start, offset);
+            end = cc.pAdd(end, offset);
+            cc.drawingUtil.drawLine(start, end);
+        }
 
         cc.renderContext.lineWidth = 1;
     },
