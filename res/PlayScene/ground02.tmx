@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="20" height="20" tilewidth="60" tileheight="30">
+ <tileset firstgid="1" name="bgtileset" tilewidth="60" tileheight="60">
+  <image source="bgtileset.png" width="120" height="180"/>
+ </tileset>
+ <layer name="MapLayer" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC62U4QqAIBCDzzzf/5UjMLrG9GY52I84+dxUMntUwLW7TNbEGeqateBqb+Zt747fqBbmjMly4R6YqRBmzOjGsyEbWbNzHPV2gXeIPTE365uxkIP5GrBUHrJZZ6WnklFhKPeR8Q4bnwHLlnnG+2qFZRv28Y08vI+oPzwnvIzJ/gP4nld4LE+WT+3N3ttIq2eIOgEk32yyQAYAAA==
+  </data>
+ </layer>
+</map>

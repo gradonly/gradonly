@@ -29,6 +29,7 @@ var TAG_TILE_MAP = 10001000;
 var PlayMapLayer = cc.Layer.extend({
     tile:null,
     map:null,
+    tile_button:0,
     ctor:function () {
         this.setTouchEnabled(true);
     },
@@ -37,8 +38,8 @@ var PlayMapLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        map = cc.TMXTiledMap.create("res/PlayScene/ground01.tmx");
-        this.addChild(map, -1, TAG_TILE_MAP);
+        map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        this.addChild(map, 0, TAG_TILE_MAP);
        
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
@@ -62,13 +63,11 @@ var PlayMapLayer = cc.Layer.extend({
             this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
             return;
         }
-        var node = this.getChildByTag(TAG_TILE_MAP);
         var diff = cc.pSub(touchLocation, this.prevLocation);
-        var currentPos = node.getPosition();
+        var currentPos = map.getPosition();
 
-        //diff = cc.p(diff.x * node.getScaleX(),diff.y * node.getScaleY());
         var curPos = cc.pAdd(currentPos, diff);
-        node.setPosition(curPos);
+        map.setPosition(curPos);
         this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
     },
     onTouchEnded:function (touch, event) {
@@ -76,7 +75,7 @@ var PlayMapLayer = cc.Layer.extend({
 
         var touchLocation = touch.getLocation();
         var nodeLocation = map.convertToNodeSpace(touchLocation);
-        tile.setPosition(nodeLocation);
+        // tile.setPosition(nodeLocation);
 
         var tileSize = map.getTileSize();
         var tw = tileSize.width;
@@ -89,17 +88,14 @@ var PlayMapLayer = cc.Layer.extend({
         var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
         var coord = cc.p(Math.floor(posX), Math.floor(posY));
 
-        // var layer = map.layerNamed("Tile Layer 1");
-        // layer.removeTileAt(coord);
-
-        // var layer = map.layerNamed("Tile Layer 2");
-        // layer.
+        var layer = map.layerNamed("MapLayer");
+        layer.setTileGID(tile_button, coord, 0);
     },
     ShowGridTileMap:function () {
         cc.renderContext.lineWidth = 3;
         cc.renderContext.strokeStyle = "#ffffff";
     
-        var layer = map.layerNamed("Tile Layer 1");
+        var layer = map.layerNamed("MapLayer");
         var tileSize = map.getTileSize();
         var tw = tileSize.width;
         var th = tileSize.height;
@@ -131,7 +127,6 @@ var PlayMapLayer = cc.Layer.extend({
 
 var PlayUILayer = cc.Layer.extend({
     ctor:function () {
-        this.setTouchEnabled(true);
     },
     onEnter:function () {
         this._super();
@@ -140,9 +135,6 @@ var PlayUILayer = cc.Layer.extend({
         this.LeftMenu();
 
         return true;
-    },
-    registerWithTouchDispatcher:function () {
-        cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
     },
     TopMenu:function () {
         var size = cc.Director.getInstance().getWinSize();
@@ -212,14 +204,14 @@ var PlayUILayer = cc.Layer.extend({
             var file = path + "tile" + i + ".png";
 
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            // var item = cc.MenuItemImageMapLeft.create(file, file, null, this, this.SelectMenuLeftItem);
-            item.abc = i;
+            item.buttonType = i+1;
             item.setPosition(0, i*-50);
             menu.addChild(item);
         }
     },
     SelectMenuLeftItem:function (sender) {
-        console.log(sender.abc);
+        console.log(sender.buttonType);
+        tile_button = sender.buttonType;
     },
 });
 
