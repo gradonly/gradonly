@@ -11,7 +11,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NkYGBgHMVUw8yDwA2jeBSP4lFMDwwA4TKIFkAGAAA=
+   H4sIAAAAAAAAA2NkYGBgHMVUw8xINDMSnxpm4uJTah6lepmxYFr5mVizselnxmIOKW5lxmIeNeOa0jBEdx+145zacUxOWiMnfijxPzZz6OX/oYAB3/lwqEAGAAA=
   </data>
  </layer>
  <layer name="Tile Layer 2" width="20" height="20">
@@ -24,8 +24,5 @@
    H4sIAAAAAAAAA2NgGAX0AsxE4OFk3igYBaNgeAMAB20aNUAGAAA=
   </data>
  </layer>
- <objectgroup name="CollisionLayer" width="20" height="20">
-  <object gid="3" x="570" y="298"/>
-  <object gid="3" x="463" y="313"/>
- </objectgroup>
+ <objectgroup name="CollisionLayer" width="20" height="20"/>
 </map>
