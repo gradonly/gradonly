@@ -42,14 +42,11 @@ var PlayMapLayer = cc.Layer.extend({
 
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
-        console.log(map);
         return true;
     },
-
     registerWithTouchDispatcher:function () {
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
     },
-
     onTouchBegan:function (touch, event) {
         var touchLocation = touch.getLocation();
         return true;
@@ -91,8 +88,25 @@ var PlayMapLayer = cc.Layer.extend({
         // var layer = map.layerNamed("Tile Layer 1");
         // layer.removeTileAt(coord);
 
-        var layer = map.layerNamed("Tile Layer 2");
-        layer.
+        // var layer = map.layerNamed("Tile Layer 2");
+        // layer.
+    },
+    ShowGridTileMap:function () {
+        for (var i = 0; i < 20; ++i) {
+            for (var j = 0; j < 20; ++j) {
+                
+            }
+        }
+
+        cc.renderContext.lineWidth = 3;
+        cc.renderContext.strokeStyle = "#ffffff";
+
+        cc.drawingUtil.drawLine(cc.p(x, y), cc.p((x + width), y));
+        cc.drawingUtil.drawLine(cc.p((x + width), y), cc.p((x + width), (y + height)));
+        cc.drawingUtil.drawLine(cc.p((x + width), (y + height)), cc.p(x, (y + height)));
+        cc.drawingUtil.drawLine(cc.p(x, (y + height)), cc.p(x, y));
+
+        cc.renderContext.lineWidth = 1;
     },
 });
 

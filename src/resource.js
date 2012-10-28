@@ -23,10 +23,8 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/top_sp.png"},
     {type:"image", src:"res/PlayScene/top_sp_p.png"},
 
-    {type:"image", src:"res/PlayScene/iso-test.png"},
     {type:"image", src:"res/PlayScene/ground.png"},   
     {type:"image", src:"res/PlayScene/3002_3iPhone.png"},
-    {type:"image", src:"res/PlayScene/hexa-tiles.png"},
     {type:"image", src:"res/PlayScene/3002_4iPhone.png"},
     {type:"image", src:"res/PlayScene/base.png"},
     
@@ -35,9 +33,7 @@ var g_ressources = [
     //fnt
 
     //tmx
-    {type:"tmx", src:"res/PlayScene/iso-test.tmx"},
     {type:"tmx", src:"res/PlayScene/ground01.tmx"},
-    {type:"tmx", src:"res/PlayScene/hexa-test.tmx"},
 
     //bgm
 
