@@ -105,6 +105,8 @@ var PlayMapLayer = cc.Layer.extend({
         var tw = tileSize.width;
         var th = tileSize.height;
         var offset = cc.p(0, th*0.45);
+        var position = this.getChildByTag(TAG_TILE_MAP).getPosition();
+        offset = cc.pAdd(offset, position);
         var count = 20;
 
         for (var i = 0; i <= count; ++i) {          
@@ -132,6 +134,12 @@ var PlayUILayer = cc.Layer.extend({
     ctor:function () {
     },
     onEnter:function () {
+        this.TopMenu();
+        this.LeftMenu();
+
+        return true;
+    },
+    TopMenu:function () {
         var size = cc.Director.getInstance().getWinSize();
 
         var menu = cc.Menu.create(null);
@@ -184,12 +192,23 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        
         PopItem.setAnchorPoint(new cc.p(0.5, 0.5));
         PopItem.setPosition(new cc.p(size.width * 0.9, size.height * 0.93));
         menu.addChild(PopItem);
+    },
+    LeftMenu:function () {
+        var menu = cc.Menu.create(null);
+        menu.setPosition(cc.p(100, 500));
+        this.addChild(menu);
 
-        return true;
+        var item_number = 5;
+        var path = "res/LeftMenu/";
+        for (var i = 0; i < item_number; ++i) {
+            var file = path + "tile" + i + ".png";
+
+            var item = cc.MenuItemImage.create(file, file, null, null, null);
+            menu.addChild(item);
+        }
     },
 });
 

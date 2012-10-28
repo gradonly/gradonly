@@ -27,6 +27,12 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/3002_3iPhone.png"},
     {type:"image", src:"res/PlayScene/3002_4iPhone.png"},
     {type:"image", src:"res/PlayScene/base.png"},
+
+    {type:"image", src:"res/LeftMenu/tile0.png"},
+    {type:"image", src:"res/LeftMenu/tile1.png"},
+    {type:"image", src:"res/LeftMenu/tile2.png"},
+    {type:"image", src:"res/LeftMenu/tile3.png"},
+    {type:"image", src:"res/LeftMenu/tile4.png"},
     
     //plist
 

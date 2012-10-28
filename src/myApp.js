@@ -57,7 +57,7 @@ var MyLayer = cc.Layer.extend({
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
         closeItem.setPosition(cc.p(size.width - 20, 20));
-
+        
         /////////////////////////////
         // 3. add your codes below...
         // add a label shows "Hello World"
@@ -77,7 +77,6 @@ var MyLayer = cc.Layer.extend({
         this.sprite.setPosition(cc.p(size.width / 2, size.height / 2));
 
         lazyLayer.addChild(this.sprite, 0);
-
         return true;
     }
 
