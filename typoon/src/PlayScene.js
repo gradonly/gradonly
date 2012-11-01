@@ -24,6 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var TAG_LAYER_MAP = 12433;
+var TAG_LAYER_UI = 209045;
 var TAG_TILE_MAP = 10001000;
 
 var PlayMapLayer = cc.Layer.extend({
@@ -32,6 +34,10 @@ var PlayMapLayer = cc.Layer.extend({
     tile_button:0,
     ctor:function () {
         this.setTouchEnabled(true);
+
+        tile = null;
+        map = null;
+        tile_button = 0;
     },
     onEnter:function () {
         this._super();
@@ -45,7 +51,7 @@ var PlayMapLayer = cc.Layer.extend({
         map.addChild(tile);
 
         var unit = gg.Unit.create();
-        this.addChild(unit);
+        map.addChild(unit);
 
         return true;
     },
@@ -57,10 +63,12 @@ var PlayMapLayer = cc.Layer.extend({
     },
     onTouchBegan:function (touch, event) {
         var touchLocation = touch.getLocation();
+        
         return true;
     },
     onTouchMoved:function (touch, event) {
         var touchLocation = touch.getLocation();
+        this.touchMoved = true;
 
         if (!this.prevLocation) {
             this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
@@ -75,24 +83,28 @@ var PlayMapLayer = cc.Layer.extend({
     },
     onTouchEnded:function (touch, event) {
         this.prevLocation = null;
+        if (!this.touchMoved) {
+            var touchLocation = touch.getLocation();
+            var nodeLocation = map.convertToNodeSpace(touchLocation);
+            // tile.setPosition(nodeLocation);
 
-        var touchLocation = touch.getLocation();
-        var nodeLocation = map.convertToNodeSpace(touchLocation);
-        // tile.setPosition(nodeLocation);
+            var tileSize = map.getTileSize();
+            var tw = tileSize.width;
+            var th = tileSize.height;
+            var mapSize = map.getMapSize();
+            var mw = mapSize.width;
+            var mh = mapSize.height;
+            
+            var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
+            var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
+            var coord = cc.p(Math.floor(posX), Math.floor(posY));
 
-        var tileSize = map.getTileSize();
-        var tw = tileSize.width;
-        var th = tileSize.height;
-        var mapSize = map.getMapSize();
-        var mw = mapSize.width;
-        var mh = mapSize.height;
-        
-        var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
-        var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
-        var coord = cc.p(Math.floor(posX), Math.floor(posY));
+            var layer = map.layerNamed("MapLayer");
+            // console.log(tile_button);
+            layer.setTileGID(tile_button, coord, 0);
+        }
 
-        var layer = map.layerNamed("MapLayer");
-        layer.setTileGID(tile_button, coord, 0);
+        this.touchMoved = false;
     },
     ShowGridTileMap:function () {
         cc.renderContext.lineWidth = 3;
@@ -103,7 +115,7 @@ var PlayMapLayer = cc.Layer.extend({
         var tw = tileSize.width;
         var th = tileSize.height;
         var offset = cc.p(0, th*0.45);
-        var position = this.getChildByTag(TAG_TILE_MAP).getPosition();
+        var position = map.getPosition();
         offset = cc.pAdd(offset, position);
         var count = 20;
 
@@ -125,6 +137,9 @@ var PlayMapLayer = cc.Layer.extend({
         }
 
         cc.renderContext.lineWidth = 1;
+    },
+    getButtonType:function(type) {
+        tile_button = type;
     },
 });
 
@@ -152,8 +167,8 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        LevelItem.setAnchorPoint(new cc.p(0.5, 0.5));
-        LevelItem.setPosition(new cc.p(size.width * 0.1, size.height * 0.93));
+        LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
+        LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
         menu.addChild(LevelItem);
 
         var CoinItem = cc.MenuItemImage.create(
@@ -162,8 +177,8 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        CoinItem.setAnchorPoint(new cc.p(0.5, 0.5));
-        CoinItem.setPosition(new cc.p(size.width * 0.28, size.height * 0.93));
+        CoinItem.setAnchorPoint(cc.p(0.5, 0.5));
+        CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
         menu.addChild(CoinItem);
 
         var CashItem = cc.MenuItemImage.create(
@@ -172,8 +187,8 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        CashItem.setAnchorPoint(new cc.p(0.5, 0.5));
-        CashItem.setPosition(new cc.p(size.width * 0.45, size.height * 0.93));
+        CashItem.setAnchorPoint(cc.p(0.5, 0.5));
+        CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
         menu.addChild(CashItem);
 
         var PopItem = cc.MenuItemImage.create(
@@ -182,8 +197,8 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        PopItem.setAnchorPoint(new cc.p(0.5, 0.5));
-        PopItem.setPosition(new cc.p(size.width * 0.75, size.height * 0.93));
+        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
+        PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
         menu.addChild(PopItem);
 
         var PopItem = cc.MenuItemImage.create(
@@ -192,8 +207,8 @@ var PlayUILayer = cc.Layer.extend({
             this,
             function () {
             });
-        PopItem.setAnchorPoint(new cc.p(0.5, 0.5));
-        PopItem.setPosition(new cc.p(size.width * 0.9, size.height * 0.93));
+        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
+        PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
         menu.addChild(PopItem);
     },
     LeftMenu:function () {
@@ -216,8 +231,9 @@ var PlayUILayer = cc.Layer.extend({
         }
     },
     SelectMenuLeftItem:function (sender) {
-        console.log(sender.buttonType);
-        tile_button = sender.buttonType;
+        console.log(tile_button);
+        map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        map_layer.getButtonType(sender.buttonType);
     },
 });
 
@@ -226,9 +242,9 @@ var PlayScene = cc.Scene.extend({
         this._super();
 
         var MapLayer = new PlayMapLayer();
-        this.addChild(MapLayer);
+        this.addChild(MapLayer, 0, TAG_LAYER_MAP);
 
         var UILayer = new PlayUILayer();
-        this.addChild(UILayer);
+        this.addChild(UILayer, 1, TAG_LAYER_UI);
     }
 });
