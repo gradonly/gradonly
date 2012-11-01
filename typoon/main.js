@@ -29,7 +29,6 @@ var cocos2dApp = cc.Application.extend({
     ctor:function (scene) {
         this._super();
         this.startScene = scene;
-
         cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
         cc.setup(this.config['tag']);
         cc.AudioEngine.getInstance().init("mp3,ogg");
@@ -45,7 +44,7 @@ var cocos2dApp = cc.Application.extend({
         
         cc.Loader.shareLoader().preload(g_ressources);
     },
-
+    cc.
     applicationDidFinishLaunching:function () {
         // initialize director
         var director = cc.Director.getInstance();
