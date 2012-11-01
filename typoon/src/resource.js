@@ -34,8 +34,11 @@ var g_ressources = [
     {type:"image", src:"res/LeftMenu/tile2.png"},
     {type:"image", src:"res/LeftMenu/tile3.png"},
     {type:"image", src:"res/LeftMenu/tile4.png"},
+
+    {type:"image", src:"res/Unit/move.png"},    
     
     //plist
+    {type:"plist", src:"res/Unit/move.plist"},
 
     //fnt
 

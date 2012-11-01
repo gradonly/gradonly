@@ -44,6 +44,9 @@ var PlayMapLayer = cc.Layer.extend({
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
 
+        var unit = gg.Unit.create();
+        this.addChild(unit);
+
         return true;
     },
     draw:function() {

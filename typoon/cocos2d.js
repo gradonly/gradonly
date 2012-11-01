@@ -39,6 +39,7 @@
             'src/MainMenuScene.js',
             'src/MenuItemImageMapLeft.js',
             'src/PlayScene.js',
+            'src/Unit.js',
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {
