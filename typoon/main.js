@@ -44,7 +44,6 @@ var cocos2dApp = cc.Application.extend({
         
         cc.Loader.shareLoader().preload(g_ressources);
     },
-    cc.
     applicationDidFinishLaunching:function () {
         // initialize director
         var director = cc.Director.getInstance();
