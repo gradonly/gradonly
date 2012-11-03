@@ -36,6 +36,8 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/resource.js',
+            'src/graph.js',
+            'src/astar.js',
             'src/Unit.js',
             'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',

@@ -28,18 +28,86 @@ var TAG_LAYER_MAP = 12433;
 var TAG_LAYER_UI = 209045;
 var TAG_TILE_MAP = 10001000;
 
+var makeNodesFromMap = function(tiles) {
+    var nodes = [];
+    var width =  20;
+    var height = 20;
+
+    for (var x=0; x < width; x++) {
+        var nodeRow = [];
+    
+        for(var y=0; y < height; y++) {
+
+            if( tiles[x][y] > 0 ) {
+                nodeRow.push(GraphNodeType.WALL);
+            }
+            else  {
+                nodeRow.push(GraphNodeType.OPEN);
+            }
+        }
+        nodes.push(nodeRow);
+    }
+
+
+    return new Graph(nodes);
+};
+
+// 랜덤하게 맵을 제너레이트
+var generateRandom = function (width, height, wallFrequency) {
+
+    var nodes = [];
+
+    for (var x=0; x < width; x++) {
+        var nodeRow = [];
+        var gridRow = [];
+
+        for(var y=0; y < height; y++) {
+
+            var isWall = Math.floor(Math.random()*(1/wallFrequency));
+            if(isWall == 0) {
+                nodeRow.push(GraphNodeType.WALL);
+            }
+            else  {
+                nodeRow.push(GraphNodeType.OPEN);
+            }
+        }
+        nodes.push(nodeRow);
+    }
+
+
+    return new Graph(nodes);
+};
+
 var PlayMapLayer = cc.Layer.extend({
     tile:null,
     map_layer:null,
     object_layer:null,
     tile_button:0,
     unit:null,
+    mapGraph:null,
     ctor:function () {
         this.setTouchEnabled(true);
 
         tile = null;
         map = null;
         tile_button = 0;
+        // mapGraph = generateRandom(10, 10, 0.2 );
+
+        // for(var j = 0; j < 10; j++) {
+        //    console.log( 
+        //     "[" + mapGraph.nodes[0][j].type +"]" 
+        //     + "[" + mapGraph.nodes[1][j].type +"]" 
+        //     + "[" + mapGraph.nodes[2][j].type +"]" 
+        //     + "[" + mapGraph.nodes[3][j].type +"]" 
+        //     + "[" + mapGraph.nodes[4][j].type +"]" 
+        //     + "[" + mapGraph.nodes[5][j].type +"]"
+        //     + "[" + mapGraph.nodes[6][j].type +"]"
+        //     + "[" + mapGraph.nodes[7][j].type +"]"
+        //     + "[" + mapGraph.nodes[8][j].type +"]"
+        //     + "[" + mapGraph.nodes[9][j].type +"]"
+        //     );
+        // }
+
     },
     onEnter:function () {
         this._super();
@@ -56,9 +124,14 @@ var PlayMapLayer = cc.Layer.extend({
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         this.addChild(object_layer);
 
+        // 오브젝트 레이어를 가지고 맵을 만든다.
+        mapGraph = makeNodesFromMap(object_layer.getTiles());
+
+
         unit = gg.Unit.create();
         map.addChild(unit);
         unit.setPosition(new cc.p(size.width / 2, size.height / 2));
+
 
         return true;
     },
@@ -109,7 +182,34 @@ var PlayMapLayer = cc.Layer.extend({
             var layer = map.layerNamed("MapLayer");
             // console.log(tile_button);
             layer.setTileGID(tile_button, coord, 0);
-            unit.move(coord);
+              // (x, y) 
+            // sequence
+            var start = mapGraph.nodes[0][0];
+            var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
+            var path = astar.search(mapGraph.nodes, start, end, false);
+        
+        for(var j = 0; j < 10; j++) {
+           console.log( 
+            "[" + mapGraph.nodes[0][j].type +"]" 
+            + "[" + mapGraph.nodes[1][j].type +"]" 
+            + "[" + mapGraph.nodes[2][j].type +"]" 
+            + "[" + mapGraph.nodes[3][j].type +"]" 
+            + "[" + mapGraph.nodes[4][j].type +"]" 
+            + "[" + mapGraph.nodes[5][j].type +"]"
+            + "[" + mapGraph.nodes[6][j].type +"]"
+            + "[" + mapGraph.nodes[7][j].type +"]"
+            + "[" + mapGraph.nodes[8][j].type +"]"
+            + "[" + mapGraph.nodes[9][j].type +"]"
+            );
+        }
+
+            console.log(path);
+            for(var i = 0; i < path.length; i++) {
+                var interPos = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
+                unit.move( interPos );
+            }
+
+            //unit.move(coord);
         }
 
         this.touchMoved = false;

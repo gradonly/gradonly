@@ -5,6 +5,7 @@ gg.Unit = cc.Node.extend({
 
 	ctor:function () {
 	},
+
 	onEnter:function () {
 		this._super();
 
