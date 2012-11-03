@@ -32,6 +32,7 @@ var PlayMapLayer = cc.Layer.extend({
     tile:null,
     map:null,
     tile_button:0,
+    unit:null,
     ctor:function () {
         this.setTouchEnabled(true);
 
@@ -50,8 +51,9 @@ var PlayMapLayer = cc.Layer.extend({
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         map.addChild(tile);
 
-        var unit = gg.Unit.create();
+        unit = gg.Unit.create();
         map.addChild(unit);
+        unit.setPosition(new cc.p(size.width / 2, size.height / 2));
 
         return true;
     },
@@ -102,6 +104,7 @@ var PlayMapLayer = cc.Layer.extend({
             var layer = map.layerNamed("MapLayer");
             // console.log(tile_button);
             layer.setTileGID(tile_button, coord, 0);
+            unit.move(coord);
         }
 
         this.touchMoved = false;
