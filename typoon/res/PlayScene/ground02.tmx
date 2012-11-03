@@ -5,7 +5,12 @@
  </tileset>
  <layer name="MapLayer" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC62U4QqAIBCDzzzf/5UjMLrG9GY52I84+dxUMntUwLW7TNbEGeqateBqb+Zt747fqBbmjMly4R6YqRBmzOjGsyEbWbNzHPV2gXeIPTE365uxkIP5GrBUHrJZZ6WnklFhKPeR8Q4bnwHLlnnG+2qFZRv28Y08vI+oPzwnvIzJ/gP4nld4LE+WT+3N3ttIq2eIOgEk32yyQAYAAA==
+   H4sIAAAAAAAAC2NgQABGPJiQGmwAn3mEMDXNQjaTGuaM4lE8HDHDEDCPgYrmooPBbh4lZuIClJoDAK9rnwVABgAA
+  </data>
+ </layer>
+ <layer name="ObjectLayer" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3SSwrAIAwEUNF6/yt3Y2AYxmgiQhcdCH4Wrwm1lHt5oPDuxPPOJ17WaqPQ4DXrKkOZPWhyzESniztLHeWZUcszlTU7m7nTJ/blfaPSXplqxtkeDfYjs3OPODdGmcpSc/O/iWT3Xa4MrD/fygtUx7B3QAYAAA==
   </data>
  </layer>
 </map>

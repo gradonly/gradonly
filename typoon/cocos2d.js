@@ -36,16 +36,20 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/resource.js',
-            'src/MainMenuScene.js',
-            'src/MenuItemImageMapLeft.js',
-            'src/PlayScene.js',
             'src/Unit.js',
+            'src/TypoonEngineIntroScene.js',
+            // 'src/MenuItemImageMapLeft.js',
+
+            'src/Game/MainMenuScene.js',
+            'src/Game/PlayScene.js',
+
+            'src/Tool/MapToolScene.js',
+            'src/Tool/ItemToolScene.js',
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {
-        //first load engine file if specified
         var s = d.createElement('script');
-        /*********Delete this section if you have packed all files into one*******/
+
         if (c.SingleEngineFile && !c.engineDir) {
             s.src = c.SingleEngineFile;
         }

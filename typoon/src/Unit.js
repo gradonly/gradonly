@@ -1,3 +1,4 @@
+var gg  = gg || {};
 
 gg.Unit = cc.Node.extend({
 	body:null,

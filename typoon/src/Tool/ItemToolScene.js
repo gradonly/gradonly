@@ -28,9 +28,10 @@ var TAG_LAYER_MAP = 12433;
 var TAG_LAYER_UI = 209045;
 var TAG_TILE_MAP = 10001000;
 
-var PlayMapLayer = cc.Layer.extend({
+var ItemToolLayer = cc.Layer.extend({
     tile:null,
-    map:null,
+    map_layer:null,
+    object_layer:null,
     tile_button:0,
     unit:null,
     ctor:function () {
@@ -48,8 +49,12 @@ var PlayMapLayer = cc.Layer.extend({
         map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
        
+        map_layer = map.layerNamed("MapLayer");
+        object_layer = map.layerNamed("ObjectLayer");
+        map_layer.setVisible(false);
+
         tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
-        map.addChild(tile);
+        this.addChild(object_layer);
 
         unit = gg.Unit.create();
         map.addChild(unit);
@@ -146,7 +151,7 @@ var PlayMapLayer = cc.Layer.extend({
     },
 });
 
-var PlayUILayer = cc.Layer.extend({
+var ItemToolUILayer = cc.Layer.extend({
     ctor:function () {
     },
     onEnter:function () {
@@ -225,9 +230,6 @@ var PlayUILayer = cc.Layer.extend({
             var file = path + "tile" + i + ".png";
 
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            var item2 = new cc.MenuItemImageMapLeft();
-            var item3 = new gg.MenuItemImageMapLeft();
-            var item4 = new MenuItemImageMapLeft();
             item.buttonType = i+1;
             item.setPosition(0, i*-50);
             menu.addChild(item);
@@ -240,14 +242,14 @@ var PlayUILayer = cc.Layer.extend({
     },
 });
 
-var PlayScene = cc.Scene.extend({
+var ItemToolScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var MapLayer = new PlayMapLayer();
+        var MapLayer = new ItemToolLayer();
         this.addChild(MapLayer, 0, TAG_LAYER_MAP);
 
-        var UILayer = new PlayUILayer();
-        this.addChild(UILayer, 1, TAG_LAYER_UI);
+        // var UILayer = new ItemToolUILayer();
+        // this.addChild(UILayer, 1, TAG_LAYER_UI);
     }
 });
