@@ -28,18 +28,26 @@ var TAG_LAYER_MAP = 12433;
 var TAG_LAYER_UI = 209045;
 var TAG_TILE_MAP = 10001000;
 
-var makeNodesFromMap = function(tiles) {
+var makeNodesFromMap = function(map) {
+    object_layer = map.layerNamed("ObjectLayer");
+    var tiles = object_layer.getTiles()
+
     var nodes = [];
-    var width =  20;
-    var height = 20;
+    var mapSize = map.getMapSize();
+    var width = mapSize.width;
+    var height = mapSize.height;
+
+    console.log("=======");
+    console.log(tiles);
+    console.log("=======");
 
     for (var x=0; x < width; x++) {
         var nodeRow = [];
-    
-        for(var y=0; y < height; y++) {
-
-            if( tiles[x][y] > 0 ) {
+        
+        for(var y = 0; y < height; y++) {
+            if( tiles[y*height + x] > 0 ) {
                 nodeRow.push(GraphNodeType.WALL);
+                console.log("It's wall");
             }
             else  {
                 nodeRow.push(GraphNodeType.OPEN);
@@ -48,13 +56,11 @@ var makeNodesFromMap = function(tiles) {
         nodes.push(nodeRow);
     }
 
-
     return new Graph(nodes);
 };
 
 // 랜덤하게 맵을 제너레이트
 var generateRandom = function (width, height, wallFrequency) {
-
     var nodes = [];
 
     for (var x=0; x < width; x++) {
@@ -74,7 +80,6 @@ var generateRandom = function (width, height, wallFrequency) {
         nodes.push(nodeRow);
     }
 
-
     return new Graph(nodes);
 };
 
@@ -91,23 +96,6 @@ var PlayMapLayer = cc.Layer.extend({
         tile = null;
         map = null;
         tile_button = 0;
-        // mapGraph = generateRandom(10, 10, 0.2 );
-
-        // for(var j = 0; j < 10; j++) {
-        //    console.log( 
-        //     "[" + mapGraph.nodes[0][j].type +"]" 
-        //     + "[" + mapGraph.nodes[1][j].type +"]" 
-        //     + "[" + mapGraph.nodes[2][j].type +"]" 
-        //     + "[" + mapGraph.nodes[3][j].type +"]" 
-        //     + "[" + mapGraph.nodes[4][j].type +"]" 
-        //     + "[" + mapGraph.nodes[5][j].type +"]"
-        //     + "[" + mapGraph.nodes[6][j].type +"]"
-        //     + "[" + mapGraph.nodes[7][j].type +"]"
-        //     + "[" + mapGraph.nodes[8][j].type +"]"
-        //     + "[" + mapGraph.nodes[9][j].type +"]"
-        //     );
-        // }
-
     },
     onEnter:function () {
         this._super();
@@ -117,22 +105,22 @@ var PlayMapLayer = cc.Layer.extend({
         map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
        
-        map_layer = map.layerNamed("MapLayer");
-        object_layer = map.layerNamed("ObjectLayer");
-        map_layer.setVisible(false);
-
-        tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
-        this.addChild(object_layer);
-
         // 오브젝트 레이어를 가지고 맵을 만든다.
-        mapGraph = makeNodesFromMap(object_layer.getTiles());
+        mapGraph = makeNodesFromMap(map);
 
+        map_layer = map.layerNamed("MapLayer");
+
+        object_layer = map.layerNamed("ObjectLayer");
 
         unit = gg.Unit.create();
-        map.addChild(unit);
-        unit.setPosition(new cc.p(size.width / 2, size.height / 2));
+        map.addChild(unit, 2);
 
-
+        map.reorderChild(map_layer, 0);
+        map.reorderChild(unit, 1);
+        map.reorderChild(object_layer, 2);
+        
+        unit.setPositionFromCoord(cc.p(10, 18));
+        
         return true;
     },
     draw:function() {
@@ -184,32 +172,43 @@ var PlayMapLayer = cc.Layer.extend({
             layer.setTileGID(tile_button, coord, 0);
               // (x, y) 
             // sequence
-            var start = mapGraph.nodes[0][0];
+            var start_coord = unit.getCoordInMap();
+            var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
             var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
             var path = astar.search(mapGraph.nodes, start, end, false);
         
-        for(var j = 0; j < 10; j++) {
-           console.log( 
-            "[" + mapGraph.nodes[0][j].type +"]" 
-            + "[" + mapGraph.nodes[1][j].type +"]" 
-            + "[" + mapGraph.nodes[2][j].type +"]" 
-            + "[" + mapGraph.nodes[3][j].type +"]" 
-            + "[" + mapGraph.nodes[4][j].type +"]" 
-            + "[" + mapGraph.nodes[5][j].type +"]"
-            + "[" + mapGraph.nodes[6][j].type +"]"
-            + "[" + mapGraph.nodes[7][j].type +"]"
-            + "[" + mapGraph.nodes[8][j].type +"]"
-            + "[" + mapGraph.nodes[9][j].type +"]"
-            );
-        }
+            // for(var j = 0; j < 20; j++) {
+            //    console.log( 
+            //     "[" + mapGraph.nodes[0][j].type +"]" 
+            //     + "[" + mapGraph.nodes[1][j].type +"]" 
+            //     + "[" + mapGraph.nodes[2][j].type +"]" 
+            //     + "[" + mapGraph.nodes[3][j].type +"]" 
+            //     + "[" + mapGraph.nodes[4][j].type +"]" 
+            //     + "[" + mapGraph.nodes[5][j].type +"]"
+            //     + "[" + mapGraph.nodes[6][j].type +"]"
+            //     + "[" + mapGraph.nodes[7][j].type +"]"
+            //     + "[" + mapGraph.nodes[8][j].type +"]"
+            //     + "[" + mapGraph.nodes[9][j].type +"]"
+            //     + "[" + mapGraph.nodes[10][j].type +"]" 
+            //     + "[" + mapGraph.nodes[11][j].type +"]" 
+            //     + "[" + mapGraph.nodes[12][j].type +"]" 
+            //     + "[" + mapGraph.nodes[13][j].type +"]" 
+            //     + "[" + mapGraph.nodes[14][j].type +"]" 
+            //     + "[" + mapGraph.nodes[15][j].type +"]"
+            //     + "[" + mapGraph.nodes[16][j].type +"]"
+            //     + "[" + mapGraph.nodes[17][j].type +"]"
+            //     + "[" + mapGraph.nodes[18][j].type +"]"
+            //     + "[" + mapGraph.nodes[19][j].type +"]"
+            //     );
+            // }
 
-            console.log(path);
+            var coords = [];
             for(var i = 0; i < path.length; i++) {
-                var interPos = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
-                unit.move( interPos );
+                var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
+                coords.push(coord);
             }
-
-            //unit.move(coord);
+            console.log(coords);
+            unit.move(coords);
         }
 
         this.touchMoved = false;
