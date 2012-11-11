@@ -2,12 +2,17 @@ var gg  = gg || {};
 
 gg.Unit = cc.Node.extend({
 	body:null,
-
+	prev_position:null,
+	prev_direction:0,
+	direction:0,
 	ctor:function () {
 	},
 
 	onEnter:function () {
 		this._super();
+
+		prev_position = this.getPositionX();
+		prev_direction = direction = 1;
 
 		var size = cc.Director.getInstance().getWinSize();
 
@@ -30,14 +35,29 @@ gg.Unit = cc.Node.extend({
 		var animation = cc.Animation.create(frames, 1/30);
 		var animate = cc.Animate.create(animation);
 		body.runAction(cc.RepeatForever.create(animate));
+
+	        this.scheduleUpdate();
 	},
-	// update:function (dt) {
-	// 	// cc.log("update called:" + dt);
-	// },
+	update:function (dt) {
+		if (this.getPositionX() - prev_position > 0) {
+			if (direction < 0) {
+				direction = 1;
+				var flip = cc.FlipX.create(90);
+				body.runAction(flip);
+			}
+		} else if (this.getPositionX() - prev_position < 0){
+			if (direction > 0) {
+				direction = -1;
+				var flip = cc.FlipX.create(0);
+				body.runAction(flip);
+			}
+		}
+		prev_position = this.getPositionX();
+	},
 	move:function (coords) {
 		var map = this.getParent();
 		var layer = map.layerNamed("MapLayer");
-		var moves= [];
+		var  actions= [];
 		var temp_position = this.getPosition();
 		for (var i in coords) {
 			var coord = coords[i];
@@ -46,9 +66,9 @@ gg.Unit = cc.Node.extend({
 			position.y += 30;
 
 			var move = cc.MoveTo.create(0.5,  position);
-			moves.push(move);
+			actions.push(move);
 		}
-		var sequence = cc.Sequence.create(moves);
+		var sequence = cc.Sequence.create(actions);
 		console.log(sequence);
 		
 		// if path is not blank, go through.

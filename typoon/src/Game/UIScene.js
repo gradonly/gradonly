@@ -320,19 +320,19 @@ var UIUILayer = cc.Layer.extend({
         console.log(property_title);
 
         
-        // keyboard input.
+        //  keyboard input
         var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
         keyboardDispatcher.addDelegate({
-            
             onKeyUp:function(e){
                 console.log(e);
+                // Menu.method call.
+                // in Menu. method 
+                // child method가  키보드 이벤트가 필요하면 처리...
             },
             onKeyDown:function(e){
                 console.log(e);
             }
-
         });
-
     },
 
     SelectMenuLeftItem:function (sender) {
