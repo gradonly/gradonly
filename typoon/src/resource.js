@@ -35,6 +35,7 @@ var g_ressources = [
     {type:"image", src:"res/LeftMenu/tile2.png"},
     {type:"image", src:"res/LeftMenu/tile3.png"},
     {type:"image", src:"res/LeftMenu/tile4.png"},
+    {type:"image", src:"res/LeftMenu/tile5.png"},
 
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},

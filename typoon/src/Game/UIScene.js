@@ -305,11 +305,11 @@ var UIUILayer = cc.Layer.extend({
         var size = cc.Director.getInstance().getWinSize();
         console.log("size width" + size.width + " size height" + size.height);
 
-        cc.canvas.addEventListener("keydown", function(e) {
-            cc.keyboardDispatcher.dispatchKeyboardMSG(e, true);
-            cc.IMED
+        // cc.canvas.addEventListener("keydown", function(e) {
+        //     cc.keyboardDispatcher.dispatchKeyboardMSG(e, true);
+        //     //cc.IMED
 
-        })
+        // })
 
         // property_title
         var property_title = cc.LabelTTF.create("Property Of UI Menu Object", "Arial", 12);
@@ -319,6 +319,7 @@ var UIUILayer = cc.Layer.extend({
 
         console.log(property_title);
 
+        
         // keyboard input.
         var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
         keyboardDispatcher.addDelegate({

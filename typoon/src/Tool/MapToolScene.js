@@ -28,6 +28,10 @@ var TAG_LAYER_MAP = 12433;
 var TAG_LAYER_UI = 209045;
 var TAG_TILE_MAP = 10001000;
 
+var ID_EMPTY_TILE = 0;
+var ID_TERRAIN_TILE = 1;
+
+
 var MapToolLayer = cc.Layer.extend({
     tile:null,
     map:null,
@@ -37,7 +41,7 @@ var MapToolLayer = cc.Layer.extend({
 
         tile = null;
         map = null;
-        tile_button = 0;
+        tile_button = ID_EMPTY_TILE;        // blank tile.
     },
     onEnter:function () {
         this._super();
@@ -47,8 +51,8 @@ var MapToolLayer = cc.Layer.extend({
         map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
        
-        tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
-        map.addChild(tile);
+        // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
+        // map.addChild(tile);
 
         return true;
     },
@@ -96,13 +100,58 @@ var MapToolLayer = cc.Layer.extend({
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
 
-            var layer = map.layerNamed("MapLayer");
-            // console.log(tile_button);
-            layer.setTileGID(tile_button, coord, 0);
+            var layer = map.layerNamed("MapLayer");             // MapLayer
+            var layer2 = map.layerNamed("ObjectLayer");         // ObjectLayer
+            console.log(coord);
+            console.log("tile_button " + tile_button);
+
+            /*
+            setTileGID(gid, pos, flags)
+            Sets the tile gid (gid = tile global id) at a given tile coordinate.
+            The Tile GID can be obtained by using the method "tileGIDAt" or by using the TMX editor . Tileset Mgr +1.
+            If a tile is already placed at that position, then it will be removed.
+            */
+
+            if( tile_button == ID_EMPTY_TILE) {
+                console.log("empty_tile");
+                //layer2.removeTileAt(coord);
+                //layer.removeTileAt(coord);
+            }
+
+            console.log(layer.tileGIDAt(coord));
+
+            var parent = layer.getParent();
+
+            if( tile_button <= ID_TERRAIN_TILE) {
+                layer.removeTileAt(coord);
+                layer2.removeTileAt(coord);
+
+                layer.setTileGID(0, coord, 0);
+                layer2.setTileGID(tile_button, coord, 0);
+                // layer2.setTileGID(tile_button, coord, 0);
+                
+            } else {
+                ///layer.setTileGID(ID_EMPTY_TILE, coord, 0);
+                //layer2.setTileGID(ID_EMPTY_TILE, coord, 0);
+                layer.setTileGID(0, coord, 0);
+                layer2.setTileGID(0, coord, 0);
+
+            }
+            //layer.setTileGID(tile_button, coord, 0);
+            console.log("Layer start--------------");
+            console.log(layer.tileGIDAt(coord));
+            console.log(layer2.tileGIDAt(coord));
+            console.log("Layer end-----------");
+            //layer.getParent().addChild(layer);
+            //layer2.getParent().addChild(layer2);
+            //layer.setTileGID(tile_button, coord, 0);
+            //layer2.setTileGID(tile_button, coord, 0);
         }
 
         this.touchMoved = false;
     },
+
+    // ShowGridTileMap.......
     ShowGridTileMap:function () {
         cc.renderContext.lineWidth = 3;
         cc.renderContext.strokeStyle = "#ffffff";
@@ -179,18 +228,20 @@ var MapToolUILayer = cc.Layer.extend({
         menu.setPosition(cc.p(100, 500));
         this.addChild(menu);
 
-        var item_number = 5;
+        var countOFTile = 6;
+        var item_number = 6;
         var path = "res/LeftMenu/";
         for (var i = 0; i < item_number; ++i) {
             var file = path + "tile" + i + ".png";
 
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            item.buttonType = i+1;
+            item.buttonType = i;
             item.setPosition(0, i*-50);
             menu.addChild(item);
         }
     },
 
+    // under construction message.
     CenterMenu:function() {
 
         var size = cc.Director.getInstance().getWinSize();
