@@ -28,6 +28,8 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/3002_4iPhone.png"},
     {type:"image", src:"res/PlayScene/base.png"},
     {type:"image", src:"res/PlayScene/bgtileset.png"},
+    {type:"image", src:"res/PlayScene/tiles_ground.png"},
+    {type:"image", src:"res/PlayScene/tiles_tree.png"},
 
     // tile
     {type:"image", src:"res/LeftMenu/tile0.png"},
@@ -61,6 +63,7 @@ var g_ressources = [
     //tmx
     {type:"tmx", src:"res/PlayScene/ground01.tmx"},
     {type:"tmx", src:"res/PlayScene/ground02.tmx"},
+    {type:"tmx", src:"res/PlayScene/ground03.tmx"},
 
     //bgm
 

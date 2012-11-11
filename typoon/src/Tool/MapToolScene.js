@@ -48,7 +48,7 @@ var MapToolLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        map = cc.TMXTiledMap.create("res/PlayScene/ground03.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
        
         // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
@@ -122,21 +122,24 @@ var MapToolLayer = cc.Layer.extend({
 
             var parent = layer.getParent();
 
-            if( tile_button <= ID_TERRAIN_TILE) {
-                layer.removeTileAt(coord);
-                layer2.removeTileAt(coord);
+            // if( tile_button <= ID_TERRAIN_TILE) {
+            //     layer.removeTileAt(coord);
+            //     layer2.removeTileAt(coord);
 
-                layer.setTileGID(0, coord, 0);
-                layer2.setTileGID(tile_button, coord, 0);
-                // layer2.setTileGID(tile_button, coord, 0);
+            //     layer.setTileGID(0, coord, 0);
+            //     layer2.setTileGID(tile_button, coord, 0);
+            //     // layer2.setTileGID(tile_button, coord, 0);
                 
-            } else {
-                ///layer.setTileGID(ID_EMPTY_TILE, coord, 0);
-                //layer2.setTileGID(ID_EMPTY_TILE, coord, 0);
-                layer.setTileGID(0, coord, 0);
-                layer2.setTileGID(0, coord, 0);
+            // } else {
+            //     ///layer.setTileGID(ID_EMPTY_TILE, coord, 0);
+            //     //layer2.setTileGID(ID_EMPTY_TILE, coord, 0);
+            //     layer.setTileGID(0, coord, 0);
+            //     layer2.setTileGID(0, coord, 0);
 
-            }
+            // }
+
+            layer.setTileGID(tile_button, coord, 1);
+
             //layer.setTileGID(tile_button, coord, 0);
             console.log("Layer start--------------");
             console.log(layer.tileGIDAt(coord));

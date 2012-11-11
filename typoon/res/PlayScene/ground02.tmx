@@ -5,7 +5,7 @@
  </tileset>
  <layer name="MapLayer" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgQABGPJiQGmwAn3mEMDXNQjaTGuaM4lE8HDHDEDCPgYrmooPBbh4lZuIClJoDAK9rnwVABgAA
+   H4sIAAAAAAAAC2NgQABGPJiQGmwAn3mEMDXNQjaTGuaM4lE8HDHDEDCPgYrmogNqmzcSAAB8BVuhQAYAAA==
   </data>
  </layer>
  <layer name="ObjectLayer" width="20" height="20">

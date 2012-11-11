@@ -374,7 +374,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
 
         var gid = this.tileGIDAt(pos);
 
-        if (gid) {
+        // if (gid) {
             var z = pos.x + pos.y * this._layerSize.width;
             var atlasIndex = this._atlasIndexForExistantZ(z);
             // remove tile from GID map
@@ -405,7 +405,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
                     }
                 }
             }
-        }
+        // }
     },
 
     /**
