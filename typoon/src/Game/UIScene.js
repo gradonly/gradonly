@@ -1,28 +1,3 @@
-/****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
-
- http://www.cocos2d-x.org
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
 
 var TAG_LAYER_MAP = 12433;
 var TAG_LAYER_UI = 209045;
@@ -83,7 +58,7 @@ var generateRandom = function (width, height, wallFrequency) {
     return new Graph(nodes);
 };
 
-var PlayMapLayer = cc.Layer.extend({
+var UIPlayMapLayer = cc.Layer.extend({
     tile:null,
     map_layer:null,
     object_layer:null,
@@ -127,7 +102,6 @@ var PlayMapLayer = cc.Layer.extend({
         this.ShowGridTileMap();
     },
     registerWithTouchDispatcher:function () {
-        console.log("registerWithTouchDispatcher() called");
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
     },
     onTouchBegan:function (touch, event) {
@@ -152,7 +126,6 @@ var PlayMapLayer = cc.Layer.extend({
     },
     onTouchEnded:function (touch, event) {
         this.prevLocation = null;
-
         if (!this.touchMoved) {
             var touchLocation = touch.getLocation();
             var nodeLocation = map.convertToNodeSpace(touchLocation);
@@ -171,40 +144,13 @@ var PlayMapLayer = cc.Layer.extend({
 
             var layer = map.layerNamed("MapLayer");
             // console.log(tile_button);
-            //layer.setTileGID(tile_button, coord, 0);
+            layer.setTileGID(tile_button, coord, 0);
               // (x, y) 
-
-            // Move the Path
             // sequence
             var start_coord = unit.getCoordInMap();
             var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
             var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
             var path = astar.search(mapGraph.nodes, start, end, false);
-        
-            // for(var j = 0; j < 20; j++) {
-            //    console.log( 
-            //     "[" + mapGraph.nodes[0][j].type +"]" 
-            //     + "[" + mapGraph.nodes[1][j].type +"]" 
-            //     + "[" + mapGraph.nodes[2][j].type +"]" 
-            //     + "[" + mapGraph.nodes[3][j].type +"]" 
-            //     + "[" + mapGraph.nodes[4][j].type +"]" 
-            //     + "[" + mapGraph.nodes[5][j].type +"]"
-            //     + "[" + mapGraph.nodes[6][j].type +"]"
-            //     + "[" + mapGraph.nodes[7][j].type +"]"
-            //     + "[" + mapGraph.nodes[8][j].type +"]"
-            //     + "[" + mapGraph.nodes[9][j].type +"]"
-            //     + "[" + mapGraph.nodes[10][j].type +"]" 
-            //     + "[" + mapGraph.nodes[11][j].type +"]" 
-            //     + "[" + mapGraph.nodes[12][j].type +"]" 
-            //     + "[" + mapGraph.nodes[13][j].type +"]" 
-            //     + "[" + mapGraph.nodes[14][j].type +"]" 
-            //     + "[" + mapGraph.nodes[15][j].type +"]"
-            //     + "[" + mapGraph.nodes[16][j].type +"]"
-            //     + "[" + mapGraph.nodes[17][j].type +"]"
-            //     + "[" + mapGraph.nodes[18][j].type +"]"
-            //     + "[" + mapGraph.nodes[19][j].type +"]"
-            //     );
-            // }
 
             var coords = [];
             for(var i = 0; i < path.length; i++) {
@@ -254,7 +200,7 @@ var PlayMapLayer = cc.Layer.extend({
     },
 });
 
-var PlayUILayer = cc.Layer.extend({
+var UIUILayer = cc.Layer.extend({
     ctor:function () {
     },
     onEnter:function () {
@@ -262,8 +208,7 @@ var PlayUILayer = cc.Layer.extend({
 
         this.TopMenu();
         this.LeftMenu();
-
-        this.CenterMenu();
+        this.RightMenu();
         return true;
     },
     TopMenu:function () {
@@ -274,15 +219,24 @@ var PlayUILayer = cc.Layer.extend({
         this.addChild(menu, 1);
 
         var LevelItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_lvexp00.png",
-            "res/PlayScene/top_lvexp00.png",
-            this,
-            function () {
+            "res/PlayScene/top_lvexp00.png",        // normal image
+            "res/PlayScene/top_lvexp00.png",        // selected images
+            this,                                   // disabled image or target
+            function () {                           // callback method
+                console.log(this);
+                console.log(LevelItem);
+                console.log(LevelItem.getPosition());
             });
+
+        //console.log(LevelItem);
         LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
         LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
+        //LevelItem.setTouchEnabled(true);
+        //LevelItem.registerWithTouchDispatcher(function(){ console.log(this) });
+
         menu.addChild(LevelItem);
 
+        // coinItem
         var CoinItem = cc.MenuItemImage.create(
             "res/PlayScene/top_coin.png",
             "res/PlayScene/top_coin_p.png",
@@ -293,6 +247,7 @@ var PlayUILayer = cc.Layer.extend({
         CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
         menu.addChild(CoinItem);
 
+        // cashItem
         var CashItem = cc.MenuItemImage.create(
             "res/PlayScene/top_cash.png",
             "res/PlayScene/top_cash_p.png",
@@ -303,6 +258,7 @@ var PlayUILayer = cc.Layer.extend({
         CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
         menu.addChild(CashItem);
 
+        // popItem
         var PopItem = cc.MenuItemImage.create(
             "res/PlayScene/top_pop.png",
             "res/PlayScene/top_pop_p.png",
@@ -313,53 +269,68 @@ var PlayUILayer = cc.Layer.extend({
         PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
         menu.addChild(PopItem);
 
-        var PopItem = cc.MenuItemImage.create(
+        var jwelItem = cc.MenuItemImage.create(
             "res/PlayScene/top_sp.png",
             "res/PlayScene/top_sp_p.png",
             this,
             function () {
             });
-        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
-        menu.addChild(PopItem);
-
-        // center of label ""
-        
-        //menu.addChild(property_title);
-        //menu.addChild(property_title, 100);
-
+        jwelItem.setAnchorPoint(cc.p(0.5, 0.5));
+        jwelItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
+        menu.addChild(jwelItem);
     },
 
     LeftMenu:function () {
-        
         var menu = cc.Menu.create();
         menu.setPosition(cc.p(100, 500));
         this.addChild(menu);
 
-        var item_number = 5;
-        var path = "res/LeftMenu/";
+        var item_number = 9;
+        var path = "res/UIItem/";
         for (var i = 0; i < item_number; ++i) {
-            var file = path + "tile" + i + ".png";
-
+            var file = path + "UI" + i + ".png";
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+            console.log(item);
+            console.log(item.getContentSize());
+            var itemHeight = item.getContentSize().height
+            item.setAnchorPoint(0.5, 0.5);
             item.buttonType = i+1;
-            item.setPosition(0, i*-50);
+            item.setPosition(0, i*(-itemHeight));
             menu.addChild(item);
         }
-
     },
 
-    CenterMenu:function() {
-
+    // Right is property of UI object Menu
+    RightMenu:function() {
         var size = cc.Director.getInstance().getWinSize();
-         // property_title
-        var property_title = cc.LabelTTF.create("Game Playing Scene...Working", "Arial", 12);
+        console.log("size width" + size.width + " size height" + size.height);
+
+        cc.canvas.addEventListener("keydown", function(e) {
+            cc.keyboardDispatcher.dispatchKeyboardMSG(e, true);
+            cc.IMED
+
+        })
+
+        // property_title
+        var property_title = cc.LabelTTF.create("Property Of UI Menu Object", "Arial", 12);
         property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
         property_title.setColor(new cc.Color3B(255, 255, 255));
         this.addChild(property_title);
 
+        console.log(property_title);
 
+        // keyboard input.
+        var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
+        keyboardDispatcher.addDelegate({
+            
+            onKeyUp:function(e){
+                console.log(e);
+            },
+            onKeyDown:function(e){
+                console.log(e);
+            }
 
+        });
 
     },
 
@@ -370,14 +341,15 @@ var PlayUILayer = cc.Layer.extend({
     },
 });
 
-var PlayScene = cc.Scene.extend({
+var UIScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var MapLayer = new PlayMapLayer();
-        this.addChild(MapLayer, 0, TAG_LAYER_MAP);
+        //var MapLayer = new PlayMapLayer();
+        //this.addChild(MapLayer, 0, TAG_LAYER_MAP);
 
-        var UILayer = new PlayUILayer();
+        var UILayer = new UIUILayer();
         this.addChild(UILayer, 1, TAG_LAYER_UI);
+
     }
 });

@@ -50,7 +50,10 @@ gg.Unit = cc.Node.extend({
 		}
 		var sequence = cc.Sequence.create(moves);
 		console.log(sequence);
-		this.runAction(sequence);
+		
+		// if path is not blank, go through.
+		if( sequence != undefined )
+			this.runAction(sequence);
 	},
 	setPositionFromCoord:function(coord) {
 		var map = this.getParent();

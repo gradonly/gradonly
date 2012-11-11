@@ -29,12 +29,27 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/base.png"},
     {type:"image", src:"res/PlayScene/bgtileset.png"},
 
+    // tile
     {type:"image", src:"res/LeftMenu/tile0.png"},
     {type:"image", src:"res/LeftMenu/tile1.png"},
     {type:"image", src:"res/LeftMenu/tile2.png"},
     {type:"image", src:"res/LeftMenu/tile3.png"},
     {type:"image", src:"res/LeftMenu/tile4.png"},
 
+    // ui
+    {type:"image", src:"res/UIItem/UI0.png"},
+    {type:"image", src:"res/UIItem/UI1.png"},
+    {type:"image", src:"res/UIItem/UI2.png"},
+    {type:"image", src:"res/UIItem/UI3.png"},
+    {type:"image", src:"res/UIItem/UI4.png"},
+    {type:"image", src:"res/UIItem/UI5.png"},
+    {type:"image", src:"res/UIItem/UI6.png"},
+    {type:"image", src:"res/UIItem/UI7.png"},
+    {type:"image", src:"res/UIItem/UI8.png"},
+    {type:"image", src:"res/UIItem/UI9.png"},
+    
+
+    // move
     {type:"image", src:"res/Unit/move.png"},    
     
     //plist

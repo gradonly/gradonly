@@ -1,3 +1,4 @@
+// 첫 화면 (Intro Scene)
 var TypoonEngineIntroLayer = cc.Layer.extend({
     init:function () {
         this._super();
@@ -9,6 +10,8 @@ var TypoonEngineIntroLayer = cc.Layer.extend({
         this.addChild(menu, 1);
 
         var item = null;
+
+        // 1. MapToolScene
         item = cc.MenuItemImage.create(
             'res/MainMenuScene/UIPlay.png',
             'res/MainMenuScene/UIPlaySelected.png',
@@ -20,6 +23,7 @@ var TypoonEngineIntroLayer = cc.Layer.extend({
         item.setPosition(cc.p(size.width * 0.5, size.height * 0.5));
         menu.addChild(item);
 
+        // 2. MainMenuScene ( Play Scene )
         item = cc.MenuItemImage.create(
             'res/MainMenuScene/UIPlay.png',
             'res/MainMenuScene/UIPlaySelected.png',
@@ -31,6 +35,19 @@ var TypoonEngineIntroLayer = cc.Layer.extend({
         item.setPosition(cc.p(size.width * 0.5, size.height * 0.3));
         menu.addChild(item);
 
+        // 3. UI Tool Scene
+         item = cc.MenuItemImage.create(
+            'res/MainMenuScene/UIPlay.png',
+            'res/MainMenuScene/UIPlaySelected.png',
+            this,
+            function () {
+                var director = cc.Director.getInstance();
+                director.replaceScene(new UIScene);
+            });
+        item.setPosition(cc.p(size.width * 0.5, size.height * 0.1));
+        menu.addChild(item);
+
+        // 4. 
         return true;
     }
 });

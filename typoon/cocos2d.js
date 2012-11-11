@@ -44,7 +44,7 @@
 
             'src/Game/MainMenuScene.js',
             'src/Game/PlayScene.js',
-
+            'src/Game/UIScene.js',
             'src/Tool/MapToolScene.js',
             'src/Tool/ItemToolScene.js',
         ]

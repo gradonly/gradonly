@@ -140,6 +140,7 @@ var MapToolLayer = cc.Layer.extend({
     },
 });
 
+// MapTool UI Layer
 var MapToolUILayer = cc.Layer.extend({
     ctor:function () {
     },
@@ -149,8 +150,10 @@ var MapToolUILayer = cc.Layer.extend({
         this.TopMenu();
         this.LeftMenu();
 
+        //this.CenterMenu();
         return true;
     },
+
     TopMenu:function () {
         var size = cc.Director.getInstance().getWinSize();
 
@@ -170,6 +173,7 @@ var MapToolUILayer = cc.Layer.extend({
         LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
         menu.addChild(LevelItem);
     },
+
     LeftMenu:function () {
         var menu = cc.Menu.create();
         menu.setPosition(cc.p(100, 500));
@@ -186,6 +190,19 @@ var MapToolUILayer = cc.Layer.extend({
             menu.addChild(item);
         }
     },
+
+    CenterMenu:function() {
+
+        var size = cc.Director.getInstance().getWinSize();
+         // property_title
+        var property_title = cc.LabelTTF.create("Game Playing Scene...Working", "Arial", 12);
+        property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
+        property_title.setColor(new cc.Color3B(255, 255, 255));
+        this.addChild(property_title);
+
+
+    },
+
     SelectMenuLeftItem:function (sender) {
         console.log(tile_button);
         map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
