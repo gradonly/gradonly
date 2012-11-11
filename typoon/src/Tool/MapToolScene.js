@@ -48,7 +48,7 @@ var MapToolLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        map = cc.TMXTiledMap.create("res/PlayScene/ground03.tmx");
+        map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
 
         // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
@@ -135,9 +135,13 @@ var MapToolLayer = cc.Layer.extend({
             //     layer2.setTileGID(0, coord, 0);
 
             // }
+             layer.setTileGID(tile_button, coord, 0);
 
-            layer.setTileGID(tile_button, coord, 1);
-
+            // if( tile_button <= ID_TERRAIN_TILE) {
+               
+            // } else {
+            //     layer2.setTileGID(tile_button, coord, 0);
+            // }
             //layer.setTileGID(tile_button, coord, 0);
             console.log("Layer start--------------");
             console.log(layer.tileGIDAt(coord));
