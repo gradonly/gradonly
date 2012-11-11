@@ -111,15 +111,18 @@ var PlayMapLayer = cc.Layer.extend({
         // Play Scene에서는 그리그가 필요없다.
         //this.ShowGridTileMap();
     },
+
     registerWithTouchDispatcher:function () {
         console.log("registerWithTouchDispatcher() called");
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
     },
+
     onTouchBegan:function (touch, event) {
         var touchLocation = touch.getLocation();
         
         return true;
     },
+
     onTouchMoved:function (touch, event) {
         var map = this.map;
 
@@ -242,6 +245,7 @@ var PlayMapLayer = cc.Layer.extend({
 
         cc.renderContext.lineWidth = 1;
     },
+    
     getButtonType:function(type) {
         tile_button = type;
     },
