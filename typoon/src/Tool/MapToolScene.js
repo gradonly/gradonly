@@ -144,7 +144,7 @@ var MapToolLayer = cc.Layer.extend({
     },
 
     // call back method.
-    getButtonType:function(type) {
+    changeTileMenu:function(type) {
         // select tile_button type.
         this.tile_button = type;
         console.log(this.tile_button);
@@ -211,6 +211,7 @@ var MapToolUILayer = cc.Layer.extend({
                 var director = cc.Director.getInstance();
                 director.replaceScene(new ItemToolScene);
             });
+
         LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
         LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
         menu.addChild(LevelItem);
@@ -220,6 +221,9 @@ var MapToolUILayer = cc.Layer.extend({
             "res/UIItem/plus.png",
             this, 
             function () {
+                //var map_layer = mapToolUILayer.getParent().getChildByTag('TAG_LAYER_MAP');
+                var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+                var map = map_layer.map;
                 var number = map.getScale();
                 number += 0.2;
                 map.setScale(number);
@@ -233,10 +237,13 @@ var MapToolUILayer = cc.Layer.extend({
             "res/UIItem/minus.png",
             this, 
             function () {
+                    var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+                    var map = map_layer.map;
                     var number = map.getScale();
                     number -= 0.2;
                     map.setScale(number);
             });
+
         MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
         MinusItem.setPosition(cc.p(size.width * 0.38, size.height * 0.93));
         menu.addChild(MinusItem);
@@ -263,20 +270,18 @@ var MapToolUILayer = cc.Layer.extend({
     // under construction message.
     CenterMenu:function() {
 
-        var size = cc.Director.getInstance().getWinSize();
+        var winSize = cc.Director.getInstance().getWinSize();
          // property_title
         var property_title = cc.LabelTTF.create("Game Playing Scene...Working", "Arial", 12);
-        property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
+        property_title.setPosition(cc.p(winSize.width * 0.5 + 25, winSize.height * 0.45 - 38));
         property_title.setColor(new cc.Color3B(255, 255, 255));
         this.addChild(property_title);
-
-
     },
 
     // left Menu Item' selector
     SelectMenuLeftItem:function (sender) {
-        map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-        map_layer.getButtonType(sender.buttonType);
+        var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        map_layer.changeTileMenu(sender.buttonType);
     },
 });
 
@@ -284,10 +289,10 @@ var MapToolScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var MapLayer = new MapToolLayer();
-        this.addChild(MapLayer, 0, TAG_LAYER_MAP);
+        var mapLayer = new MapToolLayer();
+        this.addChild(mapLayer, 0, TAG_LAYER_MAP);
 
-        var UILayer = new MapToolUILayer();
-        this.addChild(UILayer, 1, TAG_LAYER_UI);
+        var uiLayer = new MapToolUILayer();
+        this.addChild(uiLayer, 1, TAG_LAYER_UI);
     }
 });
