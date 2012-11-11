@@ -39,17 +39,17 @@ var MapToolLayer = cc.Layer.extend({
     ctor:function () {
         this.setTouchEnabled(true);
 
-        tile = null;
-        map = null;
-        tile_button = ID_EMPTY_TILE;        // blank tile.
+        this.tile = null;
+        this.map = null;
+        this.tile_button = ID_EMPTY_TILE;        // blank tile.
     },
     onEnter:function () {
         this._super();
 
         var size = cc.Director.getInstance().getWinSize();
 
-        map = cc.TMXTiledMap.create("res/PlayScene/ground03.tmx");
-        this.addChild(map, 0, TAG_TILE_MAP);
+        this.map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        this.addChild(this.map, 0, TAG_TILE_MAP);
 
         // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         // map.addChild(tile);
@@ -76,81 +76,32 @@ var MapToolLayer = cc.Layer.extend({
             return;
         }
         var diff = cc.pSub(touchLocation, this.prevLocation);
-        var currentPos = map.getPosition();
+        var currentPos = this.map.getPosition();
 
         var curPos = cc.pAdd(currentPos, diff);
-        map.setPosition(curPos);
+        this.map.setPosition(curPos);
         this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
     },
     onTouchEnded:function (touch, event) {
         this.prevLocation = null;
         if (!this.touchMoved) {
             var touchLocation = touch.getLocation();
-            var nodeLocation = map.convertToNodeSpace(touchLocation);
+            var nodeLocation = this.map.convertToNodeSpace(touchLocation);
             // tile.setPosition(nodeLocation);
 
-            var tileSize = map.getTileSize();
+            var tileSize = this.map.getTileSize();
             var tw = tileSize.width;
             var th = tileSize.height;
-            var mapSize = map.getMapSize();
+            var mapSize = this.map.getMapSize();
             var mw = mapSize.width;
             var mh = mapSize.height;
             
             var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
+            
+            this.paintMapTile(coord);
 
-            var layer = map.layerNamed("MapLayer");             // MapLayer
-            var layer2 = map.layerNamed("ObjectLayer");         // ObjectLayer
-
-            /*
-            setTileGID(gid, pos, flags)
-            Sets the tile gid (gid = tile global id) at a given tile coordinate.
-            The Tile GID can be obtained by using the method "tileGIDAt" or by using the TMX editor . Tileset Mgr +1.
-            If a tile is already placed at that position, then it will be removed.
-            */
-
-            if( tile_button == ID_EMPTY_TILE) {
-                console.log("empty_tile");
-                //layer2.removeTileAt(coord);
-                //layer.removeTileAt(coord);
-            }
-
-            console.log(layer.tileGIDAt(coord));
-
-            var parent = layer.getParent();
-
-            // if( tile_button <= ID_TERRAIN_TILE) {
-            //     layer.removeTileAt(coord);
-            //     layer2.removeTileAt(coord);
-
-            //     layer.setTileGID(0, coord, 0);
-            //     layer2.setTileGID(tile_button, coord, 0);
-            //     // layer2.setTileGID(tile_button, coord, 0);
-                
-            // } else {
-            //     ///layer.setTileGID(ID_EMPTY_TILE, coord, 0);
-            //     //layer2.setTileGID(ID_EMPTY_TILE, coord, 0);
-            //     layer.setTileGID(0, coord, 0);
-            //     layer2.setTileGID(0, coord, 0);
-
-            // }
-             layer.setTileGID(tile_button, coord, 0);
-
-            // if( tile_button <= ID_TERRAIN_TILE) {
-               
-            // } else {
-            //     layer2.setTileGID(tile_button, coord, 0);
-            // }
-            //layer.setTileGID(tile_button, coord, 0);
-            console.log("Layer start--------------");
-            console.log(layer.tileGIDAt(coord));
-            console.log(layer2.tileGIDAt(coord));
-            console.log("Layer end-----------");
-            //layer.getParent().addChild(layer);
-            //layer2.getParent().addChild(layer2);
-            //layer.setTileGID(tile_button, coord, 0);
-            //layer2.setTileGID(tile_button, coord, 0);
         }
 
         this.touchMoved = false;
@@ -161,13 +112,13 @@ var MapToolLayer = cc.Layer.extend({
         cc.renderContext.lineWidth = 3;
         cc.renderContext.strokeStyle = "#ffffff";
     
-        var scale = map.getScale();
-        var layer = map.layerNamed("MapLayer");
-        var tileSize = map.getTileSize();
+        var scale = this.map.getScale();
+        var layer = this.map.layerNamed("MapLayer");
+        var tileSize = this.map.getTileSize();
         var tw = tileSize.width * scale;
         var th = tileSize.height * scale;
         var offset = cc.p(0, th*0.45);
-        var position = map.getPosition();
+        var position = this.map.getPosition();
         offset = cc.pAdd(offset, position);
         var count = 20;
 
@@ -179,6 +130,7 @@ var MapToolLayer = cc.Layer.extend({
             end = cc.pAdd(end, offset);
             cc.drawingUtil.drawLine(start, end);
         }
+
         for (var i = 0; i <= count; ++i) {
             var start = layer.positionAt(cc.p(0, i-1));
             var end = layer.positionAt(cc.p(count, i-1));
@@ -190,9 +142,44 @@ var MapToolLayer = cc.Layer.extend({
 
         cc.renderContext.lineWidth = 1;
     },
+
+    // call back method.
     getButtonType:function(type) {
-        tile_button = type;
+        // select tile_button type.
+        this.tile_button = type;
+        console.log(this.tile_button);
     },
+
+    // change the map tile from crood releated x,y mouse position.
+    paintMapTile:function(coord) {
+        
+        var tile_button = this.tile_button;
+        var mapLayer = this.map.layerNamed("MapLayer");             // MapLayer
+        var objectLayer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+
+        if( tile_button == ID_EMPTY_TILE) {
+            mapLayer.setTileGID( tile_button, coord, 1);
+            objectLayer.setTileGID( tile_button, coord, 1);
+
+        }else if( tile_button == ID_TERRAIN_TILE) {
+            mapLayer.setTileGID(ID_EMPTY_TILE, coord, 1);
+            objectLayer.setTileGID(ID_EMPTY_TILE, coord, 1);
+
+            mapLayer.setTileGID( tile_button, coord, 1);
+
+        } else {
+            mapLayer.setTileGID(ID_EMPTY_TILE, coord, 0);
+            objectLayer.setTileGID(ID_EMPTY_TILE, coord, 0);
+
+            objectLayer.setTileGID( tile_button, coord, 0);
+        }
+
+        console.log("Layer start--------------");
+        console.log(mapLayer.tileGIDAt(coord));
+        console.log(objectLayer.tileGIDAt(coord));
+        console.log("Layer end-----------");
+
+    }
 });
 
 // MapTool UI Layer
@@ -286,8 +273,8 @@ var MapToolUILayer = cc.Layer.extend({
 
     },
 
+    // left Menu Item' selector
     SelectMenuLeftItem:function (sender) {
-        console.log(tile_button);
         map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
         map_layer.getButtonType(sender.buttonType);
     },
