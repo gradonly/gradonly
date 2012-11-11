@@ -48,7 +48,7 @@ var MapToolLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        map = cc.TMXTiledMap.create("res/PlayScene/ground03.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
 
         // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
