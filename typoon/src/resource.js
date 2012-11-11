@@ -50,6 +50,8 @@ var g_ressources = [
     {type:"image", src:"res/UIItem/UI7.png"},
     {type:"image", src:"res/UIItem/UI8.png"},
     {type:"image", src:"res/UIItem/UI9.png"},
+    {type:"image", src:"res/UIItem/plus.png"},
+    {type:"image", src:"res/UIItem/minus.png"},
 
     {type:"image", src:"res/item_info.png"},
     

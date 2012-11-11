@@ -326,6 +326,7 @@ var UIUILayer = cc.Layer.extend({
             onKeyUp:function(e){
                 console.log(e);
                 // Menu.method call.
+                
                 // in Menu. method 
                 // child method가  키보드 이벤트가 필요하면 처리...
             },

@@ -50,7 +50,7 @@ var MapToolLayer = cc.Layer.extend({
 
         map = cc.TMXTiledMap.create("res/PlayScene/ground03.tmx");
         this.addChild(map, 0, TAG_TILE_MAP);
-       
+
         // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
         // map.addChild(tile);
 
@@ -102,8 +102,6 @@ var MapToolLayer = cc.Layer.extend({
 
             var layer = map.layerNamed("MapLayer");             // MapLayer
             var layer2 = map.layerNamed("ObjectLayer");         // ObjectLayer
-            console.log(coord);
-            console.log("tile_button " + tile_button);
 
             /*
             setTileGID(gid, pos, flags)
@@ -159,10 +157,11 @@ var MapToolLayer = cc.Layer.extend({
         cc.renderContext.lineWidth = 3;
         cc.renderContext.strokeStyle = "#ffffff";
     
+        var scale = map.getScale();
         var layer = map.layerNamed("MapLayer");
         var tileSize = map.getTileSize();
-        var tw = tileSize.width;
-        var th = tileSize.height;
+        var tw = tileSize.width * scale;
+        var th = tileSize.height * scale;
         var offset = cc.p(0, th*0.45);
         var position = map.getPosition();
         offset = cc.pAdd(offset, position);
@@ -216,7 +215,7 @@ var MapToolUILayer = cc.Layer.extend({
         var LevelItem = cc.MenuItemImage.create(
             "res/PlayScene/top_lvexp00.png",
             "res/PlayScene/top_lvexp00.png",
-            this,
+            this, 
             function () {
                 var director = cc.Director.getInstance();
                 director.replaceScene(new ItemToolScene);
@@ -224,6 +223,32 @@ var MapToolUILayer = cc.Layer.extend({
         LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
         LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
         menu.addChild(LevelItem);
+
+        var PlusItem = cc.MenuItemImage.create(
+            "res/UIItem/plus.png",
+            "res/UIItem/plus.png",
+            this, 
+            function () {
+                var number = map.getScale();
+                number += 0.2;
+                map.setScale(number);
+            });
+        PlusItem.setAnchorPoint(cc.p(0.5, 0.5));
+        PlusItem.setPosition(cc.p(size.width * 0.3, size.height * 0.93));
+        menu.addChild(PlusItem);
+
+        var MinusItem = cc.MenuItemImage.create(
+            "res/UIItem/minus.png",
+            "res/UIItem/minus.png",
+            this, 
+            function () {
+                    var number = map.getScale();
+                    number -= 0.2;
+                    map.setScale(number);
+            });
+        MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
+        MinusItem.setPosition(cc.p(size.width * 0.38, size.height * 0.93));
+        menu.addChild(MinusItem);
     },
 
     LeftMenu:function () {
