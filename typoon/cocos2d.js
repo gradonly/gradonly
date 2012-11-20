@@ -38,7 +38,7 @@
             'src/resource.js',
             'src/graph.js',
             'src/astar.js',
-            'src/Tool/Unit.js',
+            'src/Unit.js',
             'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',
 

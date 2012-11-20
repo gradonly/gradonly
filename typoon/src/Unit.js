@@ -1,4 +1,4 @@
-var gg  = gg || {};
+var gg = gg = gg || {};
 
 gg.Unit = cc.Node.extend({
 	body:null,
@@ -6,6 +6,7 @@ gg.Unit = cc.Node.extend({
 	prev_direction:0,
 	direction:0,
 	ctor:function () {
+		this._super();
 	},
 
 	onEnter:function () {
@@ -100,6 +101,7 @@ gg.Unit = cc.Node.extend({
             	return coord;
 	},
 });
+
 
 gg.Unit.create = function () {
 	return new gg.Unit();

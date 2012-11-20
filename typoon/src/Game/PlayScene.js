@@ -5,6 +5,8 @@ var TAG_LAYER_UI = 209046;
 var TAG_TILE_MAP_LAYER = 10001001;
 var TAG_TILE_OBJECT_LAYER = 10001002;
 
+var Node = cc.Node;
+
 var makeNodesFromMap = function(map) {
     var object_layer =this.object_layer;
     var tiles = object_layer.getTiles();
