@@ -27,7 +27,7 @@ gg.Unit = cc.Node.extend({
 		var frames = [];
 		for (var i = 0; i < count; ++i) {
 			var name = "move_p" + i + ".png";
-			console.log(name);
+			// console.log(name);
 			var frame = cache.getSpriteFrame(name);
 			frames.push(frame);
 		}
@@ -36,7 +36,7 @@ gg.Unit = cc.Node.extend({
 		var animate = cc.Animate.create(animation);
 		body.runAction(cc.RepeatForever.create(animate));
 
-	        this.scheduleUpdate();
+	       	this.scheduleUpdate();
 	},
 	update:function (dt) {
 		if (this.getPositionX() - prev_position > 0) {
@@ -76,8 +76,7 @@ gg.Unit = cc.Node.extend({
 			this.runAction(sequence);
 	},
 	setPositionFromCoord:function(coord) {
-		var map = this.getParent();
-		var layer = map.layerNamed("MapLayer");
+		var layer = this.getParent();
 		var position = layer.positionAt(coord);
 		position.x += 30;
 		position.y += 30;
@@ -102,7 +101,6 @@ gg.Unit = cc.Node.extend({
 	},
 });
 
-gg.Unit.create = function (/*Multiple Arguments*/) {
-	var ret = new gg.Unit();
-	return ret;
+gg.Unit.create = function () {
+	return new gg.Unit();
 };

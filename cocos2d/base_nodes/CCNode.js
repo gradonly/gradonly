@@ -1706,4 +1706,3 @@ cc.Node.StateCallbackType = {onEnter:1, onExit:2, cleanup:3, onEnterTransitionDi
 cc.Node.create = function () {
     return new cc.Node();
 };
-

@@ -1,20 +1,18 @@
 
 var TAG_LAYER_MAP = 12434;
 var TAG_LAYER_UI = 209046;
-var TAG_TILE_MAP = 10001001;
+
+var TAG_TILE_MAP_LAYER = 10001001;
+var TAG_TILE_OBJECT_LAYER = 10001002;
 
 var makeNodesFromMap = function(map) {
-    object_layer = map.layerNamed("ObjectLayer");
-    var tiles = object_layer.getTiles()
+    var object_layer =this.object_layer;
+    var tiles = object_layer.getTiles();
 
     var nodes = [];
     var mapSize = map.getMapSize();
     var width = mapSize.width;
     var height = mapSize.height;
-
-    console.log("=======");
-    console.log(tiles);
-    console.log("=======");
 
     for (var x=0; x < width; x++) {
         var nodeRow = [];
@@ -22,7 +20,6 @@ var makeNodesFromMap = function(map) {
         for(var y = 0; y < height; y++) {
             if( tiles[y*height + x] > 0 ) {
                 nodeRow.push(GraphNodeType.WALL);
-                console.log("It's wall");
             }
             else  {
                 nodeRow.push(GraphNodeType.OPEN);
@@ -83,38 +80,58 @@ var PlayMapLayer = cc.Layer.extend({
         var size = cc.Director.getInstance().getWinSize();
 
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
-        var map = this.map;
+        this.map_layer = this.map.layerNamed("MapLayer");
+        this.object_layer = this.map.layerNamed("ObjectLayer");
 
-        this.addChild(map, 0, TAG_TILE_MAP);
-       
-        // 오브젝트 레이어를 가지고 맵을 만든다.
-        this.mapGraph = makeNodesFromMap(map);
-
-        this.map_layer = map.layerNamed("MapLayer");
-
-        this.object_layer = map.layerNamed("ObjectLayer");
-
-        var unit = gg.Unit.create();
-        map.addChild(unit, 2);
-
-        unit.setPositionFromCoord(cc.p(10, 18));
-        this.unit = unit;
-
-        map.reorderChild(this.map_layer, 0);
-        map.reorderChild(this.unit, 1);
-        map.reorderChild(this.object_layer, 2);
+        this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
+        this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
         
+        // 오브젝트 레이어를 가지고 맵을 만든다.
+        this.mapGraph = makeNodesFromMap(this.map);
+
+        this.unit = gg.Unit.create();
+        this.object_layer.addChild(this.unit, 2);
+        
+        this.unit.setPositionFromCoord(cc.p(10, 18));
+
+        this.scheduleUpdate();
+
+        // var map_size = this.map.getMapSize();
+        // var width = map_size.width;
+        // var height = map_size.height;
+
+        // console.log(this.object_layer);
+        // for (var x = 0; x < width; ++x) {
+        //     for (var y = 0; y < height; ++y) {
+
+        //         var tile = this.object_layer.tileAt(cc.p(x, y));
+        //         if (tile) {
+        //             this.object_layer.reorderChild(tile, x + y);
+        //         }
+        //     }
+        // }
+
         return true;
     },
 
     draw:function() {
-        // Play Scene에서는 그리그가 필요없다.
-        //this.ShowGridTileMap();
     },
 
     registerWithTouchDispatcher:function () {
-        console.log("registerWithTouchDispatcher() called");
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, true);
+    },
+
+    update:function (dt) {
+        // var map_size = this.map.getMapSize();
+        // var width = map_size.width;
+        // var height = map_size.height;
+
+        // for (var i = 0; i < width; ++i) {
+        //     for (var j = 0; j < height; ++j) {
+        //         var sprite = this.object_layer.tileAt(cc.p(i, j));
+        //         console.log(sprite.getZOrder());
+        //     }
+        // }
     },
 
     onTouchBegan:function (touch, event) {
@@ -134,10 +151,11 @@ var PlayMapLayer = cc.Layer.extend({
             return;
         }
         var diff = cc.pSub(touchLocation, this.prevLocation);
-        var currentPos = map.getPosition();
+        var currentPos = this.map_layer.getPosition();
 
         var curPos = cc.pAdd(currentPos, diff);
-        this.map.setPosition(curPos);
+        this.map_layer.setPosition(curPos);
+        this.object_layer.setPosition(curPos);
         this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
     },
 
@@ -150,7 +168,6 @@ var PlayMapLayer = cc.Layer.extend({
         if (!this.touchMoved) {
             var touchLocation = touch.getLocation();
             var nodeLocation = map.convertToNodeSpace(touchLocation);
-            // tile.setPosition(nodeLocation);
 
             var tileSize = map.getTileSize();
             var tw = tileSize.width;
@@ -163,43 +180,12 @@ var PlayMapLayer = cc.Layer.extend({
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
 
-            var layer = map.layerNamed("MapLayer");
-            // console.log(tile_button);
-            //layer.setTileGID(tile_button, coord, 0);
-              // (x, y) 
-
-            // Move the Path
-            // sequence
+            var layer = this.map_layer;
             var start_coord = unit.getCoordInMap();
             var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
             var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
             var path = astar.search(mapGraph.nodes, start, end, false);
         
-            // for(var j = 0; j < 20; j++) {
-            //    console.log( 
-            //     "[" + mapGraph.nodes[0][j].type +"]" 
-            //     + "[" + mapGraph.nodes[1][j].type +"]" 
-            //     + "[" + mapGraph.nodes[2][j].type +"]" 
-            //     + "[" + mapGraph.nodes[3][j].type +"]" 
-            //     + "[" + mapGraph.nodes[4][j].type +"]" 
-            //     + "[" + mapGraph.nodes[5][j].type +"]"
-            //     + "[" + mapGraph.nodes[6][j].type +"]"
-            //     + "[" + mapGraph.nodes[7][j].type +"]"
-            //     + "[" + mapGraph.nodes[8][j].type +"]"
-            //     + "[" + mapGraph.nodes[9][j].type +"]"
-            //     + "[" + mapGraph.nodes[10][j].type +"]" 
-            //     + "[" + mapGraph.nodes[11][j].type +"]" 
-            //     + "[" + mapGraph.nodes[12][j].type +"]" 
-            //     + "[" + mapGraph.nodes[13][j].type +"]" 
-            //     + "[" + mapGraph.nodes[14][j].type +"]" 
-            //     + "[" + mapGraph.nodes[15][j].type +"]"
-            //     + "[" + mapGraph.nodes[16][j].type +"]"
-            //     + "[" + mapGraph.nodes[17][j].type +"]"
-            //     + "[" + mapGraph.nodes[18][j].type +"]"
-            //     + "[" + mapGraph.nodes[19][j].type +"]"
-            //     );
-            // }
-
             var coords = [];
             for(var i = 0; i < path.length; i++) {
                 var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
@@ -212,40 +198,6 @@ var PlayMapLayer = cc.Layer.extend({
         this.touchMoved = false;
     },
 
-    ShowGridTileMap:function () {
-        cc.renderContext.lineWidth = 3;
-        cc.renderContext.strokeStyle = "#ffffff";
-        var map = this.map;
-
-        var layer = map.layerNamed("MapLayer");
-        var tileSize = map.getTileSize();
-        var tw = tileSize.width;
-        var th = tileSize.height;
-        var offset = cc.p(0, th*0.45);
-        var position = map.getPosition();
-        offset = cc.pAdd(offset, position);
-        var count = 20;
-
-        for (var i = 0; i <= count; ++i) {          
-            var start = layer.positionAt(cc.p(i, -1));
-            var end = layer.positionAt(cc.p(i, count-1));
-
-            start = cc.pAdd(start, offset);
-            end = cc.pAdd(end, offset);
-            cc.drawingUtil.drawLine(start, end);
-        }
-        for (var i = 0; i <= count; ++i) {
-            var start = layer.positionAt(cc.p(0, i-1));
-            var end = layer.positionAt(cc.p(count, i-1));
-
-            start = cc.pAdd(start, offset);
-            end = cc.pAdd(end, offset);
-            cc.drawingUtil.drawLine(start, end);
-        }
-
-        cc.renderContext.lineWidth = 1;
-    },
-    
     getButtonType:function(type) {
         tile_button = type;
     },
@@ -258,7 +210,6 @@ var PlayUILayer = cc.Layer.extend({
         this._super();
 
         this.TopMenu();
-        //this.LeftMenu();
 
         this.CenterMenu();
         return true;
@@ -358,24 +309,6 @@ var PlayUILayer = cc.Layer.extend({
         MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
         MinusItem.setPosition(cc.p(size.width * 0.4, size.height * 0.85));
         menu.addChild(MinusItem);
-    },
-
-    LeftMenu:function () {
-        var menu = cc.Menu.create();
-        menu.setPosition(cc.p(100, 500));
-        this.addChild(menu);
-
-        var item_number = 5;
-        var path = "res/LeftMenu/";
-        for (var i = 0; i < item_number; ++i) {
-            var file = path + "tile" + i + ".png";
-
-            var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            item.buttonType = i+1;
-            item.setPosition(0, i*-50);
-            menu.addChild(item);
-        }
-
     },
 
     CenterMenu:function() {
