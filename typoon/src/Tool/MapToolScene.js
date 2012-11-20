@@ -186,12 +186,12 @@ var MapToolUILayer = cc.Layer.extend({
     onEnter:function () {
         this._super();
 
+        this.outline = cc.Sprite.create("res/PlayScene/map/outline.png");
+        this.outline.setPosition(cc.p(0, 60));
+        this.addChild(this.outline, 2);
+
         this.TopMenu();
         this.LeftMenu();
-
-        this.outline = cc.Sprite.create("res/PlayScene/map/outline.png");
-        bg.setPosition(new cc.p(0, 0));
-        this.addChild(this.outline, 0);
 
         //this.CenterMenu();
         return true;
@@ -227,13 +227,13 @@ var MapToolUILayer = cc.Layer.extend({
         var item;
         file = "res/PlayScene/map/transparent.png";
         item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        item.buttonType = 0;
+        item.buttonType = ID_EMPTY_TILE;
         item.setPosition(0, 50);
         menu.addChild(item);
 
         file = "res/PlayScene/map/base.png";
         item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        item.buttonType = 1;
+        item.buttonType = ID_TERRAIN_TILE;
         item.setPosition(60, 50);
         menu.addChild(item);
 
@@ -267,16 +267,12 @@ var MapToolUILayer = cc.Layer.extend({
         for (var i = 0; i < item_number; ++i) {
             var file = path  + i + ".png";
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-
-            var x = parseInt(i / 4);
+            var x = parseInt(i / 4) ;
             var y = i % 4 ;
-            console.log( "x: "  + x * 50 + ", y: " + y * -60);
 
-            item.setPosition( x * 60 + 0.5, y * -60 +0.5);
-
+            item.setPosition(x * 50, y * -60);
             item.buttonType =  2 + tileset*item_number + i;
             this.left_tile_menu.addChild(item);
-
         }
     },
     ChangeTileset:function(sender) {
@@ -290,6 +286,10 @@ var MapToolUILayer = cc.Layer.extend({
                 this.SetLeftMenuTileset(++this.tileset_type);
             }
         }
+
+        this.outline.setPosition(cc.p(0, 60));
+        var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        map_layer.changeTileMenu(ID_EMPTY_TILE);
     },
 
     // under construction message.
@@ -309,8 +309,9 @@ var MapToolUILayer = cc.Layer.extend({
         var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
         map_layer.changeTileMenu(sender.buttonType);
 
-        console.log(item.buttonType);
-        this.outline.setPosition(item.getPosition());
+        var pos1 = this.left_tile_menu.getPosition();
+        var pos2 = item.getPosition();
+         this.outline.setPosition(cc.pAdd(pos1, pos2));
     },
 });
 
