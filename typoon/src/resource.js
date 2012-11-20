@@ -14,14 +14,20 @@ var g_ressources = [
 	{type:"image", src:"res/MainMenuScene/UIPlaySelected.png"},
 
     {type:"image", src:"res/PlayScene/top_lvexp00.png"},
-	{type:"image", src:"res/PlayScene/top_cash.png"},
-	{type:"image", src:"res/PlayScene/top_cash_p.png"},
-	{type:"image", src:"res/PlayScene/top_coin.png"},
-	{type:"image", src:"res/PlayScene/top_coin_p.png"},
-	{type:"image", src:"res/PlayScene/top_pop.png"},
-	{type:"image", src:"res/PlayScene/top_pop_p.png"},
+    {type:"image", src:"res/PlayScene/top_cash.png"},
+    {type:"image", src:"res/PlayScene/top_cash_p.png"},
+    {type:"image", src:"res/PlayScene/top_coin.png"},
+    {type:"image", src:"res/PlayScene/top_coin_p.png"},
+    {type:"image", src:"res/PlayScene/top_pop.png"},
+    {type:"image", src:"res/PlayScene/top_pop_p.png"},
     {type:"image", src:"res/PlayScene/top_sp.png"},
     {type:"image", src:"res/PlayScene/top_sp_p.png"},
+
+    {type:"image", src:"res/PlayScene/next.png"},
+    {type:"image", src:"res/PlayScene/next_p.png"},
+    {type:"image", src:"res/PlayScene/prev.png"},
+    {type:"image", src:"res/PlayScene/prev_p.png"},
+    {type:"image", src:"res/PlayScene/map/outline.png"},
 
     {type:"image", src:"res/PlayScene/ground.png"},   
     {type:"image", src:"res/PlayScene/3002_3iPhone.png"},
@@ -32,17 +38,18 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/tiles_tree.png"},
 
     {type:"image", src:"res/PlayScene/map/base.png"},
+    {type:"image", src:"res/PlayScene/map/transparent.png"},
     {type:"image", src:"res/PlayScene/map/tileset.png"},
 
     // tile
-    // {type:"image", src:"res/PlayScene/map/0/0.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/1.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/2.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/3.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/4.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/5.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/6.png"}, 
-    // {type:"image", src:"res/PlayScene/map/0/7.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/0.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/1.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/2.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/3.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/4.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/5.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/6.png"}, 
+    {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
@@ -59,7 +66,7 @@ var g_ressources = [
     {type:"image", src:"res/UIItem/minus.png"},
 
     {type:"image", src:"res/item_info.png"},
-    
+    {type:"image", src:"res/PlayScene/map/outline.png"},
 
     // move
     {type:"image", src:"res/Unit/move.png"},    

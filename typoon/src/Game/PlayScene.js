@@ -82,7 +82,7 @@ var PlayMapLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        this.map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
         var map = this.map;
 
         this.addChild(map, 0, TAG_TILE_MAP);
@@ -340,7 +340,7 @@ var PlayUILayer = cc.Layer.extend({
                 map.setScale(number);
             });
         PlusItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PlusItem.setPosition(cc.p(size.width * 0.1, size.height * 0.8));
+        PlusItem.setPosition(cc.p(size.width * 0.3, size.height * 0.85));
         menu.addChild(PlusItem);
 
         var MinusItem = cc.MenuItemImage.create(
@@ -356,12 +356,11 @@ var PlayUILayer = cc.Layer.extend({
             });
 
         MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
-        MinusItem.setPosition(cc.p(size.width * 0.2, size.height * 0.8));
+        MinusItem.setPosition(cc.p(size.width * 0.4, size.height * 0.85));
         menu.addChild(MinusItem);
     },
 
     LeftMenu:function () {
-        
         var menu = cc.Menu.create();
         menu.setPosition(cc.p(100, 500));
         this.addChild(menu);

@@ -31,6 +31,12 @@ var TAG_TILE_MAP = 10001000;
 var ID_EMPTY_TILE = 0;
 var ID_TERRAIN_TILE = 1;
 
+var BUTTON_TYPE_PERV = 0
+var BUTTON_TYPE_NEXT = 1
+
+var TILESET_MAX = 4;
+var TILE_MAX = 8;
+
 
 var MapToolLayer = cc.Layer.extend({
     tile:null,
@@ -95,8 +101,11 @@ var MapToolLayer = cc.Layer.extend({
             var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
-            
-            this.paintMapTile(coord);
+            if (0 <= coord.x && coord.x < mw &&
+                0 <= coord.y && coord.y < mh) {
+                this.paintMapTile(coord);
+
+            }        
         }
 
         this.touchMoved = false;
@@ -149,44 +158,40 @@ var MapToolLayer = cc.Layer.extend({
     paintMapTile:function(coord) {
         
         var tile_button = this.tile_button;
-        var mapLayer = this.map.layerNamed("MapLayer");             // MapLayer
-        var objectLayer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+        var ground = this.map.layerNamed("MapLayer");             // MapLayer
+        var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
 
         if( tile_button == ID_EMPTY_TILE) {
-            mapLayer.setTileGID( tile_button, coord, 1);
-            objectLayer.setTileGID( tile_button, coord, 1);
-
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 1);
         }else if( tile_button == ID_TERRAIN_TILE) {
-            mapLayer.setTileGID(ID_EMPTY_TILE, coord, 1);
-            objectLayer.setTileGID(ID_EMPTY_TILE, coord, 1);
-
-            mapLayer.setTileGID( tile_button, coord, 1);
-
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID(ID_EMPTY_TILE, coord, 1);
         } else {
-            mapLayer.setTileGID(ID_EMPTY_TILE, coord, 0);
-            objectLayer.setTileGID(ID_EMPTY_TILE, coord, 0);
-
-            objectLayer.setTileGID( tile_button, coord, 0);
+            ground.setTileGID( ID_TERRAIN_TILE, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 0);
         }
-
-        console.log("Layer start--------------");
-        console.log(mapLayer.tileGIDAt(coord));
-        console.log(objectLayer.tileGIDAt(coord));
-        console.log("Layer end-----------");
-
     }
 });
 
 // MapTool UI Layer
 var MapToolUILayer = cc.Layer.extend({
     left_tile_menu:null,
+    tileset_type:0,
+    outline:null,
     ctor:function () {
+        this.tileset_type = 0;
+        this.outline = null;
     },
     onEnter:function () {
         this._super();
 
         this.TopMenu();
         this.LeftMenu();
+
+        this.outline = cc.Sprite.create("res/PlayScene/map/outline.png");
+        bg.setPosition(new cc.p(0, 0));
+        this.addChild(this.outline, 0);
 
         //this.CenterMenu();
         return true;
@@ -214,44 +219,76 @@ var MapToolUILayer = cc.Layer.extend({
     },
 
     LeftMenu:function () {
-        this.left_tile_menu = cc.Menu.create();
+        var menu = cc.Menu.create(null);
+        menu.setPosition(cc.p(100, 500));
+        this.addChild(menu);
 
+        var file, file_p;
+        var item;
+        file = "res/PlayScene/map/transparent.png";
+        item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+        item.buttonType = 0;
+        item.setPosition(0, 50);
+        menu.addChild(item);
+
+        file = "res/PlayScene/map/base.png";
+        item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+        item.buttonType = 1;
+        item.setPosition(60, 50);
+        menu.addChild(item);
+
+        this.SetLeftMenuTileset(this.tileset_type);
+
+        file = "res/PlayScene/prev.png";
+        file_p = "res/PlayScene/prev_p.png";
+        item = cc.MenuItemImage.create(file, file_p, null, this, this.ChangeTileset);
+        item.setPosition(0, -240);
+        item.button_type = BUTTON_TYPE_PERV;
+        menu.addChild(item);
+
+        file = "res/PlayScene/next.png";
+        file_p = "res/PlayScene/next_p.png";
+        item = cc.MenuItemImage.create(file, file_p, null, this, this.ChangeTileset);
+        item.setPosition(60, -240);
+        item.button_type = BUTTON_TYPE_NEXT;
+        menu.addChild(item);
+    },
+    SetLeftMenuTileset:function (tileset) {
+        if (this.left_tile_menu) {
+            this.removeChild(this.left_tile_menu, true);
+        }
+
+        this.left_tile_menu = cc.Menu.create(null);
         this.left_tile_menu.setPosition(cc.p(100, 500));
         this.addChild(this.left_tile_menu);
 
-        var file = "res/PlayScene/map/transparent.png";
-        var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        item.buttonType = 1;
-        item.setPosition(0, 50);
-        this.left_tile_menu.addChild(item);
-
-        // Base Draw
-        // file = "res/PlayScene/map/base.png";
-        // item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        // item.buttonType = 0;
-        // item.setPosition(60, 50);
-        // this.left_tile_menu.addChild(item);
-
-        var path = "res/PlayScene/map/" + 0 + "/";
-        var item_number = 6;
-
+        var path = "res/PlayScene/map/" + tileset + "/";
+        var item_number = 8;
         for (var i = 0; i < item_number; ++i) {
-            file = path  + i + ".png";
-            item = null;
-            item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+            var file = path  + i + ".png";
+            var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
 
             var x = parseInt(i / 4);
             var y = i % 4 ;
-            console.log( "x: "  + x * 50 + ", y: " + y * -50);
-            console.log( item );
-            
-           // if( x == 1)
-                item.setPosition( x*100, y*-80);
-           // else
-            //    item.setPosition( x*100 +0.5, y*-80 + 0.5);
+            console.log( "x: "  + x * 50 + ", y: " + y * -60);
 
-            item.buttonType = i+1;
+            item.setPosition( x * 60 + 0.5, y * -60 +0.5);
+
+            item.buttonType =  2 + tileset*item_number + i;
             this.left_tile_menu.addChild(item);
+
+        }
+    },
+    ChangeTileset:function(sender) {
+        item = sender;
+        if (item.button_type == BUTTON_TYPE_PERV) {
+            if (this.tileset_type > 0) {
+                this.SetLeftMenuTileset(--this.tileset_type);
+            }
+        } else if (item.button_type == BUTTON_TYPE_NEXT) {
+            if (this.tileset_type < TILESET_MAX) {
+                this.SetLeftMenuTileset(++this.tileset_type);
+            }
         }
     },
 
@@ -268,8 +305,12 @@ var MapToolUILayer = cc.Layer.extend({
 
     // left Menu Item' selector
     SelectMenuLeftItem:function (sender) {
+        var item = sender;
         var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
         map_layer.changeTileMenu(sender.buttonType);
+
+        console.log(item.buttonType);
+        this.outline.setPosition(item.getPosition());
     },
 });
 
