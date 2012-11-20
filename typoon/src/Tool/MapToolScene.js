@@ -225,23 +225,30 @@ var MapToolUILayer = cc.Layer.extend({
         item.setPosition(0, 50);
         this.left_tile_menu.addChild(item);
 
-        file = "res/PlayScene/map/base.png";
-        item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        item.buttonType = 0;
-        item.setPosition(60, 50);
-        this.left_tile_menu.addChild(item);
+        // Base Draw
+        // file = "res/PlayScene/map/base.png";
+        // item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+        // item.buttonType = 0;
+        // item.setPosition(60, 50);
+        // this.left_tile_menu.addChild(item);
 
         var path = "res/PlayScene/map/" + 0 + "/";
-        var item_number = 8;
+        var item_number = 6;
+
         for (var i = 0; i < item_number; ++i) {
             file = path  + i + ".png";
+            item = null;
             item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
 
-            var x = parseInt(i / 4) ;
+            var x = parseInt(i / 4);
             var y = i % 4 ;
-            console.log( "x: "  + x * 50 + ", y: " + y * -60);
-
-            item.setPosition(x * 50, y * -60);
+            console.log( "x: "  + x * 50 + ", y: " + y * -50);
+            console.log( item );
+            
+           // if( x == 1)
+                item.setPosition( x*100, y*-80);
+           // else
+            //    item.setPosition( x*100 +0.5, y*-80 + 0.5);
 
             item.buttonType = i+1;
             this.left_tile_menu.addChild(item);

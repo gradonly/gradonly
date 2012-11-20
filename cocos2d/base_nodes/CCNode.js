@@ -479,7 +479,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     setPosition:function (newPosOrxValue, yValue) {
         //save dirty region when before change
         //this._addDirtyRegionToDirector(this.getBoundingBoxToWorld());
-        if (yValue) {
+        if (typeof yValue != "undefined") {
             this._position.x = newPosOrxValue;
             this._position.y = yValue;
             //this._position = cc.p(newPosOrxValue,yValue);
