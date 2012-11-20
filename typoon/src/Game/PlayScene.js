@@ -89,7 +89,9 @@ var PlayMapLayer = cc.Layer.extend({
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
+        console.log(gg.Unit);
         this.unit = gg.Unit.create();
+
         this.object_layer.addChild(this.unit, 2);
         
         this.unit.setPositionFromCoord(cc.p(10, 18));
