@@ -47,6 +47,7 @@
             'src/Game/UIScene.js',
             'src/Tool/MapToolScene.js',
             'src/Tool/ItemToolScene.js',
+            'src/Tool/UIWindow.js', 
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {

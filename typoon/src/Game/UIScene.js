@@ -201,7 +201,11 @@ var UIPlayMapLayer = cc.Layer.extend({
 });
 
 var UIUILayer = cc.Layer.extend({
+    m_window:null,
+    m_winSize:null,
+
     ctor:function () {
+        this.m_winSize = cc.Director.getInstance().getWinSize();
     },
     onEnter:function () {
         this._super();
@@ -209,6 +213,11 @@ var UIUILayer = cc.Layer.extend({
         this.TopMenu();
         this.LeftMenu();
         this.RightMenu();
+
+        this.m_window = new UIWindow();
+        this.m_window.setPosition(cc.p(this.m_winSize.width/2,this.m_winSize.height/2));
+        this.addChild(this.m_window);
+
         return true;
     },
     TopMenu:function () {
