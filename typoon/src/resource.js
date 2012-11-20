@@ -31,13 +31,18 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/tiles_ground.png"},
     {type:"image", src:"res/PlayScene/tiles_tree.png"},
 
+    {type:"image", src:"res/PlayScene/map/base.png"},
+    {type:"image", src:"res/PlayScene/map/tileset.png"},
+
     // tile
-    {type:"image", src:"res/LeftMenu/tile0.png"},
-    {type:"image", src:"res/LeftMenu/tile1.png"},
-    {type:"image", src:"res/LeftMenu/tile2.png"},
-    {type:"image", src:"res/LeftMenu/tile3.png"},
-    {type:"image", src:"res/LeftMenu/tile4.png"},
-    {type:"image", src:"res/LeftMenu/tile5.png"},
+    // {type:"image", src:"res/PlayScene/map/0/0.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/1.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/2.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/3.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/4.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/5.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/6.png"}, 
+    // {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
@@ -68,6 +73,7 @@ var g_ressources = [
     {type:"tmx", src:"res/PlayScene/ground01.tmx"},
     {type:"tmx", src:"res/PlayScene/ground02.tmx"},
     {type:"tmx", src:"res/PlayScene/ground03.tmx"},
+    {type:"tmx", src:"res/PlayScene/map/map1.tmx"},
 
     //bgm
 

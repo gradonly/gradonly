@@ -48,11 +48,8 @@ var MapToolLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
-        this.map = cc.TMXTiledMap.create("res/PlayScene/ground02.tmx");
+        this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
         this.addChild(this.map, 0, TAG_TILE_MAP);
-
-        // tile = cc.Sprite.create("res/PlayScene/3002_3iPhone.png");
-        // map.addChild(tile);
 
         return true;
     },
@@ -87,7 +84,6 @@ var MapToolLayer = cc.Layer.extend({
         if (!this.touchMoved) {
             var touchLocation = touch.getLocation();
             var nodeLocation = this.map.convertToNodeSpace(touchLocation);
-            // tile.setPosition(nodeLocation);
 
             var tileSize = this.map.getTileSize();
             var tw = tileSize.width;
@@ -101,7 +97,6 @@ var MapToolLayer = cc.Layer.extend({
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
             
             this.paintMapTile(coord);
-
         }
 
         this.touchMoved = false;
@@ -184,6 +179,7 @@ var MapToolLayer = cc.Layer.extend({
 
 // MapTool UI Layer
 var MapToolUILayer = cc.Layer.extend({
+    left_tile_menu:null,
     ctor:function () {
     },
     onEnter:function () {
@@ -215,55 +211,40 @@ var MapToolUILayer = cc.Layer.extend({
         LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
         LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
         menu.addChild(LevelItem);
-
-        var PlusItem = cc.MenuItemImage.create(
-            "res/UIItem/plus.png",
-            "res/UIItem/plus.png",
-            this, 
-            function () {
-                //var map_layer = mapToolUILayer.getParent().getChildByTag('TAG_LAYER_MAP');
-                var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-                var map = map_layer.map;
-                var number = map.getScale();
-                number += 0.2;
-                map.setScale(number);
-            });
-        PlusItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PlusItem.setPosition(cc.p(size.width * 0.3, size.height * 0.93));
-        menu.addChild(PlusItem);
-
-        var MinusItem = cc.MenuItemImage.create(
-            "res/UIItem/minus.png",
-            "res/UIItem/minus.png",
-            this, 
-            function () {
-                    var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-                    var map = map_layer.map;
-                    var number = map.getScale();
-                    number -= 0.2;
-                    map.setScale(number);
-            });
-
-        MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
-        MinusItem.setPosition(cc.p(size.width * 0.38, size.height * 0.93));
-        menu.addChild(MinusItem);
     },
 
     LeftMenu:function () {
-        var menu = cc.Menu.create();
-        menu.setPosition(cc.p(100, 500));
-        this.addChild(menu);
+        this.left_tile_menu = cc.Menu.create();
 
-        var countOFTile = 6;
-        var item_number = 6;
-        var path = "res/LeftMenu/";
+        this.left_tile_menu.setPosition(cc.p(100, 500));
+        this.addChild(this.left_tile_menu);
+
+        var file = "res/PlayScene/map/transparent.png";
+        var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+        item.buttonType = 1;
+        item.setPosition(0, 50);
+        this.left_tile_menu.addChild(item);
+
+        file = "res/PlayScene/map/base.png";
+        item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
+        item.buttonType = 0;
+        item.setPosition(60, 50);
+        this.left_tile_menu.addChild(item);
+
+        var path = "res/PlayScene/map/" + 0 + "/";
+        var item_number = 8;
         for (var i = 0; i < item_number; ++i) {
-            var file = path + "tile" + i + ".png";
+            file = path  + i + ".png";
+            item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
 
-            var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            item.buttonType = i;
-            item.setPosition(0, i*-50);
-            menu.addChild(item);
+            var x = parseInt(i / 4) ;
+            var y = i % 4 ;
+            console.log( "x: "  + x * 50 + ", y: " + y * -60);
+
+            item.setPosition(x * 50, y * -60);
+
+            item.buttonType = i+1;
+            this.left_tile_menu.addChild(item);
         }
     },
 
