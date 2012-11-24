@@ -13,8 +13,15 @@ gg.Unit = cc.Node.extend({
 	coords:null,
 	ctor:function () {
 		this._super();
-		prev_position = this.getPositionX();
-		prev_direction = direction = 1;
+
+	},
+
+	onEnter:function () {
+		this._super();
+		console.log(this);
+
+		this.prev_position = this.getPositionX();
+		this.prev_direction = this.direction = 1;
 
 		var size = cc.Director.getInstance().getWinSize();
 
@@ -45,20 +52,20 @@ gg.Unit = cc.Node.extend({
 	},
 
 	update:function (dt) {
-		if (this.getPositionX() - prev_position > 0) {
-			if (direction < 0) {
-				direction = 1;
+		if (this.getPositionX() - this.prev_position > 0) {
+			if (this.direction < 0) {
+				this.direction = 1;
 				var flip = cc.FlipX.create(90);
 				this.body.runAction(flip);
 			}
-		} else if (this.getPositionX() - prev_position < 0){
-			if (direction > 0) {
-				direction = -1;
+		} else if (this.getPositionX() - this.prev_position < 0){
+			if (this.direction > 0) {
+				this.direction = -1;
 				var flip = cc.FlipX.create(0);
 				this.body.runAction(flip);
 			}
 		}
-		prev_position = this.getPositionX();
+		this.prev_position = this.getPositionX();
 	},
 
 	setCoords:function(coords) {
@@ -103,7 +110,7 @@ gg.Unit = cc.Node.extend({
 		var world = this.getPosition();
 		var map = this.getParent().getPosition();
 
-		house.setPosition(prev_position);
+		house.setPosition(this.prev_position);
 		this.getParent().addChild(house, 2);
 	},
 });
