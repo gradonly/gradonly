@@ -12,17 +12,12 @@ var makeNodesFromMap = function(map) {
     var width = mapSize.width;
     var height = mapSize.height;
 
-    console.log("=======");
-    console.log(tiles);
-    console.log("=======");
-
     for (var x=0; x < width; x++) {
         var nodeRow = [];
         
         for(var y = 0; y < height; y++) {
             if( tiles[y*height + x] > 0 ) {
                 nodeRow.push(GraphNodeType.WALL);
-                console.log("It's wall");
             }
             else  {
                 nodeRow.push(GraphNodeType.OPEN);
@@ -221,6 +216,7 @@ var UIUILayer = cc.Layer.extend({
         return true;
     },
     TopMenu:function () {
+<<<<<<< HEAD
         // var size = cc.Director.getInstance().getWinSize();
 
         // var menu = cc.Menu.create(null);

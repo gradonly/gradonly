@@ -2,6 +2,7 @@
 var TAG_LAYER_MAP = 12434;
 var TAG_LAYER_UI = 209046;
 
+var TAG_TILE_MAP = 10001000;
 var TAG_TILE_MAP_LAYER = 10001001;
 var TAG_TILE_OBJECT_LAYER = 10001002;
 
@@ -65,19 +66,15 @@ var PlayMapLayer = cc.Layer.extend({
     unit:null,
     mapGraph:null,
     map:null,
+
     ctor:function () {
         this.setTouchEnabled(true);
-
-        this.tile = null;
-        this.map = null;
-        this.mapGraph = null;
-        this.tile_button = 0;
-        this.unit = null;
-
     },
 
     onEnter:function () {
         this._super();
+
+        this.scheduleUpdate();
 
         var size = cc.Director.getInstance().getWinSize();
 
@@ -89,36 +86,19 @@ var PlayMapLayer = cc.Layer.extend({
         this.object_layer = this.map.layerNamed("ObjectLayer");
         
 
-        this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
-        this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
+        this.addChild(this.map, 0, TAG_TILE_MAP);
+        // this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
+        // this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
         
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
-        console.log(gg.Unit);
         this.unit = gg.Unit.create();
 
-       
-       
+        this.map.addChild(this.unit, 2);
+        
         this.unit.setPositionFromCoord(cc.p(10, 18));
         this.object_layer.addChild(this.unit, 2);
-
-        this.scheduleUpdate();
-
-        // var map_size = this.map.getMapSize();
-        // var width = map_size.width;
-        // var height = map_size.height;
-
-        // console.log(this.object_layer);
-        // for (var x = 0; x < width; ++x) {
-        //     for (var y = 0; y < height; ++y) {
-
-        //         var tile = this.object_layer.tileAt(cc.p(x, y));
-        //         if (tile) {
-        //             this.object_layer.reorderChild(tile, x + y);
-        //         }
-        //     }
-        // }
 
         return true;
     },
@@ -131,16 +111,6 @@ var PlayMapLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
-        // var map_size = this.map.getMapSize();
-        // var width = map_size.width;
-        // var height = map_size.height;
-
-        // for (var i = 0; i < width; ++i) {
-        //     for (var j = 0; j < height; ++j) {
-        //         var sprite = this.object_layer.tileAt(cc.p(i, j));
-        //         console.log(sprite.getZOrder());
-        //     }
-        // }
     },
 
     onTouchBegan:function (touch, event) {
@@ -160,11 +130,10 @@ var PlayMapLayer = cc.Layer.extend({
             return;
         }
         var diff = cc.pSub(touchLocation, this.prevLocation);
-        var currentPos = this.map_layer.getPosition();
+        var map_position = this.map.getPosition();
 
-        var curPos = cc.pAdd(currentPos, diff);
-        this.map_layer.setPosition(curPos);
-        this.object_layer.setPosition(curPos);
+        var current_position = cc.pAdd(map_position, diff);
+        this.map.setPosition(current_position);
         this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
     },
 
@@ -188,27 +157,53 @@ var PlayMapLayer = cc.Layer.extend({
             var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
+            if (0 <= coord.x && coord.x < mw &&
+                0 <= coord.y && coord.y < mh) {
+                var layer = this.map_layer;
+                var start_coord = unit.getCoordInMap();
+                var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
+                var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
+                var path = astar.search(mapGraph.nodes, start, end, false);
+            
+                var coords = [];
+                for(var i = 0; i < path.length; i++) {
+                    var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
+                    coords.push(coord);
+                }
 
-            var layer = this.map_layer;
-            var start_coord = unit.getCoordInMap();
-            var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
-            var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
-            var path = astar.search(mapGraph.nodes, start, end, false);
-        
-            var coords = [];
-            for(var i = 0; i < path.length; i++) {
-                var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
-                coords.push(coord);
+                var actions = [];
+                var layer = this.map_layer;
+                var temp_position = this.getPosition();
+                for (var i in coords) {
+                    var coord = coords[i];
+                    var position = layer.positionAt(coord);
+                    position.x += 30;
+                    position.y += 30;
+
+                    var move = cc.MoveTo.create(0.5,  position);
+                    actions.push(move);
+                }
+
+                var state = unit.getState();
+                if (state == UNIT_STATE_DEFAULT) {
+                } else if (state == UNIT_STATE_BUILDING) {
+                    var buildfunc = cc.CallFunc.create(unit, unit.build);
+                    actions.push(buildfunc);
+                }
+
+                var sequence = cc.Sequence.create(actions);
+                unit.runAction(sequence);
             }
-            console.log(coords);
-            unit.move(coords);
         }
 
         this.touchMoved = false;
     },
-
     getButtonType:function(type) {
         tile_button = type;
+    },
+
+    getUnit:function(unit) {
+        return this.unit;
     },
 });
 
@@ -218,18 +213,20 @@ var PlayUILayer = cc.Layer.extend({
     onEnter:function () {
         this._super();
 
-        this.TopMenu();
-
-        this.CenterMenu();
-        return true;
-    },
-    TopMenu:function () {
-        var size = cc.Director.getInstance().getWinSize();
-
         var menu = cc.Menu.create(null);
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
 
+        this.TopMenu(menu);
+        this.attachZoomInOutMenu(menu);
+        this.createHouseUI(menu);
+
+        this.CenterMenu();
+
+        return true;
+    },
+    TopMenu:function (menu) {
+        var size = cc.Director.getInstance().getWinSize();
         var LevelItem = cc.MenuItemImage.create(
             "res/PlayScene/top_lvexp00.png",
             "res/PlayScene/top_lvexp00.png",
@@ -255,6 +252,7 @@ var PlayUILayer = cc.Layer.extend({
             "res/PlayScene/top_cash_p.png",
             this,
             function () {
+                console.log('dd');
             });
         CashItem.setAnchorPoint(cc.p(0.5, 0.5));
         CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
@@ -279,15 +277,10 @@ var PlayUILayer = cc.Layer.extend({
         PopItem.setAnchorPoint(cc.p(0.5, 0.5));
         PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
         menu.addChild(PopItem);
-
-
-        this.attachZoomInOutMenu(menu);
-
     },
 
     attachZoomInOutMenu:function(menu) {
         var size = cc.Director.getInstance().getWinSize();
-
         var PlusItem = cc.MenuItemImage.create(
             "res/UIItem/plus.png",
             "res/UIItem/plus.png",
@@ -299,14 +292,13 @@ var PlayUILayer = cc.Layer.extend({
                 number += 0.2;
                 map.setScale(number);
             });
-        PlusItem.setAnchorPoint(cc.p(0.5, 0.5));
         PlusItem.setPosition(cc.p(size.width * 0.3, size.height * 0.85));
         menu.addChild(PlusItem);
 
         var MinusItem = cc.MenuItemImage.create(
             "res/UIItem/minus.png",
             "res/UIItem/minus.png",
-            this, 
+            this,
             function () {
                 var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
                 var map = map_layer.map;
@@ -315,7 +307,6 @@ var PlayUILayer = cc.Layer.extend({
                 map.setScale(number);
             });
 
-        MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
         MinusItem.setPosition(cc.p(size.width * 0.4, size.height * 0.85));
         menu.addChild(MinusItem);
     },
@@ -334,16 +325,39 @@ var PlayUILayer = cc.Layer.extend({
         var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
         map_layer.getButtonType(sender.buttonType);
     },
+
+    createHouseUI:function(menu) {
+        var frame = cc.Sprite.create("res/uiitem/house/frame.png");
+        frame.setPosition(cc.p(400, 100));
+        this.addChild(frame, 0);
+
+        for (var i = 0; i < 5; ++i) {
+            var item = cc.MenuItemImage.create(
+            "res/uiitem/house/map_" + i + ".png",
+            null,
+            this,
+            function () {
+                var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+                var unit = layer.getUnit();
+
+                unit.setState(UNIT_STATE_BUILDING);
+                unit.setBuilding(i);
+            });
+
+            item.setPosition(cc.p(160+120*i, 100));
+            menu.addChild(item);
+        }
+    },
 });
 
 var PlayScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var mapLayer = new PlayMapLayer();
-        this.addChild(mapLayer, 0, TAG_LAYER_MAP);
-
         var uiLayer = new PlayUILayer();
         this.addChild(uiLayer, 1, TAG_LAYER_UI);
+
+        var mapLayer = new PlayMapLayer();
+        this.addChild(mapLayer, 0, TAG_LAYER_MAP);
     }
 });

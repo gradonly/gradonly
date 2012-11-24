@@ -51,6 +51,16 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/map/0/6.png"}, 
     {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
+    // house
+    {type:"image", src:"res/uiitem/house/map_0.png"}, 
+    {type:"image", src:"res/uiitem/house/map_1.png"}, 
+    {type:"image", src:"res/uiitem/house/map_2.png"}, 
+    {type:"image", src:"res/uiitem/house/map_3.png"}, 
+    {type:"image", src:"res/uiitem/house/map_4.png"},
+    {type:"image", src:"res/uiitem/house/map_5.png"},
+    {type:"image", src:"res/uiitem/house/map_6.png"},
+    {type:"image", src:"res/uiitem/house/map_7.png"},
+
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
     {type:"image", src:"res/UIItem/UI1.png"},

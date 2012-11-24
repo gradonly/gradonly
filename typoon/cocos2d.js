@@ -50,7 +50,7 @@
             'src/Tool/UIWindow.js',
             'src/Tool/UIComponentLabel.js',
             'src/Tool/UIComponentBase.js',
-          
+            'src/house.js', 
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {
