@@ -216,6 +216,7 @@ var UIUILayer = cc.Layer.extend({
         return true;
     },
     TopMenu:function () {
+
         // var size = cc.Director.getInstance().getWinSize();
 
         // var menu = cc.Menu.create(null);
