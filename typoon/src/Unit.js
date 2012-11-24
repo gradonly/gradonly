@@ -10,6 +10,7 @@ gg.Unit = cc.Node.extend({
 	direction:0,
 	state_type:0,
 	building_type:0,
+	coords:null,
 	ctor:function () {
 		this._super();
 		prev_position = this.getPositionX();
@@ -60,33 +61,10 @@ gg.Unit = cc.Node.extend({
 		prev_position = this.getPositionX();
 	},
 
-	move:function (coords) {
-		var map = this.getParent();
-		var layer = map.layerNamed("MapLayer");
-		var actions= [];
-		var temp_position = this.getPosition();
-		for (var i in coords) {
-			var coord = coords[i];
-			var position = layer.positionAt(coord);
-			position.x += 30;
-			position.y += 30;
-
-			var move = cc.MoveTo.create(0.5,  position);
-			actions.push(move);
-		}
-
-		if (this.state_type == UNIT_STATE_BUILDING) {
-			var callfunc = cc.CallFunc.create(this, this.build, null);
-			actions.push(callfunc);
-		}
-
-		var sequence = cc.Sequence.create(actions);
-		console.log(sequence);
-		
-		// if path is not blank, go through.
-		if( sequence != undefined )
-			this.runAction(sequence);
+	setCoords:function(coords) {
+		this.coords = coords;
 	},
+
 	setPositionFromCoord:function(coord) {
 		var layer = this.getParent().layerNamed("MapLayer");
 		var position = layer.positionAt(coord);
@@ -114,12 +92,19 @@ gg.Unit = cc.Node.extend({
 	setState:function(type) {
 		this.state_type = type;
 	},
-	setBuildingType:function(type) {
+	getState:function() {
+		return this.state_type;
+	},
+	setBuilding:function(type) {
 		this.building_type = type;
 	},
-	build:function(type) {
-		var house = cc.House.create(type, setPosition);
-		this.getParent().addChild().addChild(house);
+	build:function() {
+		var house = gg.House.create(this.building_type);
+		var world = this.getPosition();
+		var map = this.getParent().getPosition();
+
+		house.setPosition(prev_position);
+		this.getParent().addChild(house, 2);
 	},
 });
 

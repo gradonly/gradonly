@@ -62,7 +62,6 @@ var MainMenuLayer = cc.Layer.extend({
         var menu = cc.Menu.create(item, null);
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
-        
         return true;
     }
 });

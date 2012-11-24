@@ -69,12 +69,6 @@ var PlayMapLayer = cc.Layer.extend({
 
     ctor:function () {
         this.setTouchEnabled(true);
-
-        this.tile = null;
-        this.map = null;
-        this.mapGraph = null;
-        this.tile_button = 0;
-        this.unit = null;
     },
 
     onEnter:function () {
@@ -99,8 +93,6 @@ var PlayMapLayer = cc.Layer.extend({
         this.map.addChild(this.unit, 2);
         
         this.unit.setPositionFromCoord(cc.p(10, 18));
-
-        this.createHouseUI();
 
         return true;
     },
@@ -172,41 +164,40 @@ var PlayMapLayer = cc.Layer.extend({
                     var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
                     coords.push(coord);
                 }
-                unit.move(coords);
+
+                var actions = [];
+                var layer = this.map_layer;
+                var temp_position = this.getPosition();
+                for (var i in coords) {
+                    var coord = coords[i];
+                    var position = layer.positionAt(coord);
+                    position.x += 30;
+                    position.y += 30;
+
+                    var move = cc.MoveTo.create(0.5,  position);
+                    actions.push(move);
+                }
+
+                var state = unit.getState();
+                if (state == UNIT_STATE_DEFAULT) {
+                } else if (state == UNIT_STATE_BUILDING) {
+                    var buildfunc = cc.CallFunc.create(unit, unit.build);
+                    actions.push(buildfunc);
+                }
+
+                var sequence = cc.Sequence.create(actions);
+                unit.runAction(sequence);
             }
         }
 
         this.touchMoved = false;
     },
-
-    createHouseUI:function() {
-        var frame = cc.Sprite.create("res/uiitem/house/frame.png");
-        frame.setPosition(cc.p(400, 100));
-        this.addChild(frame, 0);
-
-        var menu = cc.Menu.create(null);
-        menu.setPosition(cc.PointZero());
-        this.addChild(menu, 1);
-
-        for (var i = 0; i < 5; ++i) {
-            var item = cc.MenuItemImage.create(
-            "res/uiitem/house/map_" + i + ".png",
-            "res/uiitem/house/map_" + i + ".png",
-            this,
-            function () {
-                this.unit.setState(UNIT_STATE_BUILDING);
-                this.unit.setBuildingType(i);
-                console.log("clicked item");
-            });
-
-            item.setAnchorPoint(cc.p(0.5, 0.5));
-            item.setPosition(cc.p(160+120*i, 100));
-            menu.addChild(item);
-        }
-    },
-
     getButtonType:function(type) {
         tile_button = type;
+    },
+
+    getUnit:function(unit) {
+        return this.unit;
     },
 });
 
@@ -216,18 +207,20 @@ var PlayUILayer = cc.Layer.extend({
     onEnter:function () {
         this._super();
 
-        this.TopMenu();
-
-        this.CenterMenu();
-        return true;
-    },
-    TopMenu:function () {
-        var size = cc.Director.getInstance().getWinSize();
-
         var menu = cc.Menu.create(null);
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
 
+        this.TopMenu(menu);
+        this.attachZoomInOutMenu(menu);
+        this.createHouseUI(menu);
+
+        this.CenterMenu();
+
+        return true;
+    },
+    TopMenu:function (menu) {
+        var size = cc.Director.getInstance().getWinSize();
         var LevelItem = cc.MenuItemImage.create(
             "res/PlayScene/top_lvexp00.png",
             "res/PlayScene/top_lvexp00.png",
@@ -253,6 +246,7 @@ var PlayUILayer = cc.Layer.extend({
             "res/PlayScene/top_cash_p.png",
             this,
             function () {
+                console.log('dd');
             });
         CashItem.setAnchorPoint(cc.p(0.5, 0.5));
         CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
@@ -277,15 +271,10 @@ var PlayUILayer = cc.Layer.extend({
         PopItem.setAnchorPoint(cc.p(0.5, 0.5));
         PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
         menu.addChild(PopItem);
-
-
-        this.attachZoomInOutMenu(menu);
-
     },
 
     attachZoomInOutMenu:function(menu) {
         var size = cc.Director.getInstance().getWinSize();
-
         var PlusItem = cc.MenuItemImage.create(
             "res/UIItem/plus.png",
             "res/UIItem/plus.png",
@@ -297,14 +286,13 @@ var PlayUILayer = cc.Layer.extend({
                 number += 0.2;
                 map.setScale(number);
             });
-        PlusItem.setAnchorPoint(cc.p(0.5, 0.5));
         PlusItem.setPosition(cc.p(size.width * 0.3, size.height * 0.85));
         menu.addChild(PlusItem);
 
         var MinusItem = cc.MenuItemImage.create(
             "res/UIItem/minus.png",
             "res/UIItem/minus.png",
-            this, 
+            this,
             function () {
                 var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
                 var map = map_layer.map;
@@ -313,7 +301,6 @@ var PlayUILayer = cc.Layer.extend({
                 map.setScale(number);
             });
 
-        MinusItem.setAnchorPoint(cc.p(0.5, 0.5));
         MinusItem.setPosition(cc.p(size.width * 0.4, size.height * 0.85));
         menu.addChild(MinusItem);
     },
@@ -332,16 +319,39 @@ var PlayUILayer = cc.Layer.extend({
         var map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
         map_layer.getButtonType(sender.buttonType);
     },
+
+    createHouseUI:function(menu) {
+        var frame = cc.Sprite.create("res/uiitem/house/frame.png");
+        frame.setPosition(cc.p(400, 100));
+        this.addChild(frame, 0);
+
+        for (var i = 0; i < 5; ++i) {
+            var item = cc.MenuItemImage.create(
+            "res/uiitem/house/map_" + i + ".png",
+            null,
+            this,
+            function () {
+                var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+                var unit = layer.getUnit();
+
+                unit.setState(UNIT_STATE_BUILDING);
+                unit.setBuilding(i);
+            });
+
+            item.setPosition(cc.p(160+120*i, 100));
+            menu.addChild(item);
+        }
+    },
 });
 
 var PlayScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var mapLayer = new PlayMapLayer();
-        this.addChild(mapLayer, 0, TAG_LAYER_MAP);
-
         var uiLayer = new PlayUILayer();
         this.addChild(uiLayer, 1, TAG_LAYER_UI);
+
+        var mapLayer = new PlayMapLayer();
+        this.addChild(mapLayer, 0, TAG_LAYER_MAP);
     }
 });

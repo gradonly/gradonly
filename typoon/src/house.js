@@ -3,11 +3,11 @@ var gg = gg = gg || {};
 gg.House = cc.Node.extend({
     menu:null,
     ctor:function () {
-    },
-    onEnter:function () {
         this.menu = cc.Menu.create(null);
         this.menu.setPosition(cc.PointZero());
         this.addChild(this.menu, 0);
+    },
+    onEnter:function () {
     },
     build:function(type) {
         var item = cc.MenuItemImage.create(
@@ -19,14 +19,12 @@ gg.House = cc.Node.extend({
                 // this.unit.setBuildingType(i);
             });
 
-        item.setPosition(cc.p(400, 400));
         this.menu.addChild(item, 0);
     },
 });
 
-gg.House.create = function (type, position) {
+gg.House.create = function (type) {
     var house = new gg.House();
     house.build(type);
-    house.setPosition(position);
     return house;
 };
