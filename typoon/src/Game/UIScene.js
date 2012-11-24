@@ -12,17 +12,12 @@ var makeNodesFromMap = function(map) {
     var width = mapSize.width;
     var height = mapSize.height;
 
-    console.log("=======");
-    console.log(tiles);
-    console.log("=======");
-
     for (var x=0; x < width; x++) {
         var nodeRow = [];
         
         for(var y = 0; y < height; y++) {
             if( tiles[y*height + x] > 0 ) {
                 nodeRow.push(GraphNodeType.WALL);
-                console.log("It's wall");
             }
             else  {
                 nodeRow.push(GraphNodeType.OPEN);
@@ -232,9 +227,9 @@ var UIUILayer = cc.Layer.extend({
             "res/PlayScene/top_lvexp00.png",        // selected images
             this,                                   // disabled image or target
             function () {                           // callback method
-                console.log(this);
-                console.log(LevelItem);
-                console.log(LevelItem.getPosition());
+                // console.log(this);
+                // console.log(LevelItem);
+                // console.log(LevelItem.getPosition());
             });
 
         //console.log(LevelItem);
@@ -299,8 +294,8 @@ var UIUILayer = cc.Layer.extend({
         for (var i = 0; i < item_number; ++i) {
             var file = path + "UI" + i + ".png";
             var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-            console.log(item);
-            console.log(item.getContentSize());
+            // console.log(item);
+            // console.log(item.getContentSize());
             var itemHeight = item.getContentSize().height
             item.setAnchorPoint(0.5, 0.5);
             item.buttonType = i+1;

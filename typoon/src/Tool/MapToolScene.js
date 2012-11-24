@@ -104,8 +104,7 @@ var MapToolLayer = cc.Layer.extend({
             if (0 <= coord.x && coord.x < mw &&
                 0 <= coord.y && coord.y < mh) {
                 this.paintMapTile(coord);
-
-            }        
+            }
         }
 
         this.touchMoved = false;

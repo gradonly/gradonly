@@ -2,6 +2,7 @@
 var TAG_LAYER_MAP = 12434;
 var TAG_LAYER_UI = 209046;
 
+var TAG_TILE_MAP = 10001000;
 var TAG_TILE_MAP_LAYER = 10001001;
 var TAG_TILE_OBJECT_LAYER = 10001002;
 
@@ -65,6 +66,7 @@ var PlayMapLayer = cc.Layer.extend({
     unit:null,
     mapGraph:null,
     map:null,
+
     ctor:function () {
         this.setTouchEnabled(true);
 
@@ -73,11 +75,12 @@ var PlayMapLayer = cc.Layer.extend({
         this.mapGraph = null;
         this.tile_button = 0;
         this.unit = null;
-
     },
 
     onEnter:function () {
         this._super();
+
+        this.scheduleUpdate();
 
         var size = cc.Director.getInstance().getWinSize();
 
@@ -85,35 +88,19 @@ var PlayMapLayer = cc.Layer.extend({
         this.map_layer = this.map.layerNamed("MapLayer");
         this.object_layer = this.map.layerNamed("ObjectLayer");
 
-        this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
-        this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
+        this.addChild(this.map, 0, TAG_TILE_MAP);
+        // this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
+        // this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
         
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
-        console.log(gg.Unit);
         this.unit = gg.Unit.create();
-
-        this.object_layer.addChild(this.unit, 2);
+        this.map.addChild(this.unit, 2);
         
         this.unit.setPositionFromCoord(cc.p(10, 18));
 
-        this.scheduleUpdate();
-
-        // var map_size = this.map.getMapSize();
-        // var width = map_size.width;
-        // var height = map_size.height;
-
-        // console.log(this.object_layer);
-        // for (var x = 0; x < width; ++x) {
-        //     for (var y = 0; y < height; ++y) {
-
-        //         var tile = this.object_layer.tileAt(cc.p(x, y));
-        //         if (tile) {
-        //             this.object_layer.reorderChild(tile, x + y);
-        //         }
-        //     }
-        // }
+        this.createHouseUI();
 
         return true;
     },
@@ -126,16 +113,6 @@ var PlayMapLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
-        // var map_size = this.map.getMapSize();
-        // var width = map_size.width;
-        // var height = map_size.height;
-
-        // for (var i = 0; i < width; ++i) {
-        //     for (var j = 0; j < height; ++j) {
-        //         var sprite = this.object_layer.tileAt(cc.p(i, j));
-        //         console.log(sprite.getZOrder());
-        //     }
-        // }
     },
 
     onTouchBegan:function (touch, event) {
@@ -155,11 +132,10 @@ var PlayMapLayer = cc.Layer.extend({
             return;
         }
         var diff = cc.pSub(touchLocation, this.prevLocation);
-        var currentPos = this.map_layer.getPosition();
+        var map_position = this.map.getPosition();
 
-        var curPos = cc.pAdd(currentPos, diff);
-        this.map_layer.setPosition(curPos);
-        this.object_layer.setPosition(curPos);
+        var current_position = cc.pAdd(map_position, diff);
+        this.map.setPosition(current_position);
         this.prevLocation = cc.p(touchLocation.x, touchLocation.y);
     },
 
@@ -183,23 +159,50 @@ var PlayMapLayer = cc.Layer.extend({
             var posY = mh - nodeLocation.x/tw + mw/2 - nodeLocation.y/th;
             var posX = mh + nodeLocation.x/tw - mw/2 - nodeLocation.y/th;
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
-
-            var layer = this.map_layer;
-            var start_coord = unit.getCoordInMap();
-            var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
-            var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
-            var path = astar.search(mapGraph.nodes, start, end, false);
-        
-            var coords = [];
-            for(var i = 0; i < path.length; i++) {
-                var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
-                coords.push(coord);
+            if (0 <= coord.x && coord.x < mw &&
+                0 <= coord.y && coord.y < mh) {
+                var layer = this.map_layer;
+                var start_coord = unit.getCoordInMap();
+                var start = mapGraph.nodes[start_coord.x][start_coord.y] ;
+                var end = mapGraph.nodes[ Math.floor(posX) ] [ Math.floor(posY) ];
+                var path = astar.search(mapGraph.nodes, start, end, false);
+            
+                var coords = [];
+                for(var i = 0; i < path.length; i++) {
+                    var coord = cc.p(Math.floor( path[i].x), Math.floor( path[i].y ));
+                    coords.push(coord);
+                }
+                unit.move(coords);
             }
-            console.log(coords);
-            unit.move(coords);
         }
 
         this.touchMoved = false;
+    },
+
+    createHouseUI:function() {
+        var frame = cc.Sprite.create("res/uiitem/house/frame.png");
+        frame.setPosition(cc.p(400, 100));
+        this.addChild(frame, 0);
+
+        var menu = cc.Menu.create(null);
+        menu.setPosition(cc.PointZero());
+        this.addChild(menu, 1);
+
+        for (var i = 0; i < 5; ++i) {
+            var item = cc.MenuItemImage.create(
+            "res/uiitem/house/map_" + i + ".png",
+            "res/uiitem/house/map_" + i + ".png",
+            this,
+            function () {
+                this.unit.setState(UNIT_STATE_BUILDING);
+                this.unit.setBuildingType(i);
+                console.log("clicked item");
+            });
+
+            item.setAnchorPoint(cc.p(0.5, 0.5));
+            item.setPosition(cc.p(160+120*i, 100));
+            menu.addChild(item);
+        }
     },
 
     getButtonType:function(type) {

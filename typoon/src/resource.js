@@ -51,6 +51,8 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/map/0/6.png"}, 
     {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
+    // house
+
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
     {type:"image", src:"res/UIItem/UI1.png"},
