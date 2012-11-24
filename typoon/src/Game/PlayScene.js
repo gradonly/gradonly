@@ -81,9 +81,13 @@ var PlayMapLayer = cc.Layer.extend({
 
         var size = cc.Director.getInstance().getWinSize();
 
+        // cc.TMXTiledMap
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
+        
+        // cc.TMXTiledMap -> cc.TMXLayer
         this.map_layer = this.map.layerNamed("MapLayer");
         this.object_layer = this.map.layerNamed("ObjectLayer");
+        
 
         this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
         this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
@@ -94,9 +98,10 @@ var PlayMapLayer = cc.Layer.extend({
         console.log(gg.Unit);
         this.unit = gg.Unit.create();
 
-        this.object_layer.addChild(this.unit, 2);
-        
+       
+       
         this.unit.setPositionFromCoord(cc.p(10, 18));
+        this.object_layer.addChild(this.unit, 2);
 
         this.scheduleUpdate();
 

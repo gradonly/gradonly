@@ -7,10 +7,13 @@ gg.Unit = cc.Node.extend({
 	direction:0,
 	ctor:function () {
 		this._super();
+		console.log(this);
+		console.log(this);
 	},
 
 	onEnter:function () {
 		this._super();
+		console.log(this);
 
 		prev_position = this.getPositionX();
 		prev_direction = direction = 1;
