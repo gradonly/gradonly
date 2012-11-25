@@ -39,29 +39,37 @@
             'src/graph.js',
             'src/astar.js',
             'src/Unit.js',
-            'src/TypoonEngineIntroScene.js',
+            // 'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',
 
             'src/Game/MainMenuScene.js',
             'src/Game/PlayScene.js',
             'src/Game/UIScene.js',
+            
             'src/Tool/MapToolScene.js',
             'src/Tool/ItemToolScene.js',
             'src/Tool/UIWindow.js',
             'src/Tool/UIComponentBase.js',
             'src/Tool/UIComponentLabel.js',
+            'src/Tool/UIComponentImage.js',
             'src/house.js'
           
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {
         var s = d.createElement('script');
+        console.log("onloaded - dom content loadede");
+        console.log("c.engineDir : " + c.engineDir);
+        console.log("c.SingleEngineFile : " + c.SingleEngineFile);
 
         if (c.SingleEngineFile && !c.engineDir) {
             s.src = c.SingleEngineFile;
+            console.log('jsloader if uppper clause');
         }
         else if (c.engineDir && !c.SingleEngineFile) {
-            s.src = c.engineDir + 'platform/jsloader.js';
+            //s.src = c.engineDir + 'platform/jsloader.js';
+            console.log("jsLoader " + g_platformLoader);
+            s.src = c.engineDir + g_platformLoader;
         }
         else {
             alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');

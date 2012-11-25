@@ -69,6 +69,7 @@ var MainMenuLayer = cc.Layer.extend({
 var MainMenuScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
+        console.log("MainMenu Scene Loaded ------------------------");
         var layer = new MainMenuLayer();
         this.addChild(layer);
         layer.init();

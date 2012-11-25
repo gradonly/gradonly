@@ -5,7 +5,6 @@
 gg.UIComponentBase = cc.LabelTTF.extend({
 	_type:null,
 	m_text:null,
-	m_image:null,
 	ctor:function() {
 		this._super();
 		m_identity = "UIComponentTextBox";
@@ -15,28 +14,11 @@ gg.UIComponentBase = cc.LabelTTF.extend({
 		
 	},
 
-	setImage:function(filename) {
-		this.m_image = new cc.Sprite();
-		this.m_image.initWithFile(filename);
-
-		//this.addChild(this.m_image);
-
-	},
-
 	setPosition:function(pos) {
 		console.log("pos");
 		console.log(pos);
 
 		this._super(pos);
-		if( this.m_image != null) {
-			//var parent = this.m_image.getParent();
-			//var nodePos = parent.convertToNodeSpace(pos);
-			// console.log("nodePos");
-			// console.log(nodePos);
-			
-			this.m_image.setPosition( pos );
-		}
-
 	},
 
 	onEnter:function() {
@@ -96,12 +78,6 @@ gg.UIComponentBase = cc.LabelTTF.extend({
 	draw:function(ctx) {
 		// image 
 		this._super(ctx);
-
-		if( this.m_image != null ) {
-		 	this.m_image.draw(ctx);
-		}else { // text
-			
-		}
 	},
 	setType:function(type) {
 		this._type = type;

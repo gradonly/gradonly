@@ -87,7 +87,7 @@ gg.UIWindow = cc.Node.extend({
         // //this.addChild(fontMenu, 1, 134343432);
 
         // Label Name
-        var label = gg.UIComponentBase.create("Name", "Arial", 12);
+        var label = gg.UIComponentLabel.create("Name", "Arial", 12);
         label.setType("Label");
         label.setPosition(cc.p(0,0));
         label.setColor(new cc.Color3B(255, 255, 255));
@@ -98,7 +98,7 @@ gg.UIWindow = cc.Node.extend({
         console.log(this.m_label);
 
         // Image Box
-        var imagebox = gg.UIComponentBase.create("TextBox","Arial", 12);
+        var imagebox = gg.UIComponentImage.create("TextBox","Arial", 12);
         imagebox.setType("TextBox");
         imagebox.setImage("res/PlayScene/top_lvexp00.png");
         imagebox.setPosition(cc.p(120,20));
@@ -108,7 +108,7 @@ gg.UIWindow = cc.Node.extend({
         this.m_uicomps.push(imagebox);
 
         
-        var imageLabel = gg.UIComponentBase.create("TextBox","Arial", 12);
+        var imageLabel = gg.UIComponentImage.create("TextBox","Arial", 12);
         imageLabel.setType("TextBox");
         imageLabel.setImage("res/PlayScene/top_cash.png");
         imageLabel.setPosition(cc.p(200,50));
@@ -118,7 +118,7 @@ gg.UIWindow = cc.Node.extend({
         this.m_uicomps.push(imageLabel);
 
         // textBox
-        var textbox = gg.UIComponentBase.create("TextBox","Arial", 12);
+        var textbox = gg.UIComponentLabel.create("TextBox","Arial", 12);
         textbox.setType("TextBox");
 
         textbox.setPosition(cc.p(0,60));

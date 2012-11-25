@@ -4,11 +4,43 @@
     <meta charset="utf-8">
     <title>Samsung </title>
     <link rel="icon" type="image/GIF" href="res/favicon.ico"/>
+      
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos.css" />
+    <script>
+    $(function() {
+        $( "#tabs" ).tabs({
+            beforeLoad: function( event, ui ) {
+                ui.jqXHR.error(function() {
+                    ui.panel.html(
+                        "Couldn't load this tab."
+                        );
+                });
+            }
+
+        });
+    });
+    </script>
 </head>
 <body style="padding:0; margin: 0; background: #000;">
-<div style="text-align: center; font-size: 0">
-    <canvas id="gameCanvas" width="1024" height="768"></canvas>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Map Tool</a></li>
+        <li><a href="#tabs-2">UI Tool</a></li>
+        <li><a href="#tabs-3">Play Scene</a></li>
+    </ul>
+    <div id="tabs-1">
+    	<iframe src="maptool.html" width="1124" height="868" frameborder="0"></iframe>
+    </div>
+    <div id="tabs-2">
+        <iframe src="uitool.html" width="1124" height="868" frameborder="0"></iframe>
+    </div>
+    <div id="tabs-3">
+        <iframe src="playtool.html" width="1124" height="868" frameborder="0"></iframe>
+    </div>
 </div>
 </body>
 </html>
-<script src="cocos2d.js"></script>
+

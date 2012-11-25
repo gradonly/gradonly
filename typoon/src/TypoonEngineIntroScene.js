@@ -54,6 +54,7 @@ var TypoonEngineIntroLayer = cc.Layer.extend({
 
 var TypoonEngineIntroScene = cc.Scene.extend({
     onEnter:function () {
+        console.log("TypponEngine INtro Scen fdfdfdfdf");
         this._super();
         var layer = new TypoonEngineIntroLayer();
         this.addChild(layer);

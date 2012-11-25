@@ -56,4 +56,4 @@ var cocos2dApp = cc.Application.extend({
     }
 });
 
-var myApp = new cocos2dApp(TypoonEngineIntroScene);
+var myApp = new cocos2dApp(MapToolScene);
