@@ -1,11 +1,11 @@
 // UI Component Label
-var UIComponentLabel = cc.LabelTTF.extend({
+gg.UIComponentLabel = gg.UIComponentBase.extend({
 
 	ctor:function() {
 		 this._super();
 		 console.log("UIComponentLabel");
-	},	
-
-	
+	}
 
 });
+
+

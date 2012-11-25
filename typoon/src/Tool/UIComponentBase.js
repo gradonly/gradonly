@@ -5,6 +5,7 @@
 gg.UIComponentBase = cc.LabelTTF.extend({
 	_type:null,
 	m_text:null,
+	m_image:null,
 	ctor:function() {
 		this._super();
 		m_identity = "UIComponentTextBox";
@@ -15,7 +16,27 @@ gg.UIComponentBase = cc.LabelTTF.extend({
 	},
 
 	setImage:function(filename) {
-		this.initWithFile(filename);
+		this.m_image = new cc.Sprite();
+		this.m_image.initWithFile(filename);
+
+		//this.addChild(this.m_image);
+
+	},
+
+	setPosition:function(pos) {
+		console.log("pos");
+		console.log(pos);
+
+		this._super(pos);
+		if( this.m_image != null) {
+			//var parent = this.m_image.getParent();
+			//var nodePos = parent.convertToNodeSpace(pos);
+			// console.log("nodePos");
+			// console.log(nodePos);
+			
+			this.m_image.setPosition( pos );
+		}
+
 	},
 
 	onEnter:function() {
@@ -72,22 +93,29 @@ gg.UIComponentBase = cc.LabelTTF.extend({
 	getTag:function(){
 		return 113234232;
 	},
-	// draw:function(ctx) {
+	draw:function(ctx) {
+		// image 
+		this._super(ctx);
 
-	// 	m_label.draw(ctx);
-	// },
+		if( this.m_image != null ) {
+		 	this.m_image.draw(ctx);
+		}else { // text
+			
+		}
+	},
 	setType:function(type) {
 		this._type = type;
 	}
+
 });
 
 
 // factory method.
 // 함수의 arguments 는 배열이 아니다.  객체다.
+
 gg.UIComponentBase.create = function() {
 
 	var ret = new gg.UIComponentBase();
-
 	
 	if(ret.initWithString(arguments)) {
 		if( arguments.length > 3 )

@@ -48,11 +48,9 @@
             'src/Tool/MapToolScene.js',
             'src/Tool/ItemToolScene.js',
             'src/Tool/UIWindow.js',
-            'src/Tool/UIComponentLabel.js',
             'src/Tool/UIComponentBase.js',
-            'src/house.js', 
             'src/Tool/UIComponentLabel.js',
-            'src/Tool/UIComponentBase.js',
+            'src/house.js'
           
         ]
     };
