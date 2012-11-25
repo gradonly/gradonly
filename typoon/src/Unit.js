@@ -13,11 +13,6 @@ gg.Unit = cc.Node.extend({
 	coords:null,
 	ctor:function () {
 		this._super();
-
-	},
-
-	onEnter:function () {
-		this._super();
 		console.log(this);
 
 		this.prev_position = this.getPositionX();

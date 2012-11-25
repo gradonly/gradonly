@@ -98,7 +98,6 @@ var PlayMapLayer = cc.Layer.extend({
         this.map.addChild(this.unit, 2);
 
         this.unit.setPositionFromCoord(cc.p(10, 18));
-        this.object_layer.addChild(this.unit, 2);
 
         return true;
     },
