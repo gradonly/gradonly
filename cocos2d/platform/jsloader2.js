@@ -120,7 +120,8 @@
         engine.push('../box2d/box2d.js');
     var loaded = 0;
     var que = engine.concat(c.appFiles);
-    que.push('main2.js');
+    //que.push('main2.js');
+    que.push(g_entrypoint);
     if (navigator.userAgent.indexOf("Trident/5") > -1) {
         //ie9
         this.serial = -1;
