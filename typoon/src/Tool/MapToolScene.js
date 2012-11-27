@@ -269,7 +269,10 @@ var MapToolUILayer = cc.Layer.extend({
             var x = parseInt(i / 4) ;
             var y = i % 4 ;
 
-            item.setPosition(x * 50, y * -60);
+            // position을 만들때 이렇게 사용할 것.
+            item.setPosition(cc.p(x*50, y*-60));
+
+            //item.setPosition(x * 50, y * -60);
             item.buttonType =  2 + tileset*item_number + i;
             this.left_tile_menu.addChild(item);
         }
