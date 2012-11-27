@@ -39,21 +39,25 @@
             'src/graph.js',
             'src/astar.js',
             'src/Unit.js',
+            'src/house.js',
+    
             // 'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',
 
-            'src/Game/MainMenuScene.js',
-            'src/Game/PlayScene.js',
-            'src/Game/UIScene.js',
+            'src/Tool/Char/CharToolScene.js',
+
+            'src/Tool/Play/MainMenuScene.js',
+            'src/Tool/Play/PlayScene.js',
             
-            'src/Tool/MapToolScene.js',
-            'src/Tool/ItemToolScene.js',
-            'src/Tool/UIWindow.js',
-            'src/Tool/UIComponentBase.js',
-            'src/Tool/UIComponentLabel.js',
-            'src/Tool/UIComponentImage.js',
-            'src/house.js'
-          
+            'src/Tool/Map/MapToolScene.js',
+
+            'src/Tool/UI/UIScene.js',
+            'src/Tool/UI/ItemToolScene.js',
+            'src/Tool/UI/UIWindow.js',
+            'src/Tool/UI/UIComponentBase.js',
+            'src/Tool/UI/UIComponentLabel.js',
+            'src/Tool/UI/UIComponentImage.js'
+            
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {
