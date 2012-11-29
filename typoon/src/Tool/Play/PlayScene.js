@@ -94,7 +94,7 @@ var PlayMapLayer = cc.Layer.extend({
         this.mapGraph = makeNodesFromMap(this.map);
 
         this.unit = gg.Unit.create();
-
+        this.unit.setAnimation("stay");
         this.map.addChild(this.unit, 2);
 
         this.unit.setPositionFromCoord(cc.p(10, 18));
@@ -143,6 +143,7 @@ var PlayMapLayer = cc.Layer.extend({
         var mapGraph = this.mapGraph;
 
         if (!this.touchMoved) {
+            unit.setAnimation("move");
             var touchLocation = touch.getLocation();
             var nodeLocation = map.convertToNodeSpace(touchLocation);
 
@@ -192,6 +193,7 @@ var PlayMapLayer = cc.Layer.extend({
 
                 var sequence = cc.Sequence.create(actions);
                 unit.runAction(sequence);
+
             }
         }
 
