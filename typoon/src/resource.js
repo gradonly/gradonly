@@ -52,6 +52,8 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
     // house
+    {type:"image", src:"res/uiitem/house/building_0.png"}, 
+    {type:"image", src:"res/uiitem/house/building_1.png"}, 
     {type:"image", src:"res/uiitem/house/map_0.png"}, 
     {type:"image", src:"res/uiitem/house/map_1.png"}, 
     {type:"image", src:"res/uiitem/house/map_2.png"}, 
@@ -79,10 +81,22 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/map/outline.png"},
 
     // move
-    {type:"image", src:"res/Unit/move.png"},    
+    {type:"image", src:"res/Unit/help.png"},
+    {type:"image", src:"res/Unit/move.png"},
+    {type:"image", src:"res/Unit/distort.png"},
+    {type:"image", src:"res/Unit/gather.png"},
+    {type:"image", src:"res/Unit/chop.png"},
+    {type:"image", src:"res/Unit/kick.png"},
+    {type:"image", src:"res/Unit/open.png"},
     
     //plist
+    {type:"plist", src:"res/Unit/help.plist"},
     {type:"plist", src:"res/Unit/move.plist"},
+    {type:"plist", src:"res/Unit/distort.plist"},
+    {type:"plist", src:"res/Unit/gather.plist"},
+    {type:"plist", src:"res/Unit/chop.plist"},
+    {type:"plist", src:"res/Unit/kick.plist"},
+    {type:"plist", src:"res/Unit/open.plist"},
 
     //fnt
 

@@ -14,12 +14,12 @@ var MainMenuLayer = cc.Layer.extend({
         information.setPosition(cc.p(size.width * 0.5, size.height * 0.45));
         this.addChild(information, 0);
 
-        var id = cc.LabelTTF.create("mtoto1004", "Arial", 30);
+        var id = cc.LabelTTF.create("I Love You", "Arial", 30);
         id.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 + 10));
         id.setColor(new cc.Color3B(0, 0, 0));
         this.addChild(id, 5);
 
-        var nickname = cc.LabelTTF.create("joonseok", "Arial", 30);
+        var nickname = cc.LabelTTF.create("Joonseok", "Arial", 30);
         nickname.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
         nickname.setColor(new cc.Color3B(0, 0, 0));
         this.addChild(nickname, 5);
@@ -33,7 +33,6 @@ var MainMenuLayer = cc.Layer.extend({
                 director.replaceScene(new PlayScene);
             });
         item.setPosition(cc.p(size.width * 0.5, size.height * 0.3));
-
         var menu = cc.Menu.create(item, null);
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
