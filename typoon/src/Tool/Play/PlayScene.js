@@ -119,7 +119,7 @@ var PlayMapLayer = cc.Layer.extend({
     update:function (dt) {
         this.elapsedTime += dt;
 
-        if( this.elapsedTime > 0.5) {
+        if( this.elapsedTime > 1.0) {
             this.loadMapData();
             this.elapsedTime = 0;
         }
@@ -256,7 +256,7 @@ var PlayMapLayer = cc.Layer.extend({
 
      // load map data and paint map data.
     loadMapData:function() {
-        
+
         // this.removechild(this.map, true);
         //   // cc.TMXTiledMap
         // this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");

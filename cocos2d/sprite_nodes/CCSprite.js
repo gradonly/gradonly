@@ -1463,6 +1463,9 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @param {cc.SpriteFrame} newFrame
      */
     setDisplayFrame:function (newFrame) {
+        if( newFrame == undefined ) return;
+        //console.log(newFrame);
+
         this.setNodeDirty();
         this._unflippedOffsetPositionFromCenter = newFrame.getOffset();
         var pNewTexture = newFrame.getTexture();
