@@ -28,10 +28,14 @@ var MapToolLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.Director.getInstance().getWinSize();
-
+        var stroage = gg.LocalStroageInstance();
+        
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
+    
         this.addChild(this.map, 0, TAG_TILE_MAP);
 
+
+        this.loadMapData();
         return true;
     },
     draw:function() {
@@ -78,11 +82,27 @@ var MapToolLayer = cc.Layer.extend({
             var coord = cc.p(Math.floor(posX), Math.floor(posY));
             if (0 <= coord.x && coord.x < mw &&
                 0 <= coord.y && coord.y < mh) {
+                // draw tile.
                 this.paintMapTile(coord);
+                // save tile.
+                this.saveMapData(coord);
             }
         }
 
         this.touchMoved = false;
+
+        // // save map information data to localstorage.
+        // var instance = gg.LocalStroageInstance();
+        // var instnace2 = gg.LocalStroageInstance();
+        // var instance3 = gg.LocalStroageInstance();
+
+        // instance.save('ok', 'dddddddd');
+        // instance.save('ok2', 'dddddddd2');
+        // var test = instance.load('ok');
+        // var test2 = instance.load('ok2');
+        // console.log(test);
+        // console.log(test2);
+
     },
 
     // ShowGridTileMap.......
@@ -145,7 +165,59 @@ var MapToolLayer = cc.Layer.extend({
             ground.setTileGID( ID_TERRAIN_TILE, coord, 1);
             object_layer.setTileGID( tile_button, coord, 0);
         }
+    },
+
+
+    // paint draw paintMapTile From JSOn Data
+    paintMapTileFromArray:function(mapData) {
+        var tile_button = mapData.tile_button;
+        var coord = mapData.pos;
+
+        var ground = this.map.layerNamed("MapLayer");             // MapLayer
+        var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+
+        if( tile_button == ID_EMPTY_TILE) {
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 1);
+        }else if( tile_button == ID_TERRAIN_TILE) {
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID(ID_EMPTY_TILE, coord, 1);
+        } else {
+            ground.setTileGID( ID_TERRAIN_TILE, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 0);
+        }
+    },
+
+    paintMapTilesArray:function(mapDatas) {
+
+        for(var i = 0; i < mapDatas.length; i++)
+        {
+            var element = mapDatas[i];
+            this.paintMapTileFromArray( element );
+        }
+    },
+
+     // load map data and paint map data.
+    loadMapData:function() {
+        var instance = gg.LocalStroageInstance();
+
+        var mapdata = instance.get('map');
+        console.log(mapdata);
+        if( mapdata != null)
+            this.paintMapTilesArray(mapdata);
+    },
+
+    // save map data
+    saveMapData:function(coord) {
+         // svae map ifo data.
+        var instance = gg.LocalStroageInstance();
+        var parcelMapdata = new Object();
+            parcelMapdata.tile_button = this.tile_button;
+            parcelMapdata.pos = coord;
+            instance.add('map', parcelMapdata);
+
     }
+
 });
 
 // MapTool UI Layer

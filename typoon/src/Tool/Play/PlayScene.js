@@ -9,7 +9,9 @@ var TAG_TILE_OBJECT_LAYER = 10001002;
 var Node = cc.Node;
 
 var makeNodesFromMap = function(map) {
-    var object_layer =this.object_layer;
+    var object_layer = this.object_layer;
+    //var object_layer = this.map.layerNamed("ObjectLayer");
+
     var tiles = object_layer.getTiles();
 
     var nodes = [];
@@ -66,7 +68,7 @@ var PlayMapLayer = cc.Layer.extend({
     unit:null,
     mapGraph:null,
     map:null,
-
+    elapsedTime:0,
     ctor:function () {
         this.setTouchEnabled(true);
     },
@@ -80,16 +82,18 @@ var PlayMapLayer = cc.Layer.extend({
 
         // cc.TMXTiledMap
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
-        
         // cc.TMXTiledMap -> cc.TMXLayer
         this.map_layer = this.map.layerNamed("MapLayer");
         this.object_layer = this.map.layerNamed("ObjectLayer");
         
-
         this.addChild(this.map, 0, TAG_TILE_MAP);
         // this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
         // this.addChild(this.object_layer, 1, TAG_TILE_OBJECT_LAYER);
         
+        // load map data 
+        this.loadMapData();
+
+
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
@@ -99,10 +103,13 @@ var PlayMapLayer = cc.Layer.extend({
 
         this.unit.setPositionFromCoord(cc.p(10, 18));
 
+      
+
         return true;
     },
 
     draw:function() {
+
     },
 
     registerWithTouchDispatcher:function () {
@@ -110,6 +117,13 @@ var PlayMapLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
+        this.elapsedTime += dt;
+
+        if( this.elapsedTime > 0.5) {
+            this.loadMapData();
+            this.elapsedTime = 0;
+        }
+
     },
 
     onTouchBegan:function (touch, event) {
@@ -206,6 +220,76 @@ var PlayMapLayer = cc.Layer.extend({
     getUnit:function(unit) {
         return this.unit;
     },
+
+
+    // paint draw paintMapTile From JSOn Data
+    paintMapTileFromArray:function(mapData) {
+        var tile_button = mapData.tile_button;
+        var coord = mapData.pos;
+
+        var ground = this.map_layer;
+        var object_layer = this.object_layer;
+
+        //var ground = this.map.layerNamed("MapLayer");             // MapLayer
+        //var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+
+        if( tile_button == ID_EMPTY_TILE) {
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 1);
+        }else if( tile_button == ID_TERRAIN_TILE) {
+            ground.setTileGID( tile_button, coord, 1);
+            object_layer.setTileGID(ID_EMPTY_TILE, coord, 1);
+        } else {
+            ground.setTileGID( ID_TERRAIN_TILE, coord, 1);
+            object_layer.setTileGID( tile_button, coord, 0);
+        }
+    },
+
+    paintMapTilesArray:function(mapDatas) {
+
+        for(var i = 0; i < mapDatas.length; i++)
+        {
+            var element = mapDatas[i];
+            this.paintMapTileFromArray( element );
+        }
+    },
+
+     // load map data and paint map data.
+    loadMapData:function() {
+        
+        // this.removechild(this.map, true);
+        //   // cc.TMXTiledMap
+        // this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
+        // // cc.TMXTiledMap -> cc.TMXLayer
+        // this.map_layer = this.map.layerNamed("MapLayer");
+        // this.object_layer = this.map.layerNamed("ObjectLayer");
+        
+        // this.addChild(this.map, 0, TAG_TILE_MAP);
+
+        var instance = gg.LocalStroageInstance();
+
+        var mapdata = instance.get('map');
+       // console.log(mapdata);
+
+        // draw map Tile
+        if(mapdata != null)
+            this.paintMapTilesArray(mapdata);
+
+         // update tile path from Map
+        this.mapGraph = makeNodesFromMap(this.map);
+    },
+
+    // save map data
+    saveMapData:function(coord) {
+         // svae map ifo data.
+        var instance = gg.LocalStroageInstance();
+        var parcelMapdata = new Object();
+            parcelMapdata.tile_button = this.tile_button;
+            parcelMapdata.pos = coord;
+            instance.add('map', parcelMapdata);
+
+    }
+
 });
 
 var PlayUILayer = cc.Layer.extend({

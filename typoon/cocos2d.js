@@ -35,12 +35,20 @@
         engineDir:'../cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
+
+            // 'src/cereal/lib/cereal.js',
+            'src/JSON2/json2.js',
+            // 'src/JSON2/json2.js',
+            'src/JSON2/json_parse.js',
+            'src/JSON2/json_parse_state.js',
+            'src/JSON2/cycle.js',
+
             'src/resource.js',
             'src/graph.js',
             'src/astar.js',
             'src/Unit.js',
             'src/house.js',
-    
+            'src/localstorage.js',
             // 'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',
 
