@@ -268,7 +268,7 @@ var PlayMapLayer = cc.Layer.extend({
         
         // this.addChild(this.map, 0, TAG_TILE_MAP);
 
-        var instance = gg.LocalStroageInstance();
+        var instance = gg.LocalStorage.getInstance();
 
         var mapdata = instance.get('map');
        // console.log(mapdata);
@@ -283,15 +283,22 @@ var PlayMapLayer = cc.Layer.extend({
 
     // load char data 
     loadCharData:function() {
-        var storage = gg.LocalStroageInstance();
-        var animation = storage.load('char_animation');
-        if( animation != null)
-            this.unit.setAnimation(animation);
+        var storage = gg.LocalStorage.getInstance();
+        
+        // var rtvalue = storage.isDirty('char_animation');
+        // if( rtvalue == true) {
+        if( storage.isDirty('char_animation') == true) {
+            // console.log('loadCharData------------');
+            var animation = storage.load('char_animation');
+            if( animation != null)
+                this.unit.setAnimation(animation);
+
+        }
     },
     // save map data
     saveMapData:function(coord) {
          // svae map ifo data.
-        var instance = gg.LocalStroageInstance();
+        var instance = gg.LocalStorage.getInstance();
         var parcelMapdata = new Object();
             parcelMapdata.tile_button = this.tile_button;
             parcelMapdata.pos = coord;

@@ -28,7 +28,7 @@ var MapToolLayer = cc.Layer.extend({
         this._super();
 
         var size = cc.Director.getInstance().getWinSize();
-        var stroage = gg.LocalStroageInstance();
+        var stroage = gg.LocalStorage.getInstance();
         
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
     
@@ -199,7 +199,7 @@ var MapToolLayer = cc.Layer.extend({
 
      // load map data and paint map data.
     loadMapData:function() {
-        var instance = gg.LocalStroageInstance();
+        var instance = gg.LocalStorage.getInstance();
 
         var mapdata = instance.get('map');
         console.log(mapdata);
@@ -210,7 +210,7 @@ var MapToolLayer = cc.Layer.extend({
     // save map data
     saveMapData:function(coord) {
          // svae map ifo data.
-        var instance = gg.LocalStroageInstance();
+        var instance = gg.LocalStorage.getInstance();
         var parcelMapdata = new Object();
             parcelMapdata.tile_button = this.tile_button;
             parcelMapdata.pos = coord;

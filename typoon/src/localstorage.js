@@ -1,14 +1,32 @@
 
+var gg = gg = gg || {};
+
 gg.LocalStorage = cc.Class.extend({
+	_instance:null,
 	ctor:function() {
 		console.log("gg.LocalStorage.inner");
-
+		this.storageDirty = new Array();
 	},
 	save:function(key, value) {
+		//console.log("save ---------------------------");
 		localStorage.setItem(key, value);
+		localStorage.setItem(key+"_dirty", true);
+
+		//this.dirty["key"] = true;
+		//console.log("save :function");
+		//console.log(this);
+	},
+
+	isDirty:function(key) {
+		// console.log("isDirty" + key+"_dirty");
+		// console.log(localStorage.getItem(key+"_dirty"));
+		var rtvalue = (localStorage.getItem(key+"_dirty") == "true");
+		// console.log(rtvalue);
+		return rtvalue;
 	},
 
 	load:function(key) {
+		localStorage.setItem(key+"_dirty", false);
 		return localStorage.getItem(key);
 	},
 
@@ -51,19 +69,20 @@ gg.LocalStorage = cc.Class.extend({
 	}
 });
 
-gg.LocalStorage._instance = null;
-gg.LocalStorage.firstUse = true;
 
 
-gg.LocalStroageInstance = function() {
+gg.LocalStorage.getInstance = function() {
 
-	if( gg.LocalStorage.firstUse == true) {
+	if( gg.firstUseLocalStorage == true) {
+		gg.firstUseLocalStorage = false;
 		console.log("repeate instance");
 		var m_instance = new gg.LocalStorage();
-		gg.LocalStorage._instance = m_instance;
-		gg.LocalStorage.firstUse = false;
+		gg.sharedLocalStorage = m_instance;
 	}
 	
-	return gg.LocalStorage._instance;
-}
+	return gg.sharedLocalStorage;
+};
 
+
+gg.firstUseLocalStorage = true;
+gg.sharedLocalStorage = null;
