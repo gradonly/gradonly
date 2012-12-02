@@ -26,107 +26,50 @@ gg.UIWindow = cc.Node.extend({
         //         console.log(LevelItem);
         //         console.log(LevelItem.getPosition());
         //     });
-
-        // //console.log(LevelItem);
-        // LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
-        // //LevelItem.setTouchEnabled(true);
-        // //LevelItem.registerWithTouchDispatcher(function(){ console.log(this) });
-
-        // menu.addChild(LevelItem);
-
-        // // coinItem
-        // var CoinItem = cc.MenuItemImage.create(
-        //     "res/PlayScene/top_coin.png",
-        //     "res/PlayScene/top_coin_p.png",
-        //     this,
-        //     function () {
-        //     });
-        // CoinItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
-        // menu.addChild(CoinItem);
-
-        // // cashItem
-        // var CashItem = cc.MenuItemImage.create(
-        //     "res/PlayScene/top_cash.png",
-        //     "res/PlayScene/top_cash_p.png",
-        //     this,
-        //     function () {
-        //     });
-        // CashItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
-        // menu.addChild(CashItem);
-
-        // // popItem
-        // var PopItem = cc.MenuItemImage.create(
-        //     "res/PlayScene/top_pop.png",
-        //     "res/PlayScene/top_pop_p.png",
-        //     this,
-        //     function () {
-        //     });
-        // PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
-        // menu.addChild(PopItem);
-
-        // var jwelItem = cc.MenuItemImage.create(
-        //     "res/PlayScene/top_sp.png",
-        //     "res/PlayScene/top_sp_p.png",
-        //     this,
-        //     function () {
-        //     });
-        // jwelItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // jwelItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
-        // menu.addChild(jwelItem);
-
-        // var fontMenu = cc.MenuItemFont.create("Test", this, function() {
-
-        //     console.log("this attack");
-
-        // });
-        // fontMenu.setPosition(cc.p(150,150));
-        // //this.addChild(fontMenu, 1, 134343432);
-
-        // Label Name
-        var label = gg.UIComponentLabel.create("Name", "Arial", 12);
-        label.setType("Label");
-        label.setPosition(cc.p(0,0));
-        label.setColor(new cc.Color3B(255, 255, 255));
         
-        this.m_uicomps.push(label);
+       
 
-        console.log("UIWindow - child");
-        console.log(this.m_label);
+        // // Label Name
+        // var label = gg.UIComponentLabel.create("Name", "Arial", 12);
+        // label.setType("Label");
+        // label.setPosition(cc.p(0,0));
+        // label.setColor(new cc.Color3B(255, 255, 255));
+        
+        // this.m_uicomps.push(label);
 
-        // Image Box
-        var imagebox = gg.UIComponentImage.create("TextBox","Arial", 12);
-        imagebox.setType("TextBox");
-        imagebox.setImage("res/PlayScene/top_lvexp00.png");
-        imagebox.setPosition(cc.p(120,20));
-        imagebox.setString("ImageBox");
-        imagebox.setColor(new cc.Color3B(255, 255, 255));
+        // console.log("UIWindow - child");
+        // console.log(this.m_label);
 
-        this.m_uicomps.push(imagebox);
+        // // Image Box
+        // var imagebox = gg.UIComponentImage.create("TextBox","Arial", 12);
+        // imagebox.setType("TextBox");
+        // imagebox.setImage("res/PlayScene/top_lvexp00.png");
+        // imagebox.setPosition(cc.p(120,20));
+        // imagebox.setString("ImageBox");
+        // imagebox.setColor(new cc.Color3B(255, 255, 255));
+
+        // this.m_uicomps.push(imagebox);
 
         
-        var imageLabel = gg.UIComponentImage.create("TextBox","Arial", 12);
-        imageLabel.setType("TextBox");
-        imageLabel.setImage("res/PlayScene/top_cash.png");
-        imageLabel.setPosition(cc.p(200,50));
-        imageLabel.setString("ImageBox");
-        imageLabel.setColor(new cc.Color3B(255, 255, 255));
+        // var imageLabel = gg.UIComponentImage.create("TextBox","Arial", 12);
+        // imageLabel.setType("TextBox");
+        // imageLabel.setImage("res/PlayScene/top_cash.png");
+        // imageLabel.setPosition(cc.p(200,50));
+        // imageLabel.setString("ImageBox");
+        // imageLabel.setColor(new cc.Color3B(255, 255, 255));
 
-        this.m_uicomps.push(imageLabel);
+        // this.m_uicomps.push(imageLabel);
 
-        // textBox
-        var textbox = gg.UIComponentLabel.create("TextBox","Arial", 12);
-        textbox.setType("TextBox");
+        // // textBox
+        // var textbox = gg.UIComponentLabel.create("TextBox","Arial", 12);
+        // textbox.setType("TextBox");
 
-        textbox.setPosition(cc.p(0,60));
-        textbox.setString("Type");
-        textbox.setColor(new cc.Color3B(255, 255, 255));
+        // textbox.setPosition(cc.p(0,60));
+        // textbox.setString("Type");
+        // textbox.setColor(new cc.Color3B(255, 255, 255));
         
         
-        this.m_uicomps.push(textbox);
+        // this.m_uicomps.push(textbox);
 
     },
 
@@ -135,12 +78,22 @@ gg.UIWindow = cc.Node.extend({
         //this.setAnchorPoint(cc.p(0,0));
         this.createComponent();
 
+
+         var textbox = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.Text_ALIGNMENT_LEFT,"Arial", 32);
+         textbox.setPosition(cc.p(100,100));
+         textbox.insertText('ssss',4);
+         textbox.attachWithIME();
+
+        //var textField = cc.TextFieldTTF.create("", "Arial", 32);
+        this.addChild(textbox);
+
+
         // add ui components to render.
-        var arraySize = this.m_uicomps.length;
-        for(var i = 0; i < arraySize; i++) {
-            var comps = this.m_uicomps[i];
-            this.addChild( comps ); 
-        }
+        // var arraySize = this.m_uicomps.length;
+        // for(var i = 0; i < arraySize; i++) {
+        //     var comps = this.m_uicomps[i];
+        //     this.addChild( comps ); 
+        // }
 
         
         //this.addChild(this.m_uicomps);

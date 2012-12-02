@@ -9,8 +9,8 @@ var TAG_TILE_OBJECT_LAYER = 10001002;
 var Node = cc.Node;
 
 var makeNodesFromMap = function(map) {
-    var object_layer = this.object_layer;
-    //var object_layer = this.map.layerNamed("ObjectLayer");
+    //var object_layer = this.object_layer;
+    var object_layer = map.layerNamed("ObjectLayer");
 
     var tiles = object_layer.getTiles();
 

@@ -221,8 +221,8 @@ var ItemToolScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var MapLayer = new ItemToolLayer();
-        this.addChild(MapLayer, 0, TAG_LAYER_MAP);
+        var UILayer = new ItemToolLayer();
+        this.addChild(UILayer, 0, TAG_LAYER_MAP);
 
         // var UILayer = new ItemToolUILayer();
         // this.addChild(UILayer, 1, TAG_LAYER_UI);
