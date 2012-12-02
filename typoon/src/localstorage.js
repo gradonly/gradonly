@@ -9,7 +9,7 @@ gg.LocalStorage = cc.Class.extend({
 	},
 
 	load:function(key) {
-		return localStorage[key];
+		return localStorage.getItem(key);
 	},
 
 	add:function(key, value) {

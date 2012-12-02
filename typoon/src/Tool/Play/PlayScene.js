@@ -121,6 +121,8 @@ var PlayMapLayer = cc.Layer.extend({
 
         if( this.elapsedTime > 1.0) {
             this.loadMapData();
+            this.loadCharData();
+
             this.elapsedTime = 0;
         }
 
@@ -279,6 +281,13 @@ var PlayMapLayer = cc.Layer.extend({
         this.mapGraph = makeNodesFromMap(this.map);
     },
 
+    // load char data 
+    loadCharData:function() {
+        var storage = gg.LocalStroageInstance();
+        var animation = storage.load('char_animation');
+        if( animation != null)
+            this.unit.setAnimation(animation);
+    },
     // save map data
     saveMapData:function(coord) {
          // svae map ifo data.

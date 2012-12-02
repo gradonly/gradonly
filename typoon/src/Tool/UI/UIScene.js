@@ -123,9 +123,18 @@ var UIUILayer = cc.Layer.extend({
         //     //cc.IMED
 
         // })
+        
+        var textbox = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.Text_ALIGNMENT_LEFT,"Arial", 32);
+        textbox.setPosition(new cc.p(100,100));
+        textbox.setColor(new cc.Color3B(255,255,255));
+        textbox.setColorSpaceHolder(new cc.Color3B(255,255,255));
+        textbox.insertText("ssss",4);
+        textbox.attachWithIME();
+        
+        this.addChild(textbox);
 
         // property_title
-        var property_title = cc.LabelTTF.create("Property Of UI Menu Object", "Arial", 12);
+        var property_title = cc.LabelTTF.create("Property Of UdfdfdI Menu Object", "Arial", 12);
         property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
         property_title.setColor(new cc.Color3B(255, 255, 255));
         this.addChild(property_title);
@@ -134,19 +143,19 @@ var UIUILayer = cc.Layer.extend({
 
         
         //  keyboard input
-        var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
-        keyboardDispatcher.addDelegate({
-            onKeyUp:function(e){
-                console.log(e);
-                // Menu.method call.
+        // var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
+        // keyboardDispatcher.addDelegate({
+        //     onKeyUp:function(e){
+        //         console.log(e);
+        //         // Menu.method call.
                 
-                // in Menu. method 
-                // child method가  키보드 이벤트가 필요하면 처리...
-            },
-            onKeyDown:function(e){
-                console.log(e);
-            }
-        });
+        //         // in Menu. method 
+        //         // child method가  키보드 이벤트가 필요하면 처리...
+        //     },
+        //     onKeyDown:function(e){
+        //         console.log(e);
+        //     }
+        // });
     },
 
     SelectMenuLeftItem:function (sender) {

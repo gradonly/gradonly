@@ -74,6 +74,9 @@ var CharUILayer = cc.Layer.extend({
     setAnimation:function(sender) {
         // console.log("call setAnimation");
         this.unit.setAnimation(this.names[sender.button_type]);
+        var storage = gg.LocalStroageInstance();
+        storage.save('char_animation', this.names[sender.button_type]);
+        
     },
 });
 

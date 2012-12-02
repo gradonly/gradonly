@@ -79,13 +79,13 @@ gg.UIWindow = cc.Node.extend({
         this.createComponent();
 
 
-         var textbox = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.Text_ALIGNMENT_LEFT,"Arial", 32);
-         textbox.setPosition(cc.p(100,100));
-         textbox.insertText('ssss',4);
-         textbox.attachWithIME();
+        var textbox = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.Text_ALIGNMENT_LEFT,"Arial", 32);
+        textbox.setPosition(cc.p(100,100));
+        textbox.insertText('ssss',4);
+        textbox.attachWithIME();
 
         //var textField = cc.TextFieldTTF.create("", "Arial", 32);
-        this.addChild(textbox);
+        //this.addChild(textbox);
 
 
         // add ui components to render.
