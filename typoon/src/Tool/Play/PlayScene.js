@@ -201,7 +201,8 @@ gg.PlayMapLayer = cc.Layer.extend({
                 var state = unit.getState();
                 if (state == UNIT_STATE_DEFAULT) {
                 } else if (state == UNIT_STATE_BUILDING) {
-                    var buildfunc = cc.CallFunc.create(unit, unit.build);
+                    var layer = this.getParent().getChildByTag(TAG_LAYER_UI);
+                    var buildfunc = cc.CallFunc.create(layer, layer.buildFromUnit);
                     actions.push(buildfunc);
                 }
 
@@ -298,6 +299,7 @@ gg.PlayMapLayer = cc.Layer.extend({
 
 // Player's UI Layer
 gg.PlayUILayer = cc.Layer.extend({
+    build_type:0,
     ctor:function () {
     },
     onEnter:function () {
@@ -426,17 +428,29 @@ gg.PlayUILayer = cc.Layer.extend({
             "res/uiitem/house/map_" + i + ".png",
             null,
             this,
-            function () {
-                var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-                var unit = layer.getUnit();
+            this.clickedHouseButton);
 
-                unit.setState(UNIT_STATE_BUILDING);
-                unit.setBuilding(i);
-            });
-
+            item.building_type = i;
             item.setPosition(cc.p(160+120*i, 100));
             menu.addChild(item);
         }
+    },
+
+    clickedHouseButton:function(sender) {
+        var item = sender;
+        this.build_type = item.building_type;
+
+        var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        var unit = layer.getUnit();
+        unit.setState(UNIT_STATE_BUILDING);
+    },
+
+    buildFromUnit:function() {
+        var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        var unit = layer.getUnit();
+
+        console.log(this.build_type);
+        unit.build(this.build_type)
     },
 });
 

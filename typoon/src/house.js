@@ -4,6 +4,7 @@ gg.House = cc.Node.extend({
     menu:null,
     sprite1:null,
     sprite2:null,
+    type:0,
     ctor:function () {
         this.menu = cc.Menu.create(null);
         this.menu.setPosition(cc.PointZero());
@@ -11,9 +12,9 @@ gg.House = cc.Node.extend({
     },
     onEnter:function () {
         this._super();
-
     },
     build:function(type) {
+        this.type = type;
         actions = [];
         this.sprite1 = cc.Sprite.create("res/uiitem/house/building_0.png");
         this.sprite1.setPosition(cc.PointZero());
@@ -43,10 +44,10 @@ gg.House = cc.Node.extend({
     },
     createButton:function(sender) {
         this.sprite2.setVisible(false);
-        type = 1;
+        console.log(this.type);
         var item = cc.MenuItemImage.create(
-            "res/uiitem/house/map_" + type + ".png",
-            "res/uiitem/house/map_" + type + ".png",
+            "res/uiitem/house/map_" + this.type + ".png",
+            "res/uiitem/house/map_" + this.type + ".png",
             this,
             function () {
                 // this.unit.setState(UNIT_STATE_BUILDING);

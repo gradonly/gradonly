@@ -9,7 +9,6 @@ gg.Unit = cc.Node.extend({
 	prev_direction:0,
 	direction:0,
 	state_type:0,
-	building_type:0,
 	coords:null,
 	ctor:function () {
 		this._super();
@@ -91,12 +90,9 @@ gg.Unit = cc.Node.extend({
 	getState:function() {
 		return this.state_type;
 	},
-	setBuilding:function(type) {
-		this.building_type = type;
-	},
-	build:function() {
-		console.log(this.building_type);
-		var house = gg.House.create(this.building_type);
+	build:function(type) {
+		console.log("build type: " + type);
+		var house = gg.House.create(type);
 		var world = this.getPosition();
 		var map = this.getParent().getPosition();
 
