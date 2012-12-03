@@ -97,13 +97,11 @@ gg.PlayMapLayer = cc.Layer.extend({
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
-        this.unit = gg.Unit.create();
+        this.unit = gg.Unit.create("man");
         this.unit.setAnimation("stay");
-        this.map.addChild(this.unit, 2);
+        this.map.addChild(this.unit, 3);
 
         this.unit.setPositionFromCoord(cc.p(10, 18));
-
-      
 
         return true;
     },
@@ -203,7 +201,8 @@ gg.PlayMapLayer = cc.Layer.extend({
                 var state = unit.getState();
                 if (state == UNIT_STATE_DEFAULT) {
                 } else if (state == UNIT_STATE_BUILDING) {
-                    var buildfunc = cc.CallFunc.create(unit, unit.build);
+                    var layer = this.getParent().getChildByTag(TAG_LAYER_UI);
+                    var buildfunc = cc.CallFunc.create(layer, layer.buildFromUnit);
                     actions.push(buildfunc);
                 }
 
@@ -215,6 +214,7 @@ gg.PlayMapLayer = cc.Layer.extend({
 
         this.touchMoved = false;
     },
+
     getButtonType:function(type) {
         tile_button = type;
     },
@@ -222,7 +222,6 @@ gg.PlayMapLayer = cc.Layer.extend({
     getUnit:function(unit) {
         return this.unit;
     },
-
 
     // paint draw paintMapTile From JSOn Data
     paintMapTileFromArray:function(mapData) {
@@ -248,7 +247,6 @@ gg.PlayMapLayer = cc.Layer.extend({
     },
 
     paintMapTilesArray:function(mapDatas) {
-
         for(var i = 0; i < mapDatas.length; i++)
         {
             var element = mapDatas[i];
@@ -283,7 +281,6 @@ gg.PlayMapLayer = cc.Layer.extend({
             var animation = storage.load('char_animation');
             if( animation != null)
                 this.unit.setAnimation(animation);
-
         }
     },
     // save map data
@@ -296,11 +293,11 @@ gg.PlayMapLayer = cc.Layer.extend({
             instance.add('map', parcelMapdata);
 
     }
-
 });
 
 // Player's UI Layer
 gg.PlayUILayer = cc.Layer.extend({
+    build_type:0,
     ctor:function () {
     },
     onEnter:function () {
@@ -429,17 +426,29 @@ gg.PlayUILayer = cc.Layer.extend({
             "res/uiitem/house/map_" + i + ".png",
             null,
             this,
-            function () {
-                var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-                var unit = layer.getUnit();
+            this.clickedHouseButton);
 
-                unit.setState(UNIT_STATE_BUILDING);
-                unit.setBuilding(i);
-            });
-
+            item.building_type = i;
             item.setPosition(cc.p(160+120*i, 100));
             menu.addChild(item);
         }
+    },
+
+    clickedHouseButton:function(sender) {
+        var item = sender;
+        this.build_type = item.building_type;
+
+        var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        var unit = layer.getUnit();
+        unit.setState(UNIT_STATE_BUILDING);
+    },
+
+    buildFromUnit:function() {
+        var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+        var unit = layer.getUnit();
+
+        console.log(this.build_type);
+        unit.build(this.build_type)
     },
 });
 

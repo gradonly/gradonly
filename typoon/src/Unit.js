@@ -9,8 +9,8 @@ gg.Unit = cc.Node.extend({
 	prev_direction:0,
 	direction:0,
 	state_type:0,
-	building_type:0,
 	coords:null,
+	sex:null,
 	ctor:function () {
 		this._super();
 
@@ -19,10 +19,13 @@ gg.Unit = cc.Node.extend({
 		console.log(this.prev_position);
 
 		var size = cc.Director.getInstance().getWinSize();
+	},
+
+	setSex:function(sex) {
+		this.sex = sex;
 
 		var cache = cc.SpriteFrameCache.getInstance();
-		cache.removeSpriteFrames();
-
+		// cache.removeSpriteFrames();
 		cache.addSpriteFrames("res/Unit/help.plist");
 		cache.addSpriteFrames("res/Unit/move.plist");
 		cache.addSpriteFrames("res/Unit/distort.plist");
@@ -30,15 +33,29 @@ gg.Unit = cc.Node.extend({
 		cache.addSpriteFrames("res/Unit/chop.plist");
 		cache.addSpriteFrames("res/Unit/kick.plist");
 		cache.addSpriteFrames("res/Unit/open.plist");
+		cache.addSpriteFrames("res/Unit/help_f.plist");
+		cache.addSpriteFrames("res/Unit/move_f.plist");
+		cache.addSpriteFrames("res/Unit/distort_f.plist");
+		cache.addSpriteFrames("res/Unit/gather_f.plist");
+		cache.addSpriteFrames("res/Unit/chop_f.plist");
+		cache.addSpriteFrames("res/Unit/kick_f.plist");
+		cache.addSpriteFrames("res/Unit/open_f.plist");
 
-		this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_p0.png"));
+		if (sex == "man") {
+			this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_p0.png"));
+		} else {
+			this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_f_p0.png"));
+		}
+
 		this.body.setScale(0.5, 0.5);
 		this.addChild(this.body, 0);
 	},
+
 	onEnter:function () {
 		this._super();
 	       	this.scheduleUpdate();
 	},
+
 	update:function (dt) {
 		if (this.getPositionX() - this.prev_position.x > 0) {
 			if (this.direction < 0) {
@@ -53,14 +70,14 @@ gg.Unit = cc.Node.extend({
 				this.body.runAction(flip);
 			}
 		} else {
-			// if 
-			// this.setAnimation("stay");
 		}
 		this.prev_position = this.getPosition();
 	},
+
 	setCoords:function(coords) {
 		this.coords = coords;
 	},
+
 	setPositionFromCoord:function(coord) {
 		var layer = this.getParent().layerNamed("MapLayer");
 		var position = layer.positionAt(coord);
@@ -69,6 +86,7 @@ gg.Unit = cc.Node.extend({
 
 		this.setPosition(position);
 	},
+
 	getCoordInMap:function() {
 		var map = this.getParent();
 		var tileSize = map.getTileSize();
@@ -85,24 +103,26 @@ gg.Unit = cc.Node.extend({
 
 	            	return coord;
 	},
+
 	setState:function(type) {
 		this.state_type = type;
 	},
+
 	getState:function() {
 		return this.state_type;
 	},
-	setBuilding:function(type) {
-		this.building_type = type;
-	},
-	build:function() {
-		console.log(this.building_type);
-		var house = gg.House.create(this.building_type);
+
+	build:function(type) {
+		var house = gg.House.create(type);
 		var world = this.getPosition();
 		var map = this.getParent().getPosition();
 
-		house.setPosition(this.prev_position);
+		house.setPosition(cc.pAdd(this.prev_position, cc.p(30, 20)));
 		this.getParent().addChild(house, 2);
+
+		this.setState(UNIT_STATE_DEFAULT);
 	},
+
 	setAnimation:function(name) {
 		this.body.stopAllActions();
 		var count = 0;
@@ -124,8 +144,14 @@ gg.Unit = cc.Node.extend({
 
 		var cache = cc.SpriteFrameCache.getInstance();
 		var frames = [];
+		console.log(this.sex);
 		for (var i = 0; i < count; ++i) {
-			var framename = name + "_p" + i + ".png";
+			var framename;
+			if (this.sex == "man") {
+				framename = name + "_p" + i + ".png";
+			} else {
+				framename = name + "_f"+ "_p" + i + ".png";
+			}
 			// console.log(name);
 			var frame = cache.getSpriteFrame(framename);
 			frames.push(frame);
@@ -137,6 +163,8 @@ gg.Unit = cc.Node.extend({
 	},
 });
 
-gg.Unit.create = function () {
-	return new gg.Unit();
+gg.Unit.create = function (sex) {
+	var unit = new gg.Unit();
+	unit.setSex(sex);
+	return unit;
 };

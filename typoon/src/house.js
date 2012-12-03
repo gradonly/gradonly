@@ -4,6 +4,8 @@ gg.House = cc.Node.extend({
     menu:null,
     sprite1:null,
     sprite2:null,
+    type:0,
+    bar:null,
     ctor:function () {
         this.menu = cc.Menu.create(null);
         this.menu.setPosition(cc.PointZero());
@@ -11,16 +13,16 @@ gg.House = cc.Node.extend({
     },
     onEnter:function () {
         this._super();
-
     },
     build:function(type) {
+        this.type = type;
         actions = [];
         this.sprite1 = cc.Sprite.create("res/uiitem/house/building_0.png");
         this.sprite1.setPosition(cc.PointZero());
         this.addChild(this.sprite1);
 
         this.sprite2 = cc.Sprite.create("res/uiitem/house/building_1.png");
-        this.sprite2.setPosition(cc.PointZero());
+        this.sprite2.setPosition(cc.p(0, 30));
         this.addChild(this.sprite2);
         this.sprite2.setVisible(false);
 
@@ -36,6 +38,20 @@ gg.House = cc.Node.extend({
 
         var sequence = cc.Sequence.create(actions);
         this.runAction(sequence);
+
+        this.bar = cc.Sprite.create("res/uiitem/store_greenbutton.png");
+        this.bar.setAnchorPoint(cc.p(0.0, 0.5));
+        this.bar.setScaleX(0);
+        this.bar.setPosition(cc.p(-50, 100));
+        this.addChild(this.bar);
+        
+        var actions2 = [];
+        var scale = cc.ScaleTo.create(10, 1, 1);
+        var hidebar = cc.CallFunc.create(this, this.hideBar);
+        actions2.push(scale);
+        actions2.push(hidebar);
+        var sequence2 = cc.Sequence.create(actions2);
+        this.bar.runAction(sequence2);
     },
     createBuild:function(sender) {
         this.sprite1.setVisible(false);
@@ -43,11 +59,10 @@ gg.House = cc.Node.extend({
     },
     createButton:function(sender) {
         this.sprite2.setVisible(false);
-        type = 1;
+        console.log(this.type);
         var item = cc.MenuItemImage.create(
-
-            "res/uiitem/house/map_" + type + ".png",
-            "res/uiitem/house/map_" + type + ".png",
+            "res/uiitem/house/map_" + this.type + ".png",
+            "res/uiitem/house/map_" + this.type + ".png",
             this,
             function () {
                 // this.unit.setState(UNIT_STATE_BUILDING);
@@ -56,6 +71,10 @@ gg.House = cc.Node.extend({
 
         this.menu.addChild(item, 1);
     },
+
+    hideBar:function() {
+        this.bar.setVisible(false);
+    }
 });
 
 gg.House.create = function (type) {
