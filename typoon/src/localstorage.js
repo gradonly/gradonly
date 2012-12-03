@@ -2,11 +2,12 @@
 var gg = gg = gg || {};
 
 gg.LocalStorage = cc.Class.extend({
-	_instance:null,
 	ctor:function() {
 		console.log("gg.LocalStorage.inner");
 		this.storageDirty = new Array();
 	},
+
+	// normal object.
 	save:function(key, value) {
 		//console.log("save ---------------------------");
 		localStorage.setItem(key, value);
@@ -30,21 +31,26 @@ gg.LocalStorage = cc.Class.extend({
 		return localStorage.getItem(key);
 	},
 
+	// --set
 	add:function(key, value) {
 		var item = this.get(key);
 		if( item == null ) item = [];
 
 		item.push(value);
-
-		var encoded = JSON.stringify(item);
-
+		console.log("debug------------------localStorage:add");
+		console.log(value);
+		console.log(item);
+		//var encoded = JSON.stringify(item);
+		var encoded = JSONfn.stringify(item);
+		console.log(encoded);
 		localStorage.setItem(key, encoded);
 
 	},
 
 	get:function(key) {
 		var item = localStorage.getItem(key);
-		var parsed = JSON.parse(item);
+		//var parsed = JSON.parse(item);
+		var parsed = JSONfn.parse(item);
 		return parsed;
 	},
 

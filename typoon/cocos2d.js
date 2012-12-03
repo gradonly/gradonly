@@ -38,6 +38,7 @@
 
             // 'src/cereal/lib/cereal.js',
             'src/JSON2/json2.js',
+            'src/JSONfn/jsonfn.js',
             // 'src/JSON2/json2.js',
             'src/JSON2/json_parse.js',
             'src/JSON2/json_parse_state.js',
@@ -51,7 +52,7 @@
             'src/localstorage.js',
             // 'src/TypoonEngineIntroScene.js',
             // 'src/MenuItemImageMapLeft.js',
-
+            'src/Tool/TextField.js',
             'src/Tool/Char/CharToolScene.js',
 
             'src/Tool/Play/MainMenuScene.js',

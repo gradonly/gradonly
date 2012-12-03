@@ -1,53 +1,174 @@
+
 var TAG_UIPLACEMENT_LAYER = 1134343;
 var TAG_UIPLACEMENTMENU_LAYER = 234343213;
-// general layer
-gg.UIPlacementLayer = cc.Layer.extend({
-    m_window:null,
-    m_winSize:null,
+var TAG_UICOMPONENT_DATA = "uicomponent";
+var TAG_MENUCONTAINER = "menucontainer";
+var TAG_MENU2 = "level2";
 
+
+gg.UIPlacementMenuLayer = cc.Layer.extend({
     ctor:function () {
-        this.m_winSize = cc.Director.getInstance().getWinSize();
     },
     onEnter:function () {
         this._super();
 
-        this.TopMenu();
-        this.LeftMenu();
-        this.RightMenu();
-
-        // this.m_window = new gg.UIWindow();
-        // this.m_window.setPosition(cc.p(this.m_winSize.width/2,this.m_winSize.height/2));
-        // this.addChild(this.m_window);
+        var menu = cc.Menu.create(null);
+        menu.setPosition(cc.PointZero());
+        this.addChild(menu, 1, TAG_MENUCONTAINER);
+        this.TopMenu(menu);
+        this.createHouseUI(menu);
+        this.saveMenuItem();
+        this.loadMenuItem(menu);
 
         return true;
     },
-    TopMenu:function () {
+
+    saveMenuItem:function(){
+        var size = cc.Director.getInstance().getWinSize();
+        var instance = gg.LocalStorage.getInstance();
+        // saved 
+        var item = {
+            tag: "level1",                                      // identity
+            calle: "level2",                                    // calle when click.
+            text: "",                                           // text
+            res1: "res/PlayScene/top_lvexp00.png",
+            res2: "res/PlayScene/top_lvexp00.png",
+            position: cc.p(size.width*0.1, size.height * 0.93),
+            func: function(self){
+                console.log('level_item is called!!!!!!!!!!');
+                // console.log(this);
+                // console.log(self);
+
+                // find calle
+                var level = this.getChildByTag(self.calle);
+                if( level.isVisible() == true)
+                    level.setVisible(false);
+                else
+                    level.setVisible(true);
+            },
+            visible: true
+        };
+
+        instance.add(TAG_UICOMPONENT_DATA, item);
+
+        var item = { 
+            tag: "level2",
+            res1: "res/PlayScene/top_coin.png",
+            res2: "res/PlayScene/top_coin_p.png",
+            position: cc.p(size.width*0.28, size.height * 0.93),
+            func: function(){
+                console.log('level_item2 is called!!!!!!!!!!');
+            },
+            visible: false
+        };
+
+        instance.add(TAG_UICOMPONENT_DATA, item);
+
+        // var item = { 
+        //     tag: "level3",
+        //     res1: "res/PlayScene/top_cash.png",
+        //     res2: "res/PlayScene/top_cash_p.png",
+        //     position: cc.p(size.width*0.45, size.height * 0.93),
+        //     func: function(){
+        //         console.log('level_item3 is called!!!!!!!!!!');
+        //     },
+        //     visible: false
+        // };
+
+        // instance.add(TAG_UICOMPONENT_DATA, item);
+
+        // var item = {
+        //     tag: "level4",
+        //     res1: "res/PlayScene/top_pop.png",
+        //     res2: "res/PlayScene/top_pop_p.png",
+        //     position: cc.p(size.width*0.75, size.height * 0.93),
+        //     func: function(){
+        //         console.log('level_item4 is called!!!!!!!!!!');
+        //     },
+        //     visible: false
+        // };
+
+        // instance.add(TAG_UICOMPONENT_DATA, item);
+
+        // var item = { 
+        //     tag: "level5",
+        //     res1: "res/PlayScene/top_sp.png",
+        //     res2: "res/PlayScene/top_sp_p.png",
+        //     position: cc.p(size.width*0.9, size.height * 0.93),
+        //     func: function(){
+        //         console.log('level_item5 is called!!!!!!!!!!');
+        //     },
+        //     visible: false
+        // };
+
+        // instance.add(TAG_UICOMPONENT_DATA, item);
+
+    },
+
+    // loadMenu
+    loadMenuItem:function(menu)
+    {
+        var instance = gg.LocalStorage.getInstance();
+        var items = instance.get('uicomponent');
+        for(var i = 0; i < items.length; i++) {
+            var menuElement = items[i];
+            this.makeMenuItem(menu, menuElement);
+        }
+    },
+
+    // makeMenuItem
+    makeMenuItem:function(menu, menuElement) {
+
+        var tag = menuElement.tag;
+        var calle = menuElement.calle;
+        var res1 = menuElement.res1;
+        var res2 = menuElement.res2;
+        var func = menuElement.func;
+        var position = menuElement.position;
+        var visible = menuElement.visible;
+        // Menu Item Spec.
+        // image res1
+        // image res2
+        // function
+        // position
+
+        var size = cc.Director.getInstance().getWinSize();
+
+        var Item = cc.MenuItemImage.create(
+            res1,
+            res2,
+            menu,                           // parent's
+            func
+        );
+
+        Item.setAnchorPoint(cc.p(0.5, 0.5));
+        Item.setPosition(position);
+        Item.setVisible(visible);
+        Item.setTag(tag);
+        Item.calle = calle;
+        
+        console.log("tag --------------------");
+        console.log(tag);
+
+        menu.addChild(Item);
+
+    },
+
+    TopMenu:function (menu) {
+
+        
 
         // var size = cc.Director.getInstance().getWinSize();
-
-        // var menu = cc.Menu.create(null);
-        // menu.setPosition(cc.PointZero());
-        // this.addChild(menu, 1);
-
         // var LevelItem = cc.MenuItemImage.create(
-        //     "res/PlayScene/top_lvexp00.png",        // normal image
-        //     "res/PlayScene/top_lvexp00.png",        // selected images
-        //     this,                                   // disabled image or target
-        //     function () {                           // callback method
-        //         console.log(this);
-        //         console.log(LevelItem);
-        //         console.log(LevelItem.getPosition());
+        //     "res/PlayScene/top_lvexp00.png",
+        //     "res/PlayScene/top_lvexp00.png",
+        //     this,
+        //     function () {
         //     });
-
-        // //console.log(LevelItem);
         // LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
         // LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
-        // //LevelItem.setTouchEnabled(true);
-        // //LevelItem.registerWithTouchDispatcher(function(){ console.log(this) });
-
         // menu.addChild(LevelItem);
 
-        // // coinItem
         // var CoinItem = cc.MenuItemImage.create(
         //     "res/PlayScene/top_coin.png",
         //     "res/PlayScene/top_coin_p.png",
@@ -58,18 +179,17 @@ gg.UIPlacementLayer = cc.Layer.extend({
         // CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
         // menu.addChild(CoinItem);
 
-        // // cashItem
         // var CashItem = cc.MenuItemImage.create(
         //     "res/PlayScene/top_cash.png",
         //     "res/PlayScene/top_cash_p.png",
         //     this,
         //     function () {
+        //         console.log('dd');
         //     });
         // CashItem.setAnchorPoint(cc.p(0.5, 0.5));
         // CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
         // menu.addChild(CashItem);
 
-        // // popItem
         // var PopItem = cc.MenuItemImage.create(
         //     "res/PlayScene/top_pop.png",
         //     "res/PlayScene/top_pop_p.png",
@@ -80,166 +200,71 @@ gg.UIPlacementLayer = cc.Layer.extend({
         // PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
         // menu.addChild(PopItem);
 
-        // var jwelItem = cc.MenuItemImage.create(
+        // var PopItem = cc.MenuItemImage.create(
         //     "res/PlayScene/top_sp.png",
         //     "res/PlayScene/top_sp_p.png",
         //     this,
         //     function () {
         //     });
-        // jwelItem.setAnchorPoint(cc.p(0.5, 0.5));
-        // jwelItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
-        // menu.addChild(jwelItem);
+        // PopItem.setAnchorPoint(cc.p(0.5, 0.5));
+        // PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
+        // menu.addChild(PopItem);
     },
+    createHouseUI:function(menu) {
+        var frame = cc.Sprite.create("res/uiitem/house/frame.png");
+        frame.setPosition(cc.p(400, 100));
+        this.addChild(frame, 0);
 
-    LeftMenu:function () {
-        // var menu = cc.Menu.create();
-        // menu.setPosition(cc.p(100, 500));
-        // this.addChild(menu);
+        for (var i = 0; i < 5; ++i) {
+            var item = cc.MenuItemImage.create(
+            "res/uiitem/house/map_" + i + ".png",
+            null,
+            this,
+            function () {
+                var layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
+                var unit = layer.getUnit();
 
-        // var item_number = 9;
-        // var path = "res/UIItem/";
-        // for (var i = 0; i < item_number; ++i) {
-        //     var file = path + "UI" + i + ".png";
-        //     var item = cc.MenuItemImage.create(file, file, null, this, this.SelectMenuLeftItem);
-        //     console.log(item);
-        //     console.log(item.getContentSize());
-        //     var itemHeight = item.getContentSize().height
-        //     item.setAnchorPoint(0.5, 0.5);
-        //     item.buttonType = i+1;
-        //     item.setPosition(0, i*(-itemHeight));
-        //     menu.addChild(item);
-        // }
-    },
+                unit.setState(UNIT_STATE_BUILDING);
+                unit.setBuilding(i);
+            });
 
-    // Right is property of UI object Menu
-    RightMenu:function() {
-        var size = cc.Director.getInstance().getWinSize();
-        console.log("size width" + size.width + " size height" + size.height);
-
-        // cc.canvas.addEventListener("keydown", function(e) {
-        //     cc.keyboardDispatcher.dispatchKeyboardMSG(e, true);
-        //     //cc.IMED
-
-        // })
-        
-        var textbox = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.Text_ALIGNMENT_LEFT,"Arial", 32);
-        textbox.setPosition(new cc.p(100,100));
-        textbox.setColor(new cc.Color3B(255,255,255));
-        textbox.setColorSpaceHolder(new cc.Color3B(255,255,255));
-        textbox.insertText("ssss",4);
-        textbox.attachWithIME();
-        
-        this.addChild(textbox);
-
-        // property_title
-        var property_title = cc.LabelTTF.create("UIPlacement Layer", "Arial", 12);
-        property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
-        property_title.setColor(new cc.Color3B(255, 255, 255));
-        this.addChild(property_title);
-
-        console.log(property_title);
-
-        
-        //  keyboard input
-        // var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
-        // keyboardDispatcher.addDelegate({
-        //     onKeyUp:function(e){
-        //         console.log(e);
-        //         // Menu.method call.
-                
-        //         // in Menu. method 
-        //         // child method가  키보드 이벤트가 필요하면 처리...
-        //     },
-        //     onKeyDown:function(e){
-        //         console.log(e);
-        //     }
-        // });
-    },
-
-    SelectMenuLeftItem:function (sender) {
-        console.log(tile_button);
-        map_layer = this.getParent().getChildByTag(TAG_LAYER_MAP);
-        map_layer.getButtonType(sender.buttonType);
+            item.setPosition(cc.p(160+120*i, 100));
+            menu.addChild(item);
+        }
     },
 });
 
-gg.UIPlacementMenuLayer = cc.Layer.extend({
-    ctor:function () {
+gg.PropertyWindow = cc.Layer.extend({
+    ctor:function(){
+       // this.setAnchorPoint(cc.p(0,0));
     },
-    onEnter:function () {
+    onEnter:function(){
         this._super();
+        // tag
+        // calle
+        // text
+        // res1
+        // res2
+        // func
+        // visible
 
-        var menu = cc.Menu.create(null);
-        menu.setPosition(cc.PointZero());
-        this.addChild(menu, 1);
-
-        this.TopMenu(menu);
-        return true;
+     
+        var tagText = new gg.TextFieldTTFDefault("<insert input tag>", cc.p(300,300));
+        this.addChild(tagText);
+        
+     
     },
-    TopMenu:function (menu) {
-        var size = cc.Director.getInstance().getWinSize();
-        var LevelItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_lvexp00.png",
-            "res/PlayScene/top_lvexp00.png",
-            this,
-            function () {
-            });
-        LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
-        LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
-        menu.addChild(LevelItem);
 
-        var CoinItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_coin.png",
-            "res/PlayScene/top_coin_p.png",
-            this,
-            function () {
-            });
-        CoinItem.setAnchorPoint(cc.p(0.5, 0.5));
-        CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
-        menu.addChild(CoinItem);
-
-        var CashItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_cash.png",
-            "res/PlayScene/top_cash_p.png",
-            this,
-            function () {
-                console.log('dd');
-            });
-        CashItem.setAnchorPoint(cc.p(0.5, 0.5));
-        CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
-        menu.addChild(CashItem);
-
-        var PopItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_pop.png",
-            "res/PlayScene/top_pop_p.png",
-            this,
-            function () {
-            });
-        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
-        menu.addChild(PopItem);
-
-        var PopItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_sp.png",
-            "res/PlayScene/top_sp_p.png",
-            this,
-            function () {
-            });
-        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
-        menu.addChild(PopItem);
-    },
 });
 var UIPlacement = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        //var MapLayer = new PlayMapLayer();
-        //this.addChild(MapLayer, 0, TAG_LAYER_MAP);
-
-        var UIPlacementLayer = new gg.UIPlacementLayer();
         var UIPlacementMenuLayer = new gg.UIPlacementMenuLayer();
-        this.addChild(UIPlacementLayer, 1, TAG_UIPLACEMENT_LAYER);
+        var PropertyWindow = new gg.PropertyWindow();
+
+
         this.addChild(UIPlacementMenuLayer, 0, TAG_UIPLACEMENTMENU_LAYER);
+        this.addChild(PropertyWindow,1);
     }
 });
