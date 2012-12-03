@@ -60,7 +60,7 @@ var generateRandom = function (width, height, wallFrequency) {
     return new Graph(nodes);
 };
 
-var PlayMapLayer = cc.Layer.extend({
+gg.PlayMapLayer = cc.Layer.extend({
     tile:null,
     map_layer:null,
     object_layer:null,
@@ -259,15 +259,6 @@ var PlayMapLayer = cc.Layer.extend({
      // load map data and paint map data.
     loadMapData:function() {
 
-        // this.removechild(this.map, true);
-        //   // cc.TMXTiledMap
-        // this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
-        // // cc.TMXTiledMap -> cc.TMXLayer
-        // this.map_layer = this.map.layerNamed("MapLayer");
-        // this.object_layer = this.map.layerNamed("ObjectLayer");
-        
-        // this.addChild(this.map, 0, TAG_TILE_MAP);
-
         var instance = gg.LocalStorage.getInstance();
 
         var mapdata = instance.get('map');
@@ -308,7 +299,8 @@ var PlayMapLayer = cc.Layer.extend({
 
 });
 
-var PlayUILayer = cc.Layer.extend({
+// Player's UI Layer
+gg.PlayUILayer = cc.Layer.extend({
     ctor:function () {
     },
     onEnter:function () {
@@ -455,10 +447,10 @@ var PlayScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
-        var uiLayer = new PlayUILayer();
+        var uiLayer = new gg.PlayUILayer();
         this.addChild(uiLayer, 1, TAG_LAYER_UI);
 
-        var mapLayer = new PlayMapLayer();
+        var mapLayer = new gg.PlayMapLayer();
         this.addChild(mapLayer, 0, TAG_LAYER_MAP);
     }
 });

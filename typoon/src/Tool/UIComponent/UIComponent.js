@@ -1,9 +1,7 @@
+var TAG_UICOMPONENT_LAYER = 1234332;
+var TAG_UICOMPONENTMENU_LAYER = 2343433;
 
-var TAG_LAYER_MAP = 12433;
-var TAG_LAYER_UI = 209045;
-var TAG_TILE_MAP = 10001000;
-
-var UIUILayer = cc.Layer.extend({
+gg.UIComponentLayer = cc.Layer.extend({
     m_window:null,
     m_winSize:null,
 
@@ -17,9 +15,9 @@ var UIUILayer = cc.Layer.extend({
         this.LeftMenu();
         this.RightMenu();
 
-        this.m_window = new gg.UIWindow();
-        this.m_window.setPosition(cc.p(this.m_winSize.width/2,this.m_winSize.height/2));
-        this.addChild(this.m_window);
+        // this.m_window = new gg.UIWindow();
+        // this.m_window.setPosition(cc.p(this.m_winSize.width/2,this.m_winSize.height/2));
+        // this.addChild(this.m_window);
 
         return true;
     },
@@ -134,7 +132,7 @@ var UIUILayer = cc.Layer.extend({
         this.addChild(textbox);
 
         // property_title
-        var property_title = cc.LabelTTF.create("Property Of UdfdfdI Menu Object", "Arial", 12);
+        var property_title = cc.LabelTTF.create("UI Component Layer", "Arial", 12);
         property_title.setPosition(cc.p(size.width * 0.5 + 25, size.height * 0.45 - 38));
         property_title.setColor(new cc.Color3B(255, 255, 255));
         this.addChild(property_title);
@@ -165,15 +163,86 @@ var UIUILayer = cc.Layer.extend({
     },
 });
 
-var UIScene = cc.Scene.extend({
+gg.UIComponentMenuLayer = cc.Layer.extend({
+    ctor:function () {
+    },
+    onEnter:function () {
+        this._super();
+
+        var menu = cc.Menu.create(null);
+        menu.setPosition(cc.PointZero());
+        this.addChild(menu, 1);
+
+        this.TopMenu(menu);
+        return true;
+    },
+    TopMenu:function (menu) {
+        var size = cc.Director.getInstance().getWinSize();
+        var LevelItem = cc.MenuItemImage.create(
+            "res/PlayScene/top_lvexp00.png",
+            "res/PlayScene/top_lvexp00.png",
+            this,
+            function () {
+            });
+        LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
+        LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
+        menu.addChild(LevelItem);
+
+        var CoinItem = cc.MenuItemImage.create(
+            "res/PlayScene/top_coin.png",
+            "res/PlayScene/top_coin_p.png",
+            this,
+            function () {
+            });
+        CoinItem.setAnchorPoint(cc.p(0.5, 0.5));
+        CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
+        menu.addChild(CoinItem);
+
+        var CashItem = cc.MenuItemImage.create(
+            "res/PlayScene/top_cash.png",
+            "res/PlayScene/top_cash_p.png",
+            this,
+            function () {
+                console.log('dd');
+            });
+        CashItem.setAnchorPoint(cc.p(0.5, 0.5));
+        CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
+        menu.addChild(CashItem);
+
+        var PopItem = cc.MenuItemImage.create(
+            "res/PlayScene/top_pop.png",
+            "res/PlayScene/top_pop_p.png",
+            this,
+            function () {
+            });
+        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
+        PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
+        menu.addChild(PopItem);
+
+        var PopItem = cc.MenuItemImage.create(
+            "res/PlayScene/top_sp.png",
+            "res/PlayScene/top_sp_p.png",
+            this,
+            function () {
+            });
+        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
+        PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
+        menu.addChild(PopItem);
+    },
+});
+
+var UIComponent = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
         //var MapLayer = new PlayMapLayer();
         //this.addChild(MapLayer, 0, TAG_LAYER_MAP);
 
-        var UILayer = new UIUILayer();
-        this.addChild(UILayer, 1, TAG_LAYER_UI);
+        var UILayer = new gg.UIComponentLayer();
+        var UIComponentMenuLayer = new gg.UIComponentMenuLayer();
+
+        this.addChild(UILayer, 1, TAG_UICOMPONENT_LAYER);
+        this.addChild(UIComponentMenuLayer, 1, TAG_UICOMPONENTMENU_LAYER);
 
     }
 });

@@ -59,12 +59,15 @@
             
             'src/Tool/Map/MapToolScene.js',
 
-            'src/Tool/UI/UIScene.js',
-            'src/Tool/UI/ItemToolScene.js',
-            'src/Tool/UI/UIWindow.js',
-            'src/Tool/UI/UIComponentBase.js',
-            'src/Tool/UI/UIComponentLabel.js',
-            'src/Tool/UI/UIComponentImage.js'
+            'src/Tool/UIComponent/UIComponent.js',
+            'src/Tool/UIPlacement/UIPlacement.js',
+            'src/Tool/UIWindow/UIWindow.js',
+
+            // 'src/Tool/UI/ItemToolScene.js',
+            // 'src/Tool/UI/UIWindow.js',
+            // 'src/Tool/UI/UIComponentBase.js',
+            // 'src/Tool/UI/UIComponentLabel.js',
+            // 'src/Tool/UI/UIComponentImage.js'
             
         ]
     };
