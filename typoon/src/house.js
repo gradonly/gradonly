@@ -20,7 +20,7 @@ gg.House = cc.Node.extend({
         this.addChild(this.sprite1);
 
         this.sprite2 = cc.Sprite.create("res/uiitem/house/building_1.png");
-        this.sprite2.setPosition(cc.PointZero());
+        this.sprite2.setPosition(cc.p(0, 30));
         this.addChild(this.sprite2);
         this.sprite2.setVisible(false);
 
@@ -45,7 +45,6 @@ gg.House = cc.Node.extend({
         this.sprite2.setVisible(false);
         type = 1;
         var item = cc.MenuItemImage.create(
-
             "res/uiitem/house/map_" + type + ".png",
             "res/uiitem/house/map_" + type + ".png",
             this,

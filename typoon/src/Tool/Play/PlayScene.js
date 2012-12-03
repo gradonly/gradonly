@@ -99,11 +99,9 @@ gg.PlayMapLayer = cc.Layer.extend({
 
         this.unit = gg.Unit.create();
         this.unit.setAnimation("stay");
-        this.map.addChild(this.unit, 2);
+        this.map.addChild(this.unit, 3);
 
         this.unit.setPositionFromCoord(cc.p(10, 18));
-
-      
 
         return true;
     },
@@ -215,6 +213,7 @@ gg.PlayMapLayer = cc.Layer.extend({
 
         this.touchMoved = false;
     },
+
     getButtonType:function(type) {
         tile_button = type;
     },
@@ -222,7 +221,6 @@ gg.PlayMapLayer = cc.Layer.extend({
     getUnit:function(unit) {
         return this.unit;
     },
-
 
     // paint draw paintMapTile From JSOn Data
     paintMapTileFromArray:function(mapData) {
@@ -248,7 +246,6 @@ gg.PlayMapLayer = cc.Layer.extend({
     },
 
     paintMapTilesArray:function(mapDatas) {
-
         for(var i = 0; i < mapDatas.length; i++)
         {
             var element = mapDatas[i];

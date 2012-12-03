@@ -100,8 +100,10 @@ gg.Unit = cc.Node.extend({
 		var world = this.getPosition();
 		var map = this.getParent().getPosition();
 
-		house.setPosition(this.prev_position);
+		house.setPosition(cc.pAdd(this.prev_position, cc.p(30, 20)));
 		this.getParent().addChild(house, 2);
+
+		this.setState(UNIT_STATE_DEFAULT);
 	},
 	setAnimation:function(name) {
 		this.body.stopAllActions();
