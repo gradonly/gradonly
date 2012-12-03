@@ -5,6 +5,7 @@ gg.House = cc.Node.extend({
     sprite1:null,
     sprite2:null,
     type:0,
+    bar:null,
     ctor:function () {
         this.menu = cc.Menu.create(null);
         this.menu.setPosition(cc.PointZero());
@@ -37,6 +38,20 @@ gg.House = cc.Node.extend({
 
         var sequence = cc.Sequence.create(actions);
         this.runAction(sequence);
+
+        this.bar = cc.Sprite.create("res/uiitem/store_greenbutton.png");
+        this.bar.setAnchorPoint(cc.p(0.0, 0.5));
+        this.bar.setScaleX(0);
+        this.bar.setPosition(cc.p(-50, 100));
+        this.addChild(this.bar);
+        
+        var actions2 = [];
+        var scale = cc.ScaleTo.create(10, 1, 1);
+        var hidebar = cc.CallFunc.create(this, this.hideBar);
+        actions2.push(scale);
+        actions2.push(hidebar);
+        var sequence2 = cc.Sequence.create(actions2);
+        this.bar.runAction(sequence2);
     },
     createBuild:function(sender) {
         this.sprite1.setVisible(false);
@@ -56,6 +71,10 @@ gg.House = cc.Node.extend({
 
         this.menu.addChild(item, 1);
     },
+
+    hideBar:function() {
+        this.bar.setVisible(false);
+    }
 });
 
 gg.House.create = function (type) {

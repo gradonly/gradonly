@@ -5,11 +5,11 @@ var CharUILayer = cc.Layer.extend({
     m_window:null,
     m_winSize:null,
     names:null,
-     unit:null,
+    man:null,
+    women:null,
     ctor:function () {
         this.m_winSize = cc.Director.getInstance().getWinSize();
-        this.names = ["help", "move", "distort", "gather", "chop", "kick", "open"];
-    },
+        this.names = ["help", "move", "distort", "gather", "chop", "kick", "open"];    },
 
     onEnter:function () {
         this._super();
@@ -28,12 +28,18 @@ var CharUILayer = cc.Layer.extend({
     },
 
     ShowCharacter:function () {
-        this.unit = gg.Unit.create();
-        this.unit.setPosition(cc.p(200, 400));
-        this.unit.setScale(5);
-        this.addChild(this.unit);
+        this.man = gg.Unit.create("man");
+        this.man.setPosition(cc.p(200, 400));
+        this.man.setScale(5);
+        this.addChild(this.man);
 
-        this.unit.setAnimation("help");
+        this.man.setAnimation("help");
+
+        this.women = gg.Unit.create("women");
+        this.women.setPosition(cc.p(600, 400));
+        this.women.setScale(5);
+        this.addChild(this.women);
+        this.women.setAnimation("help");
     },
 
     // Right is property of UI object Menu
@@ -42,7 +48,7 @@ var CharUILayer = cc.Layer.extend({
 
         // animation button
         var menu = cc.Menu.create(null);
-        menu.setPosition(cc.p(500, 600));
+        menu.setPosition(cc.p(300, 600));
         this.addChild(menu, 1);
 
         var index = 0;
@@ -53,30 +59,43 @@ var CharUILayer = cc.Layer.extend({
             label.button_type = i;
             label.setPosition(cc.p(0, -50*i));
             menu.addChild(label);
+            label.sex = "man";
         }
 
-        //  keyboard input
-        var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
-        keyboardDispatcher.addDelegate({
-            onKeyUp:function(e){
-                console.log(e);
-                // Menu.method call.
-                
-                // in Menu. method 
-                // child method가  키보드 이벤트가 필요하면 처리...
-            },
-            onKeyDown:function(e){
-                console.log(e);
-            }
-        });
+        for (var i = 0; i < 6; ++i) {
+            var name = null;
+            var label = cc.MenuItemFont.create(this.names[i], this, this.setAnimation);
+            label.button_type = i;
+            label.setPosition(cc.p(400, -50*i));
+            menu.addChild(label);
+            label.sex = "women";
+        }
+
+        // //  keyboard input
+        // var keyboardDispatcher = new cc.KeyboardDispatcher.getInstance();
+        // keyboardDispatcher.addDelegate({
+        //     onKeyUp:function(e){
+        //     },
+        //     onKeyDown:function(e){
+        //         console.log(e);
+        //     }
+        // });
     },
 
     setAnimation:function(sender) {
-        // console.log("call setAnimation");
-        this.unit.setAnimation(this.names[sender.button_type]);
-        var storage = gg.LocalStorage.getInstance();
-        storage.save('char_animation', this.names[sender.button_type]);
+        var item = sender;
 
+        console.log(item.sex);
+        var unit = null;
+        if (item.sex == "man") {
+            unit = this.man;
+        } else {
+            unit = this.women;
+        }
+        unit.setAnimation(this.names[sender.button_type]);
+
+        var storage = gg.LocalStorage.getInstance();
+        storage.save('char_animation', this.names[item.button_type]);
     },
 });
 
@@ -86,6 +105,5 @@ var CharToolScene = cc.Scene.extend({
 
         var UILayer = new CharUILayer();
         this.addChild(UILayer, 1, TAG_CHARUILAYER);
-
     }
 });

@@ -10,8 +10,8 @@ var g_ressources = [
 
     {type:"image", src:"res/MainMenuScene/bg.png"},
     {type:"image", src:"res/MainMenuScene/welback.png"},
-	{type:"image", src:"res/MainMenuScene/UIPlay.png"},
-	{type:"image", src:"res/MainMenuScene/UIPlaySelected.png"},
+    {type:"image", src:"res/MainMenuScene/UIPlay.png"},
+    {type:"image", src:"res/MainMenuScene/UIPlaySelected.png"},
 
     {type:"image", src:"res/PlayScene/top_lvexp00.png"},
     {type:"image", src:"res/PlayScene/top_cash.png"},
@@ -62,6 +62,7 @@ var g_ressources = [
     {type:"image", src:"res/uiitem/house/map_5.png"},
     {type:"image", src:"res/uiitem/house/map_6.png"},
     {type:"image", src:"res/uiitem/house/map_7.png"},
+    {type:"image", src:"res/uiitem/store_greenbutton.png"},
 
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
@@ -88,6 +89,14 @@ var g_ressources = [
     {type:"image", src:"res/Unit/chop.png"},
     {type:"image", src:"res/Unit/kick.png"},
     {type:"image", src:"res/Unit/open.png"},
+
+    {type:"image", src:"res/Unit/help_f.png"},
+    {type:"image", src:"res/Unit/move_f.png"},
+    {type:"image", src:"res/Unit/distort_f.png"},
+    {type:"image", src:"res/Unit/gather_f.png"},
+    {type:"image", src:"res/Unit/chop_f.png"},
+    {type:"image", src:"res/Unit/kick_f.png"},
+    {type:"image", src:"res/Unit/open_f.png"},
     
     //plist
     {type:"plist", src:"res/Unit/help.plist"},
@@ -97,6 +106,14 @@ var g_ressources = [
     {type:"plist", src:"res/Unit/chop.plist"},
     {type:"plist", src:"res/Unit/kick.plist"},
     {type:"plist", src:"res/Unit/open.plist"},
+
+    {type:"plist", src:"res/Unit/help_f.plist"},
+    {type:"plist", src:"res/Unit/move_f.plist"},
+    {type:"plist", src:"res/Unit/distort_f.plist"},
+    {type:"plist", src:"res/Unit/gather_f.plist"},
+    {type:"plist", src:"res/Unit/chop_f.plist"},
+    {type:"plist", src:"res/Unit/kick_f.plist"},
+    {type:"plist", src:"res/Unit/open_f.plist"},
 
     //fnt
 

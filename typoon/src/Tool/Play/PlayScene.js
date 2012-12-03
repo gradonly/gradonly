@@ -97,7 +97,7 @@ gg.PlayMapLayer = cc.Layer.extend({
         // 오브젝트 레이어를 가지고 맵을 만든다.
         this.mapGraph = makeNodesFromMap(this.map);
 
-        this.unit = gg.Unit.create();
+        this.unit = gg.Unit.create("man");
         this.unit.setAnimation("stay");
         this.map.addChild(this.unit, 3);
 
@@ -281,7 +281,6 @@ gg.PlayMapLayer = cc.Layer.extend({
             var animation = storage.load('char_animation');
             if( animation != null)
                 this.unit.setAnimation(animation);
-
         }
     },
     // save map data
@@ -294,7 +293,6 @@ gg.PlayMapLayer = cc.Layer.extend({
             instance.add('map', parcelMapdata);
 
     }
-
 });
 
 // Player's UI Layer
