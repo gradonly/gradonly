@@ -5,6 +5,7 @@ var TAG_LAYER_UI = 209046;
 var TAG_TILE_MAP = 10001000;
 var TAG_TILE_MAP_LAYER = 10001001;
 var TAG_TILE_OBJECT_LAYER = 10001002;
+var TAG_UICOMPONENT_DATA = "uicomponent";
 
 var Node = cc.Node;
 
@@ -120,7 +121,6 @@ gg.PlayMapLayer = cc.Layer.extend({
         if( this.elapsedTime > 1.0) {
             this.loadMapData();
             this.loadCharData();
-
             this.elapsedTime = 0;
         }
 
@@ -190,13 +190,18 @@ gg.PlayMapLayer = cc.Layer.extend({
                 var temp_position = this.getPosition();
                 for (var i in coords) {
                     var coord = coords[i];
+                    //console.log(coord);
                     var position = layer.positionAt(coord);
                     position.x += 30;
                     position.y += 30;
 
                     var move = cc.MoveTo.create(0.5,  position);
                     actions.push(move);
+                    console.log(move);
                 }
+
+                // cc.MoveTo.create 에 버그가 존재. 마지막 endPoint가 Nan 값이 나온다.
+                actions.pop();
 
                 var state = unit.getState();
                 if (state == UNIT_STATE_DEFAULT) {
@@ -207,8 +212,8 @@ gg.PlayMapLayer = cc.Layer.extend({
                 }
 
                 var sequence = cc.Sequence.create(actions);
-                unit.runAction(sequence);
-
+                unit.runAction(sequence);               // endPosition : NaN, NaN
+                console.log(sequence);          
             }
         }
 
@@ -292,12 +297,14 @@ gg.PlayMapLayer = cc.Layer.extend({
             parcelMapdata.pos = coord;
             instance.add('map', parcelMapdata);
 
-    }
+    },
 });
 
 // Player's UI Layer
 gg.PlayUILayer = cc.Layer.extend({
+    menu:null,
     build_type:0,
+    elapsedTime:0,                      // ok...
     ctor:function () {
     },
     onEnter:function () {
@@ -305,7 +312,10 @@ gg.PlayUILayer = cc.Layer.extend({
 
         var menu = cc.Menu.create(null);
         menu.setPosition(cc.PointZero());
+        this.menu = menu;
+
         this.addChild(menu, 1);
+        
 
         this.TopMenu(menu);
         this.attachZoomInOutMenu(menu);
@@ -313,60 +323,90 @@ gg.PlayUILayer = cc.Layer.extend({
 
         this.CenterMenu();
 
+        this.scheduleUpdate();
+
         return true;
     },
-    TopMenu:function (menu) {
+    update:function (dt) {
+//       console.log("UILayer - updated ");
+        this.elapsedTime += dt;
+
+        if( this.elapsedTime > 1.0) {
+            // console.log("UILayer - updated ");
+            var instance = gg.LocalStorage.getInstance();
+            if( instance.isDirty(TAG_UICOMPONENT_DATA) == true)
+                this.loadMenuItem(this.menu);
+            // console.log("update");
+            this.elapsedTime = 0;
+        }
+
+    },
+      // loadMenu
+    loadMenuItem:function(menu)
+    {
+        console.log("loadMenuItem -------------onload");
+
+        // clear
+        menu.removeAllChildrenWithCleanup(true);
+
+        var instance = gg.LocalStorage.getInstance();
+        var items = instance.get('uicomponent');
+        
+        //if( items == null) return;
+
+        for(var i = 0; i < items.length; i++) {
+            var menuElement = items[i];
+            this.makeMenuItem(menu, menuElement);
+        }
+
+        // sample ----------- window menu
+
+        localStorage.setItem(TAG_UICOMPONENT_DATA+"_dirty", false);
+    },
+
+    // makeMenuItem
+    makeMenuItem:function(menu, menuElement) {
+
+        console.log("makeMenuItem called~~~~~~~~~~~");
+
+        var tag = menuElement.tag;
+        var calle = menuElement.calle;
+        var res1 = menuElement.res1;
+        var res2 = menuElement.res2;
+        var func = menuElement.func;
+        var position = menuElement.position;
+        var visible = menuElement.visible;
+        // Menu Item Spec.
+        // image res1
+        // image res2
+        // function
+        // position
+
         var size = cc.Director.getInstance().getWinSize();
-        var LevelItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_lvexp00.png",
-            "res/PlayScene/top_lvexp00.png",
-            this,
-            function () {
-            });
-        LevelItem.setAnchorPoint(cc.p(0.5, 0.5));
-        LevelItem.setPosition(cc.p(size.width * 0.1, size.height * 0.93));
-        menu.addChild(LevelItem);
 
-        var CoinItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_coin.png",
-            "res/PlayScene/top_coin_p.png",
-            this,
-            function () {
-            });
-        CoinItem.setAnchorPoint(cc.p(0.5, 0.5));
-        CoinItem.setPosition(cc.p(size.width * 0.28, size.height * 0.93));
-        menu.addChild(CoinItem);
+        var Item = cc.MenuItemImage.create(
+            res1,
+            res2,
+            menu,                           // parent's
+            func
+        );
 
-        var CashItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_cash.png",
-            "res/PlayScene/top_cash_p.png",
-            this,
-            function () {
-                console.log('dd');
-            });
-        CashItem.setAnchorPoint(cc.p(0.5, 0.5));
-        CashItem.setPosition(cc.p(size.width * 0.45, size.height * 0.93));
-        menu.addChild(CashItem);
+        Item.setAnchorPoint(cc.p(0.5, 0.5));
+        Item.setPosition(position);
+        Item.setVisible(visible);
+        Item.setTag(tag);
+        Item.calle = calle;
+        
+        console.log("tag --------------------");
+        console.log(tag);
 
-        var PopItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_pop.png",
-            "res/PlayScene/top_pop_p.png",
-            this,
-            function () {
-            });
-        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PopItem.setPosition(cc.p(size.width * 0.75, size.height * 0.93));
-        menu.addChild(PopItem);
+        menu.addChild(Item);
 
-        var PopItem = cc.MenuItemImage.create(
-            "res/PlayScene/top_sp.png",
-            "res/PlayScene/top_sp_p.png",
-            this,
-            function () {
-            });
-        PopItem.setAnchorPoint(cc.p(0.5, 0.5));
-        PopItem.setPosition(cc.p(size.width * 0.9, size.height * 0.93));
-        menu.addChild(PopItem);
+    },
+
+    TopMenu:function (menu) {
+      console.log("TopMenu----------------------------");
+      this.loadMenuItem(menu);
     },
 
     attachZoomInOutMenu:function(menu) {

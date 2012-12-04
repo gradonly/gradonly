@@ -5,7 +5,7 @@ var TEXT_INPUT_FONT_SIZE = 12;
 gg.textInputGetRect = function (node) {
     var rc = cc.rect(node.getPosition().x, node.getPosition().y, node.getContentSize().width, node.getContentSize().height);
     rc.origin.x -= rc.size.width / 2;
-    //rc.origin.y -= rc.size.height / 2;
+    rc.origin.y -= rc.size.height / 2;
     return rc;
 };
 
@@ -29,41 +29,11 @@ gg.KeyboardNotificationLayer = cc.Layer.extend({
     registerWithTouchDispatcher:function () {
         cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, false);
     },
-    keyboardWillShow:function (info) {
-        cc.log("TextInputTest:keyboardWillShowAt(origin:" + info.end.origin.x + "," + info.end.origin.y
-            + ", size:" + info.end.size.width + "," + info.end.size.height + ")");
-
-        if (!this._pTrackNode) {
-            return;
-        }
-
-        var rectTracked = gg.textInputGetRect(this._pTrackNode);
-        cc.log("TextInputTest:trackingNodeAt(origin:" + info.end.origin.x + "," + info.end.origin.y
-            + ", size:" + info.end.size.width + "," + info.end.size.height + ")");
-
-        // if the keyboard area doesn't intersect with the tracking node area, nothing need to do.
-        if (!cc.Rect.CCRectIntersectsRect(rectTracked, info.end)) {
-            return;
-        }
-
-        // assume keyboard at the bottom of screen, calculate the vertical adjustment.
-        var adjustVert = cc.Rect.CCRectGetMaxY(info.end) - cc.Rect.CCRectGetMinY(rectTracked);
-        cc.log("TextInputTest:needAdjustVerticalPosition(" + adjustVert + ")");
-
-        // move all the children node of KeyboardNotificationLayer
-        var children = this.getChildren();
-        for (var i = 0; i < children.length; ++i) {
-            var node = children[i];
-            var pos = node.getPosition();
-            pos.y += adjustVert;
-            node.setPosition(pos);
-        }
-    },
-
     onTouchBegan:function (touch, event) {
         cc.log("++++++++++++++++++++++++++++++++++++++++++++");
         this._beginPos = touch.getLocation();
         this._beginPos = cc.Director.getInstance().convertToGL(this._beginPos);
+        //this._beginPos = this.convertToNodeSpace(this._beginPos);
         return true;
     },
 
@@ -74,6 +44,7 @@ gg.KeyboardNotificationLayer = cc.Layer.extend({
 
         var endPos = touch.getLocation();
         endPos = cc.Director.getInstance().convertToGL(endPos);
+        //endPos = this.convertToNodeSpace(endPos);
 
         var delta = 5.0;
         if (Math.abs(endPos.x - this._beginPos.x) > delta
@@ -85,7 +56,9 @@ gg.KeyboardNotificationLayer = cc.Layer.extend({
 
         // decide the trackNode is clicked.
         var point = this.convertTouchToNodeSpaceAR(touch);
-     
+        point.y *= 2;
+        point.y += 6;
+
         //var point = endPos;
         cc.log("KeyboardNotificationLayer:clickedAt(" + point.x + "," + point.y + ")");
 
@@ -136,7 +109,7 @@ gg.TextFieldTTFDefault = gg.KeyboardNotificationLayer.extend({
         this.addChild(textField);
 
         console.log(s);
-        textField.setPosition(cc.p(s.width/2+100, s.height/2 + 50));
+        textField.setPosition(cc.p(this._pTrackNodePos));
 
         this._pTrackNode = textField;
     }

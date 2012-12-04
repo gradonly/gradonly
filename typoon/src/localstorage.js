@@ -1,6 +1,14 @@
 
 var gg = gg = gg || {};
 
+
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
+
 gg.LocalStorage = cc.Class.extend({
 	ctor:function() {
 		console.log("gg.LocalStorage.inner");
@@ -47,11 +55,38 @@ gg.LocalStorage = cc.Class.extend({
 
 	},
 
+	set:function(key, value) {
+		localStorage.setItem(key, JSONfn.stringify(value));
+	},
+	
 	get:function(key) {
 		var item = localStorage.getItem(key);
 		//var parsed = JSON.parse(item);
 		var parsed = JSONfn.parse(item);
 		return parsed;
+	},
+
+	modifyElementPosition:function(key, element) {
+		var tag = element.tag;
+		var items = JSONfn.parse(localStorage.getItem(key));
+
+	//	console.log("modifyElementPosition---------------------------------------------------");
+
+		for(x in items) {
+		console.log(items);
+		console.log("items ---" + items[x].tag + "  " + tag);
+	//		console.log(items[x]);
+	//		console.log(items[x].tag);
+			if(items[x].tag == tag) {
+				items[x].position = element.position;
+				//console.log("element.position -------------------------------");
+				//console.log(element.position);
+			}
+		}
+		
+		localStorage.setItem(key, JSONfn.stringify(items));
+		localStorage.setItem(key+"_dirty", true);
+
 	},
 
 	saveObject:function(key, value) {
@@ -64,7 +99,7 @@ gg.LocalStorage = cc.Class.extend({
 		//localStorage.setItem(key, JSON.stringify( decycled ) );
 	},
 	loadObject:function(key) {
-		var rtObject = [];
+		var rtObject = new Array();
 		rtObject = localStorage.getItem(key);
 		if( rtObject == null) {
 			return null;

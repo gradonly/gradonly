@@ -7,7 +7,9 @@ var TAG_MENU2 = "level2";
 
 
 gg.UIPlacementMenuLayer = cc.Layer.extend({
+    menu:null,
     ctor:function () {
+          this.setTouchEnabled(true);
     },
     onEnter:function () {
         this._super();
@@ -20,88 +22,145 @@ gg.UIPlacementMenuLayer = cc.Layer.extend({
         this.saveMenuItem();
         this.loadMenuItem(menu);
 
+        this.menu = menu;
+
+        cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 0, false);
+
         return true;
+    },
+
+    saveMenuItemFromNode:function(node){
+        if( node == null) 
+        {
+            console.log("saveMenuItemFromNode- node : null");
+            return;
+        }
+        var instance = gg.LocalStorage.getInstance();
+        var item = {
+            tag : node.getTag(),
+            calle : node.calle,
+            res1 : node.res1,
+            res2 : node.res2,
+            position : node.getPosition(),
+            func : node.func,
+            visible : node.visible
+        };
+
+        // modify object
+        instance.modifyElementPosition(TAG_UICOMPONENT_DATA, item);
+
+       // instance.add(TAG_UICOMPONENT_DATA, item);
+
     },
 
     saveMenuItem:function(){
         var size = cc.Director.getInstance().getWinSize();
         var instance = gg.LocalStorage.getInstance();
+        var items = [];
+
         // saved 
         var item = {
             tag: "level1",                                      // identity
-            calle: "level2",                                    // calle when click.
-            text: "",                                           // text
+            calle: "window1",                                    // calle when click.
             res1: "res/PlayScene/top_lvexp00.png",
             res2: "res/PlayScene/top_lvexp00.png",
             position: cc.p(size.width*0.1, size.height * 0.93),
             func: function(self){
+                console.log(this);
+                console.log(self);
                 console.log('level_item is called!!!!!!!!!!');
                 // console.log(this);
                 // console.log(self);
 
-                // find calle
+                //find calle
                 var level = this.getChildByTag(self.calle);
                 if( level.isVisible() == true)
                     level.setVisible(false);
                 else
                     level.setVisible(true);
+
+                this.selectedNode = self;
             },
             visible: true
         };
 
-        instance.add(TAG_UICOMPONENT_DATA, item);
+        items.push(item);
+        //instance.add(TAG_UICOMPONENT_DATA, item);
 
         var item = { 
             tag: "level2",
             res1: "res/PlayScene/top_coin.png",
             res2: "res/PlayScene/top_coin_p.png",
             position: cc.p(size.width*0.28, size.height * 0.93),
-            func: function(){
+            func: function(self){
                 console.log('level_item2 is called!!!!!!!!!!');
+                this.selectedNode = self;
+            },
+            visible: true
+        };
+
+        items.push(item);
+        //instance.add(TAG_UICOMPONENT_DATA, item);
+
+        var item = { 
+            tag: "level3",
+            res1: "res/PlayScene/top_cash.png",
+            res2: "res/PlayScene/top_cash_p.png",
+            position: cc.p(size.width*0.45, size.height * 0.93),
+            func: function(self){
+                console.log('level_item3 is called!!!!!!!!!!');
+                this.selectedNode = self;
+            },
+            visible: true
+        };
+
+        items.push(item);
+
+        var item = {
+            tag: "level4",
+            res1: "res/PlayScene/top_pop.png",
+            res2: "res/PlayScene/top_pop_p.png",
+            position: cc.p(size.width*0.75, size.height * 0.93),
+            func: function(self){
+                console.log('level_item4 is called!!!!!!!!!!');
+                this.selectedNode = self;
+            },
+            visible: true
+        };
+
+        items.push(item);
+
+        var item = { 
+            tag: "level5",
+            res1: "res/PlayScene/top_sp.png",
+            res2: "res/PlayScene/top_sp_p.png",
+            position: cc.p(size.width*0.9, size.height * 0.93),
+            func: function(self){
+                console.log('level_item5 is called!!!!!!!!!!');
+                this.selectedNode = self;
+            },
+            visible: true
+        };
+
+        
+        items.push(item);
+
+        var item = { 
+            tag: "window1",
+            res1: "res/MainMenuScene/welback.png",
+            res2: "res/MainMenuScene/welback.png",
+            position: cc.p(size.width/2, size.height/2),
+            func: function(self){
+                console.log('welback is called!!!!!!!!!!');
+                this.selectedNode = self;
             },
             visible: false
         };
 
-        instance.add(TAG_UICOMPONENT_DATA, item);
 
-        // var item = { 
-        //     tag: "level3",
-        //     res1: "res/PlayScene/top_cash.png",
-        //     res2: "res/PlayScene/top_cash_p.png",
-        //     position: cc.p(size.width*0.45, size.height * 0.93),
-        //     func: function(){
-        //         console.log('level_item3 is called!!!!!!!!!!');
-        //     },
-        //     visible: false
-        // };
+        items.push(item);
 
-        // instance.add(TAG_UICOMPONENT_DATA, item);
-
-        // var item = {
-        //     tag: "level4",
-        //     res1: "res/PlayScene/top_pop.png",
-        //     res2: "res/PlayScene/top_pop_p.png",
-        //     position: cc.p(size.width*0.75, size.height * 0.93),
-        //     func: function(){
-        //         console.log('level_item4 is called!!!!!!!!!!');
-        //     },
-        //     visible: false
-        // };
-
-        // instance.add(TAG_UICOMPONENT_DATA, item);
-
-        // var item = { 
-        //     tag: "level5",
-        //     res1: "res/PlayScene/top_sp.png",
-        //     res2: "res/PlayScene/top_sp_p.png",
-        //     position: cc.p(size.width*0.9, size.height * 0.93),
-        //     func: function(){
-        //         console.log('level_item5 is called!!!!!!!!!!');
-        //     },
-        //     visible: false
-        // };
-
-        // instance.add(TAG_UICOMPONENT_DATA, item);
+        instance.set(TAG_UICOMPONENT_DATA, items);
 
     },
 
@@ -110,6 +169,8 @@ gg.UIPlacementMenuLayer = cc.Layer.extend({
     {
         var instance = gg.LocalStorage.getInstance();
         var items = instance.get('uicomponent');
+        console.log("items-----------------");
+        console.log(items.length);
         for(var i = 0; i < items.length; i++) {
             var menuElement = items[i];
             this.makeMenuItem(menu, menuElement);
@@ -232,6 +293,30 @@ gg.UIPlacementMenuLayer = cc.Layer.extend({
             menu.addChild(item);
         }
     },
+
+    registerWithTouchDispatcher:function () {
+        cc.Director.getInstance().getTouchDispatcher().addTargetedDelegate(this, 10, false);
+    },
+
+    onTouchBegan:function (touch, event) {
+        var touchLocation = touch.getLocation();
+        
+        return true;
+    },
+    onTouchMoved:function (touch, event) {
+        var touchLocation = touch.getLocation();
+        console.log("move operation!~~~~~~~~~~~~");
+        console.log(this.menu.selectedNode);
+            if( this.menu.selectedNode != null) {
+                this.menu.selectedNode.setPosition(touchLocation.x, touchLocation.y);
+            }
+        
+    },
+    onTouchEnded:function (touch, event) {
+       this.saveMenuItemFromNode(this.menu.selectedNode);
+       console.log("onTouchEnded----------------------------");
+       this.menu.selectedNode = null;
+    },
 });
 
 gg.PropertyWindow = cc.Layer.extend({
@@ -248,9 +333,8 @@ gg.PropertyWindow = cc.Layer.extend({
         // func
         // visible
 
-     
-        var tagText = new gg.TextFieldTTFDefault("<insert input tag>", cc.p(300,300));
-        this.addChild(tagText);
+        
+        
         
      
     },
@@ -261,10 +345,18 @@ var UIPlacement = cc.Scene.extend({
         this._super();
 
         var UIPlacementMenuLayer = new gg.UIPlacementMenuLayer();
-        var PropertyWindow = new gg.PropertyWindow();
+       // var PropertyWindow = new gg.PropertyWindow();
 
+        // var tagText = new gg.TextFieldTTFDefault("<insert input tag>", cc.p(300,100));
+        // this.addChild(tagText);
+        // tagText.setPosition(cc.p(0, 100));
+
+        // var tagText = new gg.TextFieldTTFDefault("<insert input calle>", cc.p(300,120));
+        // this.addChild(tagText);
+        // tagText.setPosition(cc.p(0, 120));
+        
 
         this.addChild(UIPlacementMenuLayer, 0, TAG_UIPLACEMENTMENU_LAYER);
-        this.addChild(PropertyWindow,1);
+        //this.addChild(PropertyWindow,1);
     }
 });

@@ -773,8 +773,13 @@ cc.MoveTo = cc.ActionInterval.extend(/** @lends cc.MoveTo# */{
      * @return {Boolean}
      */
     initWithDuration:function (duration, position) {
+        
+        console.log(position);
+        
         if (cc.ActionInterval.prototype.initWithDuration.call(this, duration)) {
             this._endPosition = position;
+            console.log("_endPosition");
+            console.log(position);
             return true;
         }
 
