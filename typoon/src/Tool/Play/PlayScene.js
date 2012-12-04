@@ -207,10 +207,16 @@ gg.PlayMapLayer = cc.Layer.extend({
                 if (state == UNIT_STATE_DEFAULT) {
                 } else if (state == UNIT_STATE_BUILDING) {
                     var layer = this.getParent().getChildByTag(TAG_LAYER_UI);
+                    console.log(layer.buildmenu);
+
                     var buildfunc = cc.CallFunc.create(layer, layer.buildFromUnit);
                     actions.push(buildfunc);
-                }
 
+                    var rolFunc = cc.CallFunc.create(this, this.roleTheUnit);
+                    actions.push(rolFunc);
+
+                }
+                
                 var sequence = cc.Sequence.create(actions);
                 unit.runAction(sequence);               // endPosition : NaN, NaN
                 console.log(sequence);          
@@ -220,6 +226,31 @@ gg.PlayMapLayer = cc.Layer.extend({
         this.touchMoved = false;
     },
 
+    roleTheUnit:function(self){
+        var map = this;
+
+        console.log(this);
+        var layer = this.getParent().getChildByTag(TAG_LAYER_UI);
+        console.log(layer);
+        var buildmenu = layer.build_type;
+
+        var role = "distort";
+        if( buildmenu == 0)
+            role = "distort";
+        else if(buildmenu == 1)
+            role = "help";
+        else if(buildmenu == 2)
+            role ="gather";
+        else if(buildmenu == 3)
+            role ="chop";
+        else if(buildmenu == 4)
+            role ="kick";
+        console.log("buildmenu");
+        console.log( buildmenu );
+        console.log(role);
+        this.unit.setAnimation(role);
+
+    },
     getButtonType:function(type) {
         tile_button = type;
     },
@@ -303,6 +334,7 @@ gg.PlayMapLayer = cc.Layer.extend({
 // Player's UI Layer
 gg.PlayUILayer = cc.Layer.extend({
     menu:null,
+    buildmenu:null,
     build_type:0,
     elapsedTime:0,                      // ok...
     ctor:function () {
@@ -316,10 +348,16 @@ gg.PlayUILayer = cc.Layer.extend({
 
         this.addChild(menu, 1);
         
+        var buildmenu = cc.Menu.create(null);
+        buildmenu.setPosition(cc.PointZero());
+        this.buildmenu = buildmenu;
+
+        this.addChild(buildmenu, 1);
+
 
         this.TopMenu(menu);
         this.attachZoomInOutMenu(menu);
-        this.createHouseUI(menu);
+        this.createHouseUI(buildmenu);
 
         this.CenterMenu();
 
