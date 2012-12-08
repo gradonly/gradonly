@@ -33,7 +33,7 @@ var MainMenuLayer = cc.Layer.extend({
                 director.replaceScene(new PlayScene);
             });
         item.setPosition(cc.p(size.width * 0.5, size.height * 0.3));
-        var menu = cc.Menu.create(item, null);
+        var menu = cc.Menu.create(item);
         menu.setPosition(cc.PointZero());
         this.addChild(menu, 1);
         return true;

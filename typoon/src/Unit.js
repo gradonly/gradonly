@@ -42,9 +42,12 @@ gg.Unit = cc.Node.extend({
 		cache.addSpriteFrames("res/Unit/open_f.plist");
 
 		if (sex == "man") {
-			this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_p0.png"));
+			//	this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_p0.png"));
+			this.body = cc.Sprite.createWithSpriteFrameName("move_p0.png");
+		
 		} else {
-			this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_f_p0.png"));
+			// this.body = cc.Sprite.createWithSpriteFrameName(cache.getSpriteFrame("move_f_p0.png"));
+			this.body = cc.Sprite.createWithSpriteFrameName("move_f_p0.png");
 		}
 
 		this.body.setScale(0.5, 0.5);
@@ -79,8 +82,8 @@ gg.Unit = cc.Node.extend({
 	},
 
 	setPositionFromCoord:function(coord) {
-		var layer = this.getParent().layerNamed("MapLayer");
-		var position = layer.positionAt(coord);
+		var layer = this.getParent().getLayer("MapLayer");
+		var position = layer.getPositionAt(coord);
 		position.x += 30;
 		position.y += 30;
 

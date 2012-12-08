@@ -139,7 +139,7 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * initializes a cc.Menu with a Array of cc.MenuItem objects
      */
     initWithArray:function (arrayOfItems) {
-        if(this.init()){
+        if (this.init()) {
             this.setTouchEnabled(true);
             this._enabled = true;
 
@@ -148,11 +148,10 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
             this.ignoreAnchorPointForPosition(true);
             this.setAnchorPoint(cc.p(0.5, 0.5));
             this.setContentSize(winSize);
-
             this.setPosition(cc.p(winSize.width / 2, winSize.height / 2));
 
-            if(arrayOfItems){
-                for(var i = 0; i< arrayOfItems.length; i++){
+            if (arrayOfItems) {
+                for (var i = 0; i < arrayOfItems.length; i++) {
                     this.addChild(arrayOfItems[i],i);
                 }
             }
@@ -413,7 +412,7 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      * @return {Boolean}
      */
     onTouchBegan:function (touch, e) {
-        if (this._state != cc.MENU_STATE_WAITING || !this._isVisible || !this._enabled) {
+        if (this._state != cc.MENU_STATE_WAITING || !this._visible || !this._enabled) {
             return false;
         }
 

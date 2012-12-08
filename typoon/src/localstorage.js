@@ -21,16 +21,10 @@ gg.LocalStorage = cc.Class.extend({
 		localStorage.setItem(key, value);
 		localStorage.setItem(key+"_dirty", true);
 
-		//this.dirty["key"] = true;
-		//console.log("save :function");
-		//console.log(this);
 	},
 
 	isDirty:function(key) {
-		// console.log("isDirty" + key+"_dirty");
-		// console.log(localStorage.getItem(key+"_dirty"));
 		var rtvalue = (localStorage.getItem(key+"_dirty") == "true");
-		// console.log(rtvalue);
 		return rtvalue;
 	},
 
@@ -45,12 +39,7 @@ gg.LocalStorage = cc.Class.extend({
 		if( item == null ) item = [];
 
 		item.push(value);
-		console.log("debug------------------localStorage:add");
-		console.log(value);
-		console.log(item);
-		//var encoded = JSON.stringify(item);
 		var encoded = JSONfn.stringify(item);
-		console.log(encoded);
 		localStorage.setItem(key, encoded);
 
 	},
@@ -61,7 +50,6 @@ gg.LocalStorage = cc.Class.extend({
 	
 	get:function(key) {
 		var item = localStorage.getItem(key);
-		//var parsed = JSON.parse(item);
 		var parsed = JSONfn.parse(item);
 		return parsed;
 	},

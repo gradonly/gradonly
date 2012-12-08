@@ -11,7 +11,7 @@ var Node = cc.Node;
 
 var makeNodesFromMap = function(map) {
     //var object_layer = this.object_layer;
-    var object_layer = map.layerNamed("ObjectLayer");
+    var object_layer = map.getLayer("ObjectLayer");
 
     var tiles = object_layer.getTiles();
 
@@ -84,8 +84,8 @@ gg.PlayMapLayer = cc.Layer.extend({
         // cc.TMXTiledMap
         this.map = cc.TMXTiledMap.create("res/PlayScene/map/map1.tmx");
         // cc.TMXTiledMap -> cc.TMXLayer
-        this.map_layer = this.map.layerNamed("MapLayer");
-        this.object_layer = this.map.layerNamed("ObjectLayer");
+        this.map_layer = this.map.getLayer("MapLayer");
+        this.object_layer = this.map.getLayer("ObjectLayer");
         
         this.addChild(this.map, 0, TAG_TILE_MAP);
         // this.addChild(this.map_layer, 0, TAG_TILE_MAP_LAYER);
@@ -267,8 +267,8 @@ gg.PlayMapLayer = cc.Layer.extend({
         var ground = this.map_layer;
         var object_layer = this.object_layer;
 
-        //var ground = this.map.layerNamed("MapLayer");             // MapLayer
-        //var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+        //var ground = this.map.getLayer("MapLayer");             // MapLayer
+        //var object_layer = this.map.getLayer("ObjectLayer");         // ObjectLayer
 
         if( tile_button == ID_EMPTY_TILE) {
             ground.setTileGID( tile_button, coord, 1);

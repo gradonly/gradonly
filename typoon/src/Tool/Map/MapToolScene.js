@@ -111,7 +111,7 @@ var MapToolLayer = cc.Layer.extend({
         cc.renderContext.strokeStyle = "#ffffff";
     
         var scale = this.map.getScale();
-        var layer = this.map.layerNamed("MapLayer");
+        var layer = this.map.getLayer("MapLayer");
         var tileSize = this.map.getTileSize();
         var tw = tileSize.width * scale;
         var th = tileSize.height * scale;
@@ -121,8 +121,8 @@ var MapToolLayer = cc.Layer.extend({
         var count = 20;
 
         for (var i = 0; i <= count; ++i) {          
-            var start = layer.positionAt(cc.p(i, -1));
-            var end = layer.positionAt(cc.p(i, count-1));
+            var start = layer.getPositionAt(cc.p(i, -1));
+            var end = layer.getPositionAt(cc.p(i, count-1));
 
             start = cc.pAdd(start, offset);
             end = cc.pAdd(end, offset);
@@ -130,8 +130,8 @@ var MapToolLayer = cc.Layer.extend({
         }
 
         for (var i = 0; i <= count; ++i) {
-            var start = layer.positionAt(cc.p(0, i-1));
-            var end = layer.positionAt(cc.p(count, i-1));
+            var start = layer.getPositionAt(cc.p(0, i-1));
+            var end = layer.getPositionAt(cc.p(count, i-1));
 
             start = cc.pAdd(start, offset);
             end = cc.pAdd(end, offset);
@@ -152,8 +152,8 @@ var MapToolLayer = cc.Layer.extend({
     paintMapTile:function(coord) {
         
         var tile_button = this.tile_button;
-        var ground = this.map.layerNamed("MapLayer");             // MapLayer
-        var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+        var ground = this.map.getLayer("MapLayer");             // MapLayer
+        var object_layer = this.map.getLayer("ObjectLayer");         // ObjectLayer
 
         if( tile_button == ID_EMPTY_TILE) {
             ground.setTileGID( tile_button, coord, 1);
@@ -173,8 +173,8 @@ var MapToolLayer = cc.Layer.extend({
         var tile_button = mapData.tile_button;
         var coord = mapData.pos;
 
-        var ground = this.map.layerNamed("MapLayer");             // MapLayer
-        var object_layer = this.map.layerNamed("ObjectLayer");         // ObjectLayer
+        var ground = this.map.getLayer("MapLayer");             // MapLayer
+        var object_layer = this.map.getLayer("ObjectLayer");         // ObjectLayer
 
         if( tile_button == ID_EMPTY_TILE) {
             ground.setTileGID( tile_button, coord, 1);
