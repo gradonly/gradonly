@@ -191,7 +191,7 @@ gg.PlayMapLayer = cc.Layer.extend({
                 for (var i in coords) {
                     var coord = coords[i];
                     //console.log(coord);
-                    var position = layer.positionAt(coord);
+                    var position = layer.getPositionAt(coord);
                     position.x += 30;
                     position.y += 30;
 
