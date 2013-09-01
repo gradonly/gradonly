@@ -52,17 +52,17 @@ var g_ressources = [
     {type:"image", src:"res/PlayScene/map/0/7.png"}, 
 
     // house
-    {type:"image", src:"res/uiitem/house/building_0.png"}, 
-    {type:"image", src:"res/uiitem/house/building_1.png"}, 
-    {type:"image", src:"res/uiitem/house/map_0.png"}, 
-    {type:"image", src:"res/uiitem/house/map_1.png"}, 
-    {type:"image", src:"res/uiitem/house/map_2.png"}, 
-    {type:"image", src:"res/uiitem/house/map_3.png"}, 
-    {type:"image", src:"res/uiitem/house/map_4.png"},
-    {type:"image", src:"res/uiitem/house/map_5.png"},
-    {type:"image", src:"res/uiitem/house/map_6.png"},
-    {type:"image", src:"res/uiitem/house/map_7.png"},
-    {type:"image", src:"res/uiitem/store_greenbutton.png"},
+    {type:"image", src:"res/UIItem/house/building_0.png"}, 
+    {type:"image", src:"res/UIItem/house/building_1.png"}, 
+    {type:"image", src:"res/UIItem/house/map_0.png"}, 
+    {type:"image", src:"res/UIItem/house/map_1.png"}, 
+    {type:"image", src:"res/UIItem/house/map_2.png"}, 
+    {type:"image", src:"res/UIItem/house/map_3.png"}, 
+    {type:"image", src:"res/UIItem/house/map_4.png"},
+    {type:"image", src:"res/UIItem/house/map_5.png"},
+    {type:"image", src:"res/UIItem/house/map_6.png"},
+    {type:"image", src:"res/UIItem/house/map_7.png"},
+    {type:"image", src:"res/UIItem/store_greenbutton.png"},
 
     // ui
     {type:"image", src:"res/UIItem/UI0.png"},
